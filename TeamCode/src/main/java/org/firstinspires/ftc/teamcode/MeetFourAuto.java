@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -48,6 +49,8 @@ public class MeetFourAuto extends LinearOpMode {
                 Settings.DEFAULT_PROFILE, Settings.DEFAULT_PROFILE);
         baseRobot = new BaseRobot(hardwareMap, dynamicInput, this, telemetry);
         dashboard = FtcDashboard.getInstance();
+
+        baseRobot.outtake.claw.backward();
 
         AtomicBoolean menuActive = new AtomicBoolean(true);
         AtomicInteger currentSelection = new AtomicInteger(0);
@@ -121,7 +124,12 @@ public class MeetFourAuto extends LinearOpMode {
     }
 
     public void run(StartingPosition sp) {
+        baseRobot.outtake.claw.backward();
         baseRobot.intake.wrist.setPosition(Wrist.Position.VERTICAL);
+        if (startingPosition.equals(StartingPosition.RED_RIGHT)) {
+            goober();
+            requestOpModeStop();
+        }
         switch (Settings.Deploy.AUTONOMOUS_MODE) {
             case JUST_PARK:
                 baseRobot.logger.update("Autonomous phase", "Parking due to deploy flag");
@@ -157,15 +165,88 @@ public class MeetFourAuto extends LinearOpMode {
         }
     }
 
+    public void goober() {
+        Pose2d initialPose = new Pose2d(11.5, -60, Math.toRadians(90));
+//        MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
+
+        // vision here that outputs position
+        int visionOutputPosition = 1;
+
+
+        TrajectoryActionBuilder MoveSampleToHumanPlayerZone = roadRunner.actionBuilder(new Pose2d(11.5, -60, Math.toRadians(270))).endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(43, -35), Math.toRadians(90))
+                .strafeTo(new Vector2d(43,-5))
+                .strafeTo(new Vector2d(56+8,0+10))
+                .strafeTo(new Vector2d(56+8,-50))
+                .strafeTo(new Vector2d(52+8,0+10))
+                .strafeTo(new Vector2d(62+11,0+10))
+                .strafeTo(new Vector2d(62+11,-50));
+        TrajectoryActionBuilder tab2 = roadRunner.actionBuilder(initialPose)
+                .lineToY(37)
+                .setTangent(Math.toRadians(0))
+                .lineToX(18)
+                .waitSeconds(3)
+                .setTangent(Math.toRadians(0))
+                .lineToXSplineHeading(46, Math.toRadians(180))
+                .waitSeconds(3);
+        TrajectoryActionBuilder tab3 = roadRunner.actionBuilder(initialPose)
+                .lineToYSplineHeading(33, Math.toRadians(180))
+                .waitSeconds(2)
+                .strafeTo(new Vector2d(46, 30))
+                .waitSeconds(3);
+        Action PlaceSample = roadRunner.actionBuilder(initialPose)
+                .strafeToLinearHeading(new Vector2d(5, -28), Math.toRadians(270))
+                .build();
+        Action trajectoryActionCloseOut = MoveSampleToHumanPlayerZone.endTrajectory().fresh()
+                .strafeTo(new Vector2d(48, 12))
+                .build();
+
+        while (!isStopRequested() && !opModeIsActive()) {
+            int position = visionOutputPosition;
+            telemetry.addData("Position during Init", position);
+            telemetry.update();
+        }
+
+        int startPosition = visionOutputPosition;
+        telemetry.addData("Starting Position", startPosition);
+        telemetry.update();
+        waitForStart();
+
+        if (isStopRequested()) return;
+
+        Action trajectoryActionChosen;
+        if (startPosition == 1) {
+            trajectoryActionChosen = MoveSampleToHumanPlayerZone.build();
+        } else if (startPosition == 2) {
+            trajectoryActionChosen = tab2.build();
+        } else {
+            trajectoryActionChosen = tab3.build();
+        }
+
+        Actions.runBlocking(
+                new SequentialAction(
+                        PlaceSample,
+                        hookChamber(),
+                        unhookChamber(),
+                        trajectoryActionChosen
+//                        ,trajectoryActionCloseOut
+                )
+        );
+    }
+
     public TrajectoryActionBuilder gameLoopSetup(StartingPosition sp, PlacementHeight chamberHeight) {
         baseRobot.logger.update("Autonomous phase", "Placing initial specimen on chamber");
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(sp, roadRunner.actionBuilder(initialPose));
+
+        if(startingPosition.equals(StartingPosition.RED_RIGHT)) {
+            goober();
+            requestOpModeStop();
+        }
 
         Actions.runBlocking(
                 new SequentialAction(
                         placingTrajectory.build(),
                         hookChamber()));
-
         return placingTrajectory;
     }
 
@@ -214,7 +295,7 @@ public class MeetFourAuto extends LinearOpMode {
     public class HookChamber implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            baseRobot.outtake.claw.forward();
+            baseRobot.outtake.claw.backward();
             pause(300);
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG);
             pause(2000);
@@ -232,7 +313,7 @@ public class MeetFourAuto extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             pause(300);
-            baseRobot.outtake.claw.backward();
+            baseRobot.outtake.claw.forward();
             pause(300);
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
             baseRobot.outtake.linkage.setPosition(Linkage.Position.TRANSFER);
