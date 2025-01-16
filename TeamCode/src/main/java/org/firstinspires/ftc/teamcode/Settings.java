@@ -191,6 +191,13 @@ public class Settings {
             public static Pose2d RED_RIGHT_PARK_POSE = new Pose2d(-26, -10, Math.toRadians(180));
             public static Pose2d BLUE_LEFT_PARK_POSE = new Pose2d(26, -13, Math.toRadians(90));
             public static Pose2d BLUE_RIGHT_PARK_POSE = new Pose2d(26, 10, Math.toRadians(90));
+
+            // I added this to help transition between placing position and collecting samples to place in basket or chamber
+            public static Vector2d RED_Right_Sample_MIDDLEMAN = new Vector2d(32, -30);
+
+            // I am adding this to push samples into human player zone
+            public static Pose2d Red_Sample_Push_Pose_1 = new Pose2d(48, -13, Math.toRadians(90));
+            public static Pose2d Red_Sample_Push_Pose_2 = new Pose2d(58, -13, Math.toRadians(90));
         }
 
         @Config
@@ -248,7 +255,7 @@ public class Settings {
 
         /**
          * Applies a mathematical curve to the boost input to adjust control response
-         * 
+         *
          * @param input Raw input value between 0 and 1
          * @return Modified input value between 0 and 1
          */
@@ -411,13 +418,13 @@ public class Settings {
                     return BoostCurves.smooth(input);
                 }
             }, new DefaultGamepadSettings() {
-                {
-                    // Customize sub gamepad settings
-                    buttonMapping.extendHorizontal = GamepadButton.Y;
-                    buttonMapping.retractHorizontal = GamepadButton.A;
-                    trigger_threshold = 0.2;
-                }
-            });
+        {
+            // Customize sub gamepad settings
+            buttonMapping.extendHorizontal = GamepadButton.Y;
+            buttonMapping.retractHorizontal = GamepadButton.A;
+            trigger_threshold = 0.2;
+        }
+    });
 
     public static final ControllerProfile CISRAEL_PROFILE = new ControllerProfile("cisrael",
             new DefaultGamepadSettings() {
@@ -431,11 +438,11 @@ public class Settings {
                     return BoostCurves.quadratic(input);
                 }
             }, new DefaultGamepadSettings() {
-                {
-                    // Customize sub gamepad settings
-                    trigger_threshold = 0.15;
-                }
-            });
+        {
+            // Customize sub gamepad settings
+            trigger_threshold = 0.15;
+        }
+    });
 
     public static final ControllerProfile RSHARMA_PROFILE = new ControllerProfile("rsharma",
             new DefaultGamepadSettings() {
@@ -449,11 +456,11 @@ public class Settings {
                     return BoostCurves.linear(input);
                 }
             }, new DefaultGamepadSettings() {
-                {
-                    // Customize sub gamepad settings
-                    trigger_threshold = 0.1;
-                }
-            });
+        {
+            // Customize sub gamepad settings
+            trigger_threshold = 0.1;
+        }
+    });
 
     public static final ControllerProfile[] AVAILABLE_PROFILES = {
             DEFAULT_PROFILE,
@@ -509,3 +516,4 @@ public class Settings {
         }
     }
 }
+

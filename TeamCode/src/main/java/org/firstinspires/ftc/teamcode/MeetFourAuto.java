@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -170,7 +171,7 @@ public class MeetFourAuto extends LinearOpMode {
     }
 
     public TrajectoryActionBuilder gameLoop(StartingPosition sp, TrajectoryActionBuilder previousTrajectory,
-            PlacementHeight placementHeight) {
+                                            PlacementHeight placementHeight) {
         baseRobot.telemetry.addData("Autonomous phase", "Grabbing next specimen");
         baseRobot.telemetry.update();
         previousTrajectory = getNextSpecimen(sp, previousTrajectory);
@@ -217,9 +218,9 @@ public class MeetFourAuto extends LinearOpMode {
             baseRobot.outtake.claw.forward();
             pause(300);
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG);
-            pause(2000);
+            pause(1000);
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE);
-            pause(2000);
+            pause(1000);
             return false;
         }
     }
@@ -275,7 +276,7 @@ public class MeetFourAuto extends LinearOpMode {
     }
 
     public TrajectoryActionBuilder placeNextSpecimenOnChamber(StartingPosition sp,
-            TrajectoryActionBuilder previousTrajectory, PlacementHeight placementHeight) {
+                                                              TrajectoryActionBuilder previousTrajectory, PlacementHeight placementHeight) {
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(sp, previousTrajectory);
 
         Actions.runBlocking(
@@ -287,7 +288,7 @@ public class MeetFourAuto extends LinearOpMode {
     }
 
     public TrajectoryActionBuilder placeNextSampleInBasket(StartingPosition sp,
-            TrajectoryActionBuilder previousTrajectory, PlacementHeight placementHeight) {
+                                                           TrajectoryActionBuilder previousTrajectory, PlacementHeight placementHeight) {
         TrajectoryActionBuilder basketTrajectory = getBasketTrajectory(sp, previousTrajectory);
 
         Actions.runBlocking(
@@ -311,15 +312,21 @@ public class MeetFourAuto extends LinearOpMode {
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(sp, roadRunner.actionBuilder(initialPose));
         TrajectoryActionBuilder unhookTrajectory = getUnhookTrajectory(sp, placingTrajectory);
         TrajectoryActionBuilder parkingTrajectory = getParkingTrajectory(sp, unhookTrajectory);
+        TrajectoryActionBuilder sampleCollectorTrajectory = getSampleTrajectory(sp, unhookTrajectory);
 
         Actions.runBlocking(
                 new SequentialAction(
-                        placingTrajectory.build(),
-                        hookChamber(),
+                        new ParallelAction(
+                                placingTrajectory.build(),
+                                hookChamber()
+                        ),
                         unhookTrajectory.build(),
                         unhookChamber(),
-                        parkingTrajectory.build(),
-                        hang()));
+                        sampleCollectorTrajectory.build()
+//                        parkingTrajectory.build(),
+//                        hang()
+                )
+        );
     }
 
     public void justPark(StartingPosition sp) {
@@ -433,7 +440,7 @@ public class MeetFourAuto extends LinearOpMode {
     }
 
     private TrajectoryActionBuilder getUnhookTrajectory(StartingPosition sp,
-                                                         TrajectoryActionBuilder previousTrajectory) {
+                                                        TrajectoryActionBuilder previousTrajectory) {
         // Helper method to get placing trajectory based on starting position
         switch (sp) {
             case RED_LEFT:
@@ -455,7 +462,7 @@ public class MeetFourAuto extends LinearOpMode {
     }
 
     private TrajectoryActionBuilder getBasketTrajectory(StartingPosition sp,
-            TrajectoryActionBuilder previousTrajectory) {
+                                                        TrajectoryActionBuilder previousTrajectory) {
         switch (sp) {
             case RED_LEFT:
             case RED_RIGHT:
@@ -471,6 +478,26 @@ public class MeetFourAuto extends LinearOpMode {
                 return previousTrajectory.endTrajectory().fresh();
         }
     }
+    private TrajectoryActionBuilder getSampleTrajectory(StartingPosition sp, TrajectoryActionBuilder previousTrajectory){
+        switch (sp) {
+            case RED_LEFT:
+            case RED_RIGHT:
+                return previousTrajectory.endTrajectory().fresh()
+                        // gets in front of the first on field sample and pushes it back
+                        .setTangent(Math.toRadians(270))
+                        .strafeTo(Settings.Autonomous.FieldPositions.RED_Right_Sample_MIDDLEMAN)
+                        .splineToSplineHeading(new Pose2d(Settings.Autonomous.FieldPositions.Red_Sample_Push_Pose_1.position,
+                                Settings.Autonomous.FieldPositions.Red_Sample_Push_Pose_1.heading), Math.toRadians(270))
+                        .lineToY(Settings.Autonomous.FieldPositions.Red_Sample_Push_Pose_1.position.y-37)
+                        // this is the same thing for the second sample
+                        .setTangent(Math.toRadians(90))
+                        .splineToLinearHeading(new Pose2d(Settings.Autonomous.FieldPositions.Red_Sample_Push_Pose_2.position,
+                                Settings.Autonomous.FieldPositions.Red_Sample_Push_Pose_2.heading), Math.toRadians(270))
+                        .lineToY(Settings.Autonomous.FieldPositions.Red_Sample_Push_Pose_2.position.y-37);
+            default:
+                return previousTrajectory.endTrajectory().fresh();
+        }
+    };
 
     // Define an enum for starting positions
     public enum StartingPosition {
