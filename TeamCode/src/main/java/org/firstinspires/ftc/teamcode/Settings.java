@@ -191,11 +191,18 @@ public class Settings {
             public static Pose2d RED_RIGHT_PARK_POSE = new Pose2d(-26, -10, Math.toRadians(180));
             public static Pose2d BLUE_LEFT_PARK_POSE = new Pose2d(26, -13, Math.toRadians(90));
             public static Pose2d BLUE_RIGHT_PARK_POSE = new Pose2d(26, 10, Math.toRadians(90));
+
+            public static Pose2d RED_FIRST_PRESET_SAMPLE_POSE = new Pose2d(48, -7, Math.toRadians(90));
+            public static Pose2d RED_SECOND_PRESET_SAMPLE_POSE = new Pose2d(58, -7, Math.toRadians(90));
+            public static Pose2d BLUE_FIRST_PRESET_SAMPLE_POSE = new Pose2d(-48, 7, Math.toRadians(270));
+            public static Pose2d BLUE_SECOND_PRESET_SAMPLE_POSE = new Pose2d(-58, 7, Math.toRadians(270));
+
         }
 
         @Config
         public static class Movement {
             public static int ENCODERS_NEEDED_TO_CORRECT_ODOMETRY = 3;
+
         }
 
         @Config

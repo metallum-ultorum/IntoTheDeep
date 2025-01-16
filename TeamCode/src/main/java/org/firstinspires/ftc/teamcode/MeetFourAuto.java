@@ -41,6 +41,8 @@ public class MeetFourAuto extends LinearOpMode {
 
     public AdaptiveCalibration adaptiveCalibration;
 
+    public int PresetSamplesTaken = 0;
+
     @Override
     public void runOpMode() {
         adaptiveCalibration = AdaptiveCalibration.getInstance();
@@ -467,6 +469,29 @@ public class MeetFourAuto extends LinearOpMode {
                 return previousTrajectory.endTrajectory().fresh()
                         .strafeToLinearHeading(Settings.Autonomous.FieldPositions.BLUE_BASKET_POSE.position,
                                 Settings.Autonomous.FieldPositions.BLUE_BASKET_POSE.heading);
+            default:
+                return previousTrajectory.endTrajectory().fresh();
+        }
+    }
+
+    private TrajectoryActionBuilder getPresetSample(StartingPosition sp, TrajectoryActionBuilder previousTrajectory) {
+        switch (sp) {
+            case RED_LEFT:
+            case RED_RIGHT:
+                return previousTrajectory.endTrajectory().fresh()
+                        .strafeToLinearHeading(Settings.Autonomous.FieldPositions.RED_FIRST_PRESET_SAMPLE_POSE.position, Settings.Autonomous.FieldPositions.RED_FIRST_PRESET_SAMPLE_POSE.heading)
+                        .lineToY(Settings.Autonomous.FieldPositions.RED_FIRST_PRESET_SAMPLE_POSE.position.y - 40)
+                        .lineToY(Settings.Autonomous.FieldPositions.RED_FIRST_PRESET_SAMPLE_POSE.position.y - 10)
+                        .strafeToLinearHeading(Settings.Autonomous.FieldPositions.RED_SECOND_PRESET_SAMPLE_POSE.position, Settings.Autonomous.FieldPositions.RED_SECOND_PRESET_SAMPLE_POSE.heading)
+                        .lineToY(Settings.Autonomous.FieldPositions.RED_SECOND_PRESET_SAMPLE_POSE.position.y - 40);
+            case BLUE_LEFT:
+            case BLUE_RIGHT:
+                return previousTrajectory.endTrajectory().fresh()
+                        .strafeToLinearHeading(Settings.Autonomous.FieldPositions.BLUE_FIRST_PRESET_SAMPLE_POSE.position, Settings.Autonomous.FieldPositions.BLUE_FIRST_PRESET_SAMPLE_POSE.heading)
+                        .lineToY(Settings.Autonomous.FieldPositions.BLUE_FIRST_PRESET_SAMPLE_POSE.position.y + 40)
+                        .lineToY(Settings.Autonomous.FieldPositions.BLUE_FIRST_PRESET_SAMPLE_POSE.position.y + 10)
+                        .strafeToLinearHeading(Settings.Autonomous.FieldPositions.BLUE_SECOND_PRESET_SAMPLE_POSE.position, Settings.Autonomous.FieldPositions.BLUE_SECOND_PRESET_SAMPLE_POSE.heading)
+                        .lineToY(Settings.Autonomous.FieldPositions.BLUE_SECOND_PRESET_SAMPLE_POSE.position.y + 40);
             default:
                 return previousTrajectory.endTrajectory().fresh();
         }
