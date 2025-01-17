@@ -304,11 +304,18 @@ public class MeetFourAuto extends LinearOpMode {
     public void immediatelyPlace(StartingPosition sp) {
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(sp, roadRunner.actionBuilder(initialPose));
         TrajectoryActionBuilder unhookTrajectory = getUnhookTrajectory(sp, placingTrajectory);
-        TrajectoryActionBuilder parkingTrajectory = getParkingTrajectory(sp, unhookTrajectory);
+        TrajectoryActionBuilder presetSampleTrajectory = getPresetSample(sp, unhookTrajectory);
+        TrajectoryActionBuilder nextSpecimenTrajectory = getNextSpecimen(sp, presetSampleTrajectory);
+        TrajectoryActionBuilder parkingTrajectory = getParkingTrajectory(sp, nextSpecimenTrajectory);
 
         Actions.runBlocking(
                 new SequentialAction(
                         placingTrajectory.build(),
+                        hookChamber(),
+                        unhookTrajectory.build(),
+                        unhookChamber(),
+                        presetSampleTrajectory.build(),
+                        nextSpecimenTrajectory.build(),
                         hookChamber(),
                         unhookTrajectory.build(),
                         unhookChamber(),
@@ -402,6 +409,22 @@ public class MeetFourAuto extends LinearOpMode {
         return previousTrajectory.endTrajectory().fresh()
                 .strafeToLinearHeading(Settings.Autonomous.FieldPositions.BASKET_POSE.position,
                         Settings.Autonomous.FieldPositions.BASKET_POSE.heading);
+    }
+
+
+    private TrajectoryActionBuilder getPresetSample(StartingPosition sp, TrajectoryActionBuilder previousTrajectory) {
+        switch (sp) {
+            case LEFT:
+            case RIGHT:
+                return previousTrajectory.endTrajectory().fresh()
+                        .strafeToLinearHeading(Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.position, Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.heading)
+                        .lineToY(Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.position.y - 40)
+                        .lineToY(Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.position.y - 10)
+                        .strafeToLinearHeading(Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.position, Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.heading)
+                        .lineToY(Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.position.y - 40);
+            default:
+                return previousTrajectory.endTrajectory().fresh();
+        }
     }
 
     // Define an enum for starting positions

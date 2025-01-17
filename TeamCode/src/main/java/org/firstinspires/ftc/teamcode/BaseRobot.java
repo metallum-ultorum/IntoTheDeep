@@ -220,7 +220,7 @@ public class BaseRobot {
                 }
             }
 
-            if (contextualActions.toggleClaw) {
+            if (contextualActions.justInwardClaw) {
                 outtake.claw.toggle();
             }
 
