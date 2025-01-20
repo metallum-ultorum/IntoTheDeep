@@ -40,7 +40,7 @@ public class BaseRobot {
     public Outtake outtake;
     public LinearActuator linearActuator;
     public Odometry odometry;
-    public boolean clawOpen = false;
+    public Pause easeTransfer = new Pause(0);
 
     /**
      * Core robot class that manages hardware initialization and basic
@@ -121,10 +121,10 @@ public class BaseRobot {
     public void mecanumDrive(double drivePower, double strafePower, double rotation) {
         // Adjust the values for strafing and rotation
         strafePower *= Settings.Movement.strafe_power_coefficient;
-        double frontLeft = drivePower + strafePower + rotation;
-        double frontRight = drivePower - strafePower - rotation;
-        double rearLeft = drivePower - strafePower + rotation;
-        double rearRight = drivePower + strafePower - rotation;
+        double frontLeft = (drivePower + strafePower) * Settings.Movement.flip_movement + rotation;
+        double frontRight = (drivePower - strafePower) * Settings.Movement.flip_movement - rotation;
+        double rearLeft = (drivePower - strafePower) * Settings.Movement.flip_movement + rotation;
+        double rearRight = (drivePower + strafePower) * Settings.Movement.flip_movement - rotation;
 
         logger.update("FRONT LEFT", String.valueOf(frontLeft));
         logger.update("FRONT RIGHT", String.valueOf(frontRight));
@@ -222,17 +222,24 @@ public class BaseRobot {
             }
 
             if (contextualActions.justToggleClaw) {
-                if (clawOpen) {
-                    outtake.claw.close();
-                    clawOpen = false;
-                } else {
-                    outtake.claw.open();
-                    clawOpen = true;
+                if (outtake.claw.opened && Settings.Movement.easeTransfer) {
+                    intake.geckoWheels.outtake();
+                    easeTransfer = new Pause(30);
                 }
+                outtake.claw.toggle();
+            }
+
+            if (easeTransfer.shouldResume()) {
+                intake.geckoWheels.stop();
             }
 
             if (contextualActions.justShoulderUp) {
                 outtake.linkage.cyclePosition();
+            }
+
+
+            if (contextualActions.justFlipMovement) {
+                Settings.Movement.flip_movement *= -1;
             }
 
         }
@@ -277,6 +284,20 @@ public class BaseRobot {
         // Stop all motors
         for (DcMotor motor : motors.values()) {
             motor.setPower(0);
+        }
+    }
+
+    private class Pause {
+        ElapsedTime timestamp;
+        long pauseTime;
+
+        Pause(long ms) {
+            timestamp = new ElapsedTime();
+            pauseTime = ms;
+        }
+
+        public boolean shouldResume() {
+            return pauseTime >= timestamp.milliseconds();
         }
     }
 }
