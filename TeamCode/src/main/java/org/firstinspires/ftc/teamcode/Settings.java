@@ -215,9 +215,9 @@ public class Settings {
             public static Vector2d SAMPLE_MIDDLEMAN = new Vector2d(22, -38);
             public static Vector2d BASKET_MIDDLEMAN = new Vector2d(-36.3, -60.0);
 
-            public static Vector2d LEFT_SAMPLE_1_VEC = new Vector2d(-47.9, -11.7);
-            public static Vector2d LEFT_SAMPLE_2_VEC = new Vector2d(-55.9, -11.7);
-            public static Vector2d LEFT_SAMPLE_3_VEC = new Vector2d(-60.9, -11.7);
+            public static Vector2d LEFT_SAMPLE_1_VEC = new Vector2d(-48.1, -36);
+            public static Vector2d LEFT_SAMPLE_2_VEC = new Vector2d(-58.3, -36);
+            public static Vector2d LEFT_SAMPLE_3_VEC = new Vector2d(-65.6, -36);
 
         }
 
