@@ -202,7 +202,7 @@ public class Settings {
             public static Vector2d SAFE_CHAMBER_VEC = new Vector2d(0, -50);
             public static Pose2d BASKET_POSE = new Pose2d(-58.2, -58.6, Math.toRadians(45));
 
-            public static Pose2d HP_POSE = new Pose2d(55, -54, Math.toRadians(90));
+            public static Pose2d HP_POSE = new Pose2d(55, -50, Math.toRadians(90));
 
             public static Vector2d PARK_MIDDLEMAN = new Vector2d(-45, -30);
 
@@ -215,9 +215,9 @@ public class Settings {
             public static Vector2d SAMPLE_MIDDLEMAN = new Vector2d(22, -38);
             public static Vector2d BASKET_MIDDLEMAN = new Vector2d(-36.3, -60.0);
 
-            public static Vector2d LEFT_SAMPLE_1_VEC = new Vector2d(-48.1, -36);
-            public static Vector2d LEFT_SAMPLE_2_VEC = new Vector2d(-58.3, -36);
-            public static Vector2d LEFT_SAMPLE_3_VEC = new Vector2d(-65.6, -36);
+            public static Vector2d LEFT_SAMPLE_1_VEC = new Vector2d(-48.1, -40);
+            public static Vector2d LEFT_SAMPLE_2_VEC = new Vector2d(-58.3, -40);
+            public static Vector2d LEFT_SAMPLE_3_VEC = new Vector2d(-65.6, -40);
 
         }
 

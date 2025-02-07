@@ -101,6 +101,7 @@ public class LeftStateAuto extends LinearOpMode {
     }
 
     public TrajectoryActionBuilder placeSample(TrajectoryActionBuilder previousTrajectory) {
+        baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(previousTrajectory);
         Actions.runBlocking(
                 new SequentialAction(
@@ -131,16 +132,19 @@ public class LeftStateAuto extends LinearOpMode {
         switch (samplesTaken) {
             case 0:
                 nextSampleTrajectory = previousTrajectory.endTrajectory().fresh()
-                        .splineTo(LEFT_SAMPLE_1_VEC, Math.toRadians(270), speedyVel, speedyAccel);
+                        .splineToConstantHeading(LEFT_SAMPLE_1_VEC, Math.toRadians(90))
+                        .turnTo(Math.toRadians(90));
                 break;
             case 1:
                 nextSampleTrajectory = previousTrajectory.endTrajectory().fresh()
-                        .splineTo(LEFT_SAMPLE_2_VEC, Math.toRadians(270), speedyVel, speedyAccel);
+                        .splineToConstantHeading(LEFT_SAMPLE_2_VEC, Math.toRadians(90))
+                        .turnTo(Math.toRadians(90));
                 break;
             case 2:
             default:
                 nextSampleTrajectory = previousTrajectory.endTrajectory().fresh()
-                        .splineTo(LEFT_SAMPLE_3_VEC, Math.toRadians(270), speedyVel, speedyAccel);
+                        .splineToConstantHeading(LEFT_SAMPLE_3_VEC, Math.toRadians(90))
+                        .turnTo(Math.toRadians(90));
         }
 
         Actions.runBlocking(new SequentialAction(nextSampleTrajectory.build(), loadSample()));
@@ -161,10 +165,13 @@ public class LeftStateAuto extends LinearOpMode {
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
             pause(500);
             baseRobot.outtake.claw.open();
-            pause(200);
+            pause(100);
+            baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
+            pause(300);
             return false;
         }
     }
+
 
     public Action loadSample() {
         return new LoadSample();
@@ -186,11 +193,10 @@ public class LeftStateAuto extends LinearOpMode {
             baseRobot.outtake.claw.close();
             sleep(100);
             baseRobot.intake.geckoWheels.outtake();
-            baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
             sleep(100);
+            baseRobot.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
             baseRobot.intake.geckoWheels.stop();
-
             return false;
         }
     }

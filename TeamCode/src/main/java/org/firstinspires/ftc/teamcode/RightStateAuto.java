@@ -155,10 +155,10 @@ public class RightStateAuto extends LinearOpMode {
                 .strafeTo(Settings.Autonomous.FieldPositions.SAMPLE_MIDDLEMAN, speedyVel, speedyAccel)
                 .splineToLinearHeading(new Pose2d(Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.position,
                         Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.heading), Math.toRadians(270))
-                .lineToY(Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.position.y - 50, speedyVel, speedyAccel)
+                .lineToY(Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.position.y - 50)
                 .setTangent(90)
                 .splineToLinearHeading(new Pose2d(Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.position,
-                        Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.heading), Math.toRadians(270), speedyVel, speedyAccel)
+                        Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.heading), Math.toRadians(270))
                 .lineToY(Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.position.y - 40, speedyVel, speedyAccel)
                 .lineToY(Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.position.y - 58, cautiousVel, cautiousAccel);
     }
