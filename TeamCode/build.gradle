@@ -40,4 +40,22 @@ dependencies {
     implementation "com.acmerobotics.roadrunner:core:1.0.0"
     implementation "com.acmerobotics.roadrunner:actions:1.0.0"
     implementation "com.acmerobotics.dashboard:dashboard:0.4.16"
+    implementation files('lib/Echolocate-1.0.jar')
 }
+
+task createJar(type: Jar) {
+    archiveBaseName.set('Echolocate')
+    archiveVersion.set('1.0')
+    destinationDirectory.set(file("$buildDir/libs"))
+
+    // Include the Echolocate.java file at the root level of the JAR
+    from 'src/main/java/org/firstinspires/ftc/teamcode/echolocate/Echolocate.java'
+
+    // Specify how to handle duplicate entries
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    into('/') {
+        from 'src/main/java/org/firstinspires/ftc/teamcode/echolocate/Echolocate.java'
+    }
+}
+

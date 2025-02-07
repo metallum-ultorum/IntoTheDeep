@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
+// import Echolocate;
 
 @Autonomous(name = "Left State Auto", group = "Autonomous")
 public class LeftStateAuto extends LinearOpMode {
@@ -42,7 +43,7 @@ public class LeftStateAuto extends LinearOpMode {
         initialPose = Settings.Autonomous.FieldPositions.LEFT_INITIAL_POSE;
         roadRunner = new MecanumDrive(hardwareMap, initialPose);
         adaptiveCalibration.initialize(roadRunner);
-
+        // Pose2d randomized_sample_pose = Echolocate.find_one();
         telemetry.addData("Status", "Ready to start on the left side");
         telemetry.update();
         waitForStart();
