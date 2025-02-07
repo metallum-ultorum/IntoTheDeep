@@ -138,7 +138,7 @@ public class RightStateAuto extends LinearOpMode {
         return previousTrajectory.endTrajectory().fresh()
                 .strafeTo(new Vector2d(Settings.Autonomous.FieldPositions.HP_POSE.position.x, Settings.Autonomous.FieldPositions.HP_POSE.position.y), speedyVel, speedyAccel)
                 .waitSeconds(.1)
-                .lineToY(Settings.Autonomous.FieldPositions.HP_POSE.position.y - 10, cautiousVel, cautiousAccel)
+                .lineToY(Settings.Autonomous.FieldPositions.HP_POSE.position.y - 6, cautiousVel, cautiousAccel)
                 .waitSeconds(0.5);
     }
 

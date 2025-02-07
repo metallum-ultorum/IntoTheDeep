@@ -116,7 +116,7 @@ public class TestingSuite extends LinearOpMode {
                     testServo.setDirection(Servo.Direction.FORWARD);
                     boolean ltLastClicked = false;
                     boolean rtLastClicked = false;
-                    boolean fineControl = false;
+                    boolean fineControl = true;
                     double position = 0.5; // Start at middle position
                     testServo.setPosition(position);
 

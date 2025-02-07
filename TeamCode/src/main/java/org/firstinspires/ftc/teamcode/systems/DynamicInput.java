@@ -197,7 +197,7 @@ public class DynamicInput {
     // Method to switch between different control profiles
     public void switchProfiles(String mainProfileName, String subProfileName) {
         boolean mainFound = false, subFound = false;
-        for (Settings.ControllerProfile profile : Settings.AVAILABLE_PROFILES) {
+        for (Settings.ControllerProfile profile : Settings.MAIN_AVAILABLE_PROFILES) {
             if (profile.name.equals(mainProfileName)) {
                 this.mainProfile = profile;
                 this.mainSettings = profile.mainGamepad;

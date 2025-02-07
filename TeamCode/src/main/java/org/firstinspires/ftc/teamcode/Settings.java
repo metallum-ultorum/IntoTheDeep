@@ -427,6 +427,27 @@ public class Settings {
             new DefaultGamepadSettings(),
             new DefaultGamepadSettings());
 
+    public static final ControllerProfile AKAKKUNNATH_PROFILE = new ControllerProfile("akakkunnath",
+            new DefaultGamepadSettings() {
+                {
+                    // Customize main gamepad settings
+                    dpad_movement_speed = 0.6;
+                    bumper_rotation_speed = 0.8;
+                }
+
+                @Override
+                public double applyBoostCurve(double input) {
+                    return BoostCurves.exponential(input);
+                }
+            },
+            new DefaultGamepadSettings() {
+                {
+                    // Customize sub gamepad settings
+                    trigger_threshold = 0.1;
+                }
+            }
+    );
+
     public static final ControllerProfile BBOONSTRA_PROFILE = new ControllerProfile("bboonstra",
             new DefaultGamepadSettings() {
                 {
@@ -484,8 +505,16 @@ public class Settings {
                 }
             });
 
-    public static final ControllerProfile[] AVAILABLE_PROFILES = {
+    public static final ControllerProfile[] MAIN_AVAILABLE_PROFILES = {
             DEFAULT_PROFILE,
+            AKAKKUNNATH_PROFILE,
+            BBOONSTRA_PROFILE,
+            CISRAEL_PROFILE
+    };
+
+    public static final ControllerProfile[] SUB_AVAILABLE_PROFILES = {
+            DEFAULT_PROFILE,
+            AKAKKUNNATH_PROFILE,
             BBOONSTRA_PROFILE,
             CISRAEL_PROFILE
     };
