@@ -40,7 +40,7 @@ dependencies {
     implementation "com.acmerobotics.roadrunner:core:1.0.0"
     implementation "com.acmerobotics.roadrunner:actions:1.0.0"
     implementation "com.acmerobotics.dashboard:dashboard:0.4.16"
-    implementation files('libs/Echolocate.jar')
+    implementation files('libs/Echolocate-1.0.jar')
 }
 
 task createJar(type: Jar) {
