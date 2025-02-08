@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
-// import Echolocate;
+import org.firstinspires.ftc.teamcode.echolocate.Echolocate;
 
 @Autonomous(name = "Left State Auto", group = "Autonomous")
 public class LeftStateAuto extends LinearOpMode {
