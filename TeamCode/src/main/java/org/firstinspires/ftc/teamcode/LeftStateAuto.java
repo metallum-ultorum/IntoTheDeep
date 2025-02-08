@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
-import org.firstinspires.ftc.teamcode.echolocate.Echolocate;
+import com.roboticsmu.echolocate.*;
 
 @Autonomous(name = "Left State Auto", group = "Autonomous")
 public class LeftStateAuto extends LinearOpMode {
@@ -32,6 +32,8 @@ public class LeftStateAuto extends LinearOpMode {
     private MecanumDrive roadRunner;
     private Pose2d initialPose;
     public AdaptiveCalibration adaptiveCalibration;
+
+    public Echolocate
 
     @Override
     public void runOpMode() {
