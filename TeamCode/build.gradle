@@ -43,7 +43,7 @@ dependencies {
     implementation files('libs/Echolocate-1.0.jar')
 }
 
-task createJar(type: Jar) {
+tasks.register('createJar', Jar) {
     archiveBaseName.set('Echolocate')
     archiveVersion.set('1.0')
     destinationDirectory.set(file("$buildDir/libs"))
