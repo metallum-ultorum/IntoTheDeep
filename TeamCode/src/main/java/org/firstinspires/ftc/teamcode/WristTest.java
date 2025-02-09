@@ -3,32 +3,17 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.utils.MenuHelper;
-
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Stream;
 
 /** @noinspection unused */
 @Config
-@TeleOp(name = "WristTest", group = "TeleOp")
+// Not needed anymore as we are not using two servos in the inner wrist anymore
+//@TeleOp(name = "WristTest", group = "TeleOp")
 public class WristTest extends LinearOpMode {
-    // Please Update
-
-    private static final String[] SERVO_OPTIONS = {
-            Settings.Hardware.IDs.GECKO_LEFT,
-            Settings.Hardware.IDs.GECKO_RIGHT,
-            Settings.Hardware.IDs.WRIST_LEFT,
-            Settings.Hardware.IDs.WRIST_RIGHT,
-            Settings.Hardware.IDs.LINKAGE,
-    };
-
-    private static final String[] LIST_OPTIONS = SERVO_OPTIONS;
 
     @Override
     public void runOpMode() {

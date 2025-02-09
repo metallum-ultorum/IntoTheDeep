@@ -19,9 +19,10 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.InnerWrist;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Linkage;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.OuterWrist;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
 
@@ -51,7 +52,7 @@ public class LeftStateAuto extends LinearOpMode {
     }
 
     public void run() {
-        baseRobot.intake.wrist.setPosition(Wrist.Position.VERTICAL);
+        baseRobot.intake.innerWrist.setPosition(InnerWrist.Position.VERTICAL);
         TrajectoryActionBuilder previousChamberTrajectory = gameLoopSetup();
         int samplesTaken = 0;
         while (samplesTaken <= 3) {
@@ -185,7 +186,7 @@ public class LeftStateAuto extends LinearOpMode {
             sleep(500);
             baseRobot.intake.geckoWheels.stop();
             baseRobot.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.COLLAPSED);
-            baseRobot.intake.wrist.setPosition(Wrist.Position.VERTICAL);
+            baseRobot.intake.innerWrist.setPosition(InnerWrist.Position.VERTICAL);
             sleep(300);
             baseRobot.outtake.linkage.setPosition(Linkage.Position.TRANSFER);
             baseRobot.outtake.claw.open();
@@ -195,7 +196,7 @@ public class LeftStateAuto extends LinearOpMode {
             baseRobot.intake.geckoWheels.outtake();
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
             sleep(100);
-            baseRobot.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
+            baseRobot.intake.innerWrist.setPosition(InnerWrist.Position.HORIZONTAL);
             baseRobot.intake.geckoWheels.stop();
             return false;
         }

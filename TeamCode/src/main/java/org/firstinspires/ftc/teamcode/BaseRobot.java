@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.mechanisms.Intake;
 import org.firstinspires.ftc.teamcode.mechanisms.Outtake;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.InnerWrist;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.LinearActuator;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
 import org.firstinspires.ftc.teamcode.systems.Logger;
 import org.firstinspires.ftc.teamcode.systems.Odometry;
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -187,10 +187,10 @@ public class BaseRobot {
             if (contextualActions.intakeStop) {
                 intake.geckoWheels.stop();
             }
-            if (contextualActions.justWristUp) {
-                intake.wrist.cyclePosition();
-            } else if (contextualActions.wristDown) {
-                intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
+            if (contextualActions.justInnerWristUp) {
+                intake.innerWrist.cyclePosition();
+            } else if (contextualActions.innerWristDown) {
+                intake.innerWrist.setPosition(InnerWrist.Position.HORIZONTAL);
             }
             logger.update("freaky?", String.valueOf(input.subSettings.freaky_horizontal));
             if (input.subSettings.freaky_horizontal) {
@@ -207,6 +207,7 @@ public class BaseRobot {
                     intake.horizontalSlide.retract();
                 }
             }
+            intake.outerWrist.setPosition(contextualActions.outerWrist);
         }
 
         if (Settings.Deploy.OUTTAKE) {

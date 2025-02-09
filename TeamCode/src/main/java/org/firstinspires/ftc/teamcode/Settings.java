@@ -73,11 +73,18 @@ public class Settings {
             }
 
             @Config
-            public static class Wrist {
+            public static class InnerWrist {
                 // we removed the right servo so just change the left value lol
                 public static double[] HORIZONTAL_POSITION = {0.45, 0.0};
                 public static double[] CHAMBER_POSITION = {0.3, 0.0};
                 public static double[] VERTICAL_POSITION = {0.85, 0.0};
+            }
+
+            @Config
+            public static class OuterWrist {
+                public static double MIDDLE_POSITION = 0.5; //TODO: PHYSICALLY ADJUST TO MAKE THIS AS CLOSE TO THE MIDDLE AS POSSIBLE, THEN TUNE
+                public static double LEFT_LIMIT = 0; //TODO: SWAP WITH RIGHT_LIMIT IF NEEDED
+                public static double RIGHT_LIMIT = 1; //TODO: SWAP WITH LEFT_LIMIT IF NEEDED
             }
 
             @Config
@@ -107,9 +114,10 @@ public class Settings {
             public static final String LINEAR_ACTUATOR = "linearActuator";
             public static final String GECKO_LEFT = "geckoLeft";
             public static final String GECKO_RIGHT = "geckoRight";
-            public static final String WRIST_LEFT = "wristLeft";
-            public static final String WRIST_RIGHT = "wristRight";
-            public static final String LINKAGE = "shoulder";
+            public static final String INNER_WRIST_LEFT = "wristLeft";
+            public static final String INNER_WRIST_RIGHT = "wristRight";
+            public static final String OUTER_WRIST = "outerWrist";
+            public static final String SHOULDER = "shoulder";
             public static final String CLAW = "claw";
         }
 
@@ -309,10 +317,11 @@ public class Settings {
         public final GamepadButton clawIn = GamepadButton.OPTIONS;
         public final GamepadButton clawOut = GamepadButton.START;
         public final GamepadButton clawToggle = GamepadButton.RIGHT_STICK_BUTTON;
+        public final GamepadAxis outerWrist = GamepadAxis.RIGHT_STICK_X;
 
-        // Wrist controls
-        public GamepadButton wristUp = GamepadButton.DPAD_LEFT;
-        public GamepadButton wristDown = GamepadButton.DPAD_RIGHT;
+        // Inner Wrist controls
+        public GamepadButton innerWristUp = GamepadButton.DPAD_LEFT;
+        public GamepadButton innerWristDown = GamepadButton.DPAD_RIGHT;
 
         // Ascend extensor controls
         public final GamepadButton ascendExtensorExtend = GamepadButton.DPAD_RIGHT;

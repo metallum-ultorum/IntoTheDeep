@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 
-import static android.os.SystemClock.sleep;
-
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -10,23 +7,23 @@ import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
 /** @noinspection FieldCanBeLocal, unused */
-public class Wrist {
+public class InnerWrist {
     public static double[] position = {0,0};
     public final Servo wristLeft;
     public final Servo wristRight;
     public static long rightServoDelay = 45;
-    public static double[] verticalPos = Settings.Hardware.Servo.Wrist.VERTICAL_POSITION;
+    public static double[] verticalPos = Settings.Hardware.Servo.InnerWrist.VERTICAL_POSITION;
 //    public final double[] chamberPos = Settings.Hardware.Servo.Wrist.CHAMBER_POSITION;
-    public static double[] horizPos = Settings.Hardware.Servo.Wrist.HORIZONTAL_POSITION;
+    public static double[] horizPos = Settings.Hardware.Servo.InnerWrist.HORIZONTAL_POSITION;
 
     private final BaseRobot baseRobot;
     private final HardwareMap hardwareMap;
 
-    public Wrist(BaseRobot baseRobot) {
+    public InnerWrist(BaseRobot baseRobot) {
         this.baseRobot = baseRobot;
         this.hardwareMap = baseRobot.hardwareMap;
-        wristLeft = hardwareMap.get(Servo.class, Settings.Hardware.IDs.WRIST_LEFT);
-        wristRight = hardwareMap.get(Servo.class, Settings.Hardware.IDs.WRIST_RIGHT);
+        wristLeft = hardwareMap.get(Servo.class, Settings.Hardware.IDs.INNER_WRIST_LEFT);
+        wristRight = hardwareMap.get(Servo.class, Settings.Hardware.IDs.INNER_WRIST_RIGHT);
         wristRight.setDirection(Servo.Direction.REVERSE);
     }
 

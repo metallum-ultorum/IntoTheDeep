@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Settings;
 /** @noinspection FieldCanBeLocal, unused */
 public class Linkage {
     public static double position = 0;
-    public final Servo linkageServo;
+    public final Servo shoulderServo;
     public static double transferPos = Settings.Hardware.Servo.Linkage.TRANSFER_POSITION;
     public static double placeForwardPos = Settings.Hardware.Servo.Linkage.PLACE_FORWARD_POSITION;
     public static double placeBackwardPos = Settings.Hardware.Servo.Linkage.PLACE_BACKWARD_POSITION;
@@ -19,7 +19,7 @@ public class Linkage {
     public Linkage(BaseRobot baseRobot) {
         this.baseRobot = baseRobot;
         this.hardwareMap = baseRobot.hardwareMap;
-        linkageServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.LINKAGE);
+        shoulderServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.SHOULDER);
     }
 
     public void setPosition(Position newPosition) {
@@ -36,7 +36,7 @@ public class Linkage {
                 position = transferPos;
                 break;
         }
-        linkageServo.setPosition(position);
+        shoulderServo.setPosition(position);
     }
 
     public Position position() {
