@@ -111,6 +111,8 @@ public class Settings {
             public static final String WRIST_RIGHT = "wristRight";
             public static final String LINKAGE = "shoulder";
             public static final String CLAW = "claw";
+            public static final String PINPOINT = "pinpoint";
+
         }
 
         @Config
