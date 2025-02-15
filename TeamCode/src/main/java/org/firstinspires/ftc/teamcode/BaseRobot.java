@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PWMOutput;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -74,7 +75,7 @@ public class BaseRobot {
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         rearLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        rearRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        rearRightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

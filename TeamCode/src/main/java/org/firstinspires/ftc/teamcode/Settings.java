@@ -82,9 +82,8 @@ public class Settings {
 
             @Config
             public static class OuterWrist {
-                public static double MIDDLE_POSITION = 0.5; //TODO: PHYSICALLY ADJUST TO MAKE THIS AS CLOSE TO THE MIDDLE AS POSSIBLE, THEN TUNE
-                public static double LEFT_LIMIT = 0; //TODO: SWAP WITH RIGHT_LIMIT IF NEEDED
-                public static double RIGHT_LIMIT = 1; //TODO: SWAP WITH LEFT_LIMIT IF NEEDED
+                public static double Horizontal_Position = 0; //TODO: PHYSICALLY ADJUST TO MAKE THIS AS CLOSE TO THE MIDDLE AS POSSIBLE, THEN TUNE
+                public static double Vertical_Position = .5; //TODO: SWAP WITH LEFT_LIMIT IF NEEDED
             }
 
             @Config

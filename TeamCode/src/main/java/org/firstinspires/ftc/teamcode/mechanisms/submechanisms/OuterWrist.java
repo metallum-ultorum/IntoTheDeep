@@ -12,9 +12,8 @@ public class OuterWrist {
     public final Servo outerWrist;
     private final BaseRobot baseRobot;
     private final HardwareMap hardwareMap;
-    public static double middlePos = Settings.Hardware.Servo.OuterWrist.MIDDLE_POSITION;
-    public static double leftLimit = Settings.Hardware.Servo.OuterWrist.LEFT_LIMIT;
-    public static double rightLimit = Settings.Hardware.Servo.OuterWrist.RIGHT_LIMIT;
+    public static double horizontalPos = Settings.Hardware.Servo.OuterWrist.Horizontal_Position;
+    public static double verticalPos = Settings.Hardware.Servo.OuterWrist.Vertical_Position;
 
     public OuterWrist(BaseRobot baseRobot) {
         this.baseRobot = baseRobot;
@@ -24,10 +23,10 @@ public class OuterWrist {
 
     // Intended to be used with a joystick for variable control
     public void setPosition(double newPosition) {
-        if(newPosition < leftLimit) {
-            newPosition = leftLimit;
-        } else if(newPosition > rightLimit) {
-            newPosition = rightLimit;
+        if(newPosition < horizontalPos) {
+            newPosition = horizontalPos;
+        } else if(newPosition > verticalPos) {
+            newPosition = verticalPos;
         }
         position = newPosition;
         outerWrist.setPosition(position);
