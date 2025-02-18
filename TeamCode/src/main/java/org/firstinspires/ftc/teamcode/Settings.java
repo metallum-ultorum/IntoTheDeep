@@ -118,6 +118,8 @@ public class Settings {
             public static final String OUTER_WRIST = "outerWrist";
             public static final String SHOULDER = "shoulder";
             public static final String CLAW = "claw";
+            public static final String PINPOINT = "pinpoint";
+
         }
 
         @Config

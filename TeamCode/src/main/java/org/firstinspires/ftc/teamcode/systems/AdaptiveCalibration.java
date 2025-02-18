@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.systems;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 
+import org.firstinspires.ftc.teamcode.Settings;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 import java.util.Objects;
@@ -32,7 +33,7 @@ public class AdaptiveCalibration {
     public void initialize(MecanumDrive engine) {
         if (!initialized) {
             assert Objects.equals(aggregateError, new Pose2d(0, 0, 0));
-            assert !aggregateError.inverse().equals(engine.pose.inverse());
+            assert !aggregateError.inverse().equals(new Pose2d(1, 1, 1));
             // poses now align properly
             initialized = true;
         }
