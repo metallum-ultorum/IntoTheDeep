@@ -204,7 +204,7 @@ public class BaseRobot {
                     intake.horizontalSlide.retract();
                 }
             }
-            intake.rotator.setPosition(contextualActions.rotator);
+            intake.rotator.setPosition((contextualActions.rotator/4) + 0.25);
         }
 
         if (Settings.Deploy.OUTTAKE) {
