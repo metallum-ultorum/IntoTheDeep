@@ -7,18 +7,18 @@ import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
 /** @noinspection FieldCanBeLocal, unused */
-public class OuterWrist {
+public class Rotator {
     public static double position = 0;
-    public final Servo outerWrist;
+    public final Servo rotator;
     private final BaseRobot baseRobot;
     private final HardwareMap hardwareMap;
-    public static double horizontalPos = Settings.Hardware.Servo.OuterWrist.Horizontal_Position;
-    public static double verticalPos = Settings.Hardware.Servo.OuterWrist.Vertical_Position;
+    public static double horizontalPos = Settings.Hardware.Servo.Rotator.Horizontal_Position;
+    public static double verticalPos = Settings.Hardware.Servo.Rotator.Vertical_Position;
 
-    public OuterWrist(BaseRobot baseRobot) {
+    public Rotator(BaseRobot baseRobot) {
         this.baseRobot = baseRobot;
         this.hardwareMap = baseRobot.hardwareMap;
-        outerWrist = hardwareMap.get(Servo.class, Settings.Hardware.IDs.OUTER_WRIST);
+        rotator = hardwareMap.get(Servo.class, Settings.Hardware.IDs.OUTER_WRIST);
     }
 
     // Intended to be used with a joystick for variable control
@@ -29,6 +29,6 @@ public class OuterWrist {
             newPosition = verticalPos;
         }
         position = newPosition;
-        outerWrist.setPosition(position);
+        rotator.setPosition(position);
     }
 }

@@ -18,9 +18,9 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.InnerWrist;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Linkage;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.systems.AdaptiveCalibration;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
@@ -52,7 +52,7 @@ public class RightStateAuto extends LinearOpMode {
     }
 
     public void run() {
-        baseRobot.intake.innerWrist.setPosition(InnerWrist.Position.VERTICAL);
+        baseRobot.intake.wrist.setPosition(Wrist.Position.VERTICAL);
         TrajectoryActionBuilder previousChamberTrajectory = gameLoopSetup(PlacementHeight.CHAMBER_HIGH);
         int phase = 0;
         while (phase < 2) {
