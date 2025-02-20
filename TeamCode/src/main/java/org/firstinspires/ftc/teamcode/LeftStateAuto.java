@@ -68,7 +68,7 @@ public class LeftStateAuto extends LinearOpMode {
     public TrajectoryActionBuilder gameLoopSetup() {
         baseRobot.logger.update("Autonomous phase", "Placing initial specimen on chamber");
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(roadRunner.actionBuilder(initialPose));
-        baseRobot.outtake.claw.close();
+        baseRobot.outtake.outtakeClaw.close();
         baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
         baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
 
@@ -165,7 +165,7 @@ public class LeftStateAuto extends LinearOpMode {
             pause(1000);
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
             pause(500);
-            baseRobot.outtake.claw.open();
+            baseRobot.outtake.outtakeClaw.open();
             pause(100);
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
             pause(300);
@@ -181,23 +181,21 @@ public class LeftStateAuto extends LinearOpMode {
     public class LoadSample implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            baseRobot.intake.geckoWheels.intake();
+            baseRobot.intake.intakeClaw.close();
             baseRobot.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.EXPANDED);
             sleep(500);
-            baseRobot.intake.geckoWheels.stop();
             baseRobot.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.COLLAPSED);
             baseRobot.intake.wrist.setPosition(Wrist.Position.VERTICAL);
             sleep(300);
             baseRobot.outtake.linkage.setPosition(Linkage.Position.TRANSFER);
-            baseRobot.outtake.claw.open();
+            baseRobot.outtake.outtakeClaw.open();
             sleep(200);
-            baseRobot.outtake.claw.close();
+            baseRobot.outtake.outtakeClaw.close();
             sleep(100);
-            baseRobot.intake.geckoWheels.outtake();
+            baseRobot.intake.intakeClaw.open();
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
             sleep(100);
             baseRobot.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
-            baseRobot.intake.geckoWheels.stop();
             return false;
         }
     }

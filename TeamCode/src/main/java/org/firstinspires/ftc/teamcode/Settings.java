@@ -108,7 +108,8 @@ public class Settings {
             public static final String REAR_RIGHT_MOTOR = "rearRight";
 
             // Arm components
-            public static final String SLIDE_VERTICAL = "slideVertical";
+            public static final String SLIDE_VERTICAL_LEFT = "slideVerticalLeft";
+            public static final String SLIDE_VERTICAL_RIGHT = "slideVerticalRight";
             public static final String SLIDE_HORIZONTAL = "slideHorizontal";
             public static final String LINEAR_ACTUATOR = "linearActuator";
             public static final String GECKO_LEFT = "geckoLeft";
@@ -118,7 +119,8 @@ public class Settings {
             public static final String OUTER_WRIST = "rotator";
             public static final String LEFT_SHOULDER = "shoulderLeft";
             public static final String RIGHT_SHOULDER = "shoulderRight";
-            public static final String CLAW = "claw";
+            public static final String INTAKE_CLAW = "intakeClaw";
+            public static final String OUTTAKE_CLAW = "outtakeClaw";
             public static final String PINPOINT = "pinpoint";
 
         }

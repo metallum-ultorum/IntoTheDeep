@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PWMOutput;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -71,9 +72,9 @@ public class BaseRobot {
         rearRightMotor = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.REAR_RIGHT_MOTOR);
 
         // IF A WHEEL IS GOING THE WRONG DIRECTION CHECK WIRING red/black
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        rearLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        rearLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         rearRightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -127,10 +128,10 @@ public class BaseRobot {
     public void mecanumDrive(double drivePower, double strafePower, double rotation) {
         // Adjust the values for strafing and rotation
         strafePower *= Settings.Movement.strafe_power_coefficient;
-        double frontLeft = (drivePower + strafePower) * Settings.Movement.flip_movement + rotation;
-        double frontRight = (drivePower - strafePower) * Settings.Movement.flip_movement - rotation;
-        double rearLeft = (drivePower - strafePower) * Settings.Movement.flip_movement + rotation;
-        double rearRight = (drivePower + strafePower) * Settings.Movement.flip_movement - rotation;
+        double frontLeft = (drivePower + strafePower) * Settings.Movement.flip_movement - rotation;
+        double frontRight = (drivePower - strafePower) * Settings.Movement.flip_movement + rotation;
+        double rearLeft = (drivePower - strafePower) * Settings.Movement.flip_movement - rotation;
+        double rearRight = (drivePower + strafePower) * Settings.Movement.flip_movement + rotation;
 
         logger.update("FRONT LEFT", String.valueOf(frontLeft));
         logger.update("FRONT RIGHT", String.valueOf(frontRight));
@@ -178,15 +179,11 @@ public class BaseRobot {
         if (Settings.Deploy.INTAKE) {
 
             if (contextualActions.intakeIn) {
-                intake.geckoWheels.intake();
+                intake.intakeClaw.close();
             } else if (contextualActions.intakeOut) {
-                intake.geckoWheels.outtake();
-            } else {
-                intake.geckoWheels.stop();
+                intake.intakeClaw.open();
             }
-            if (contextualActions.intakeStop) {
-                intake.geckoWheels.stop();
-            }
+
             if (contextualActions.justWristUp) {
                 intake.wrist.cyclePosition();
             } else if (contextualActions.wristDown) {
@@ -227,11 +224,10 @@ public class BaseRobot {
             }
 
             if (contextualActions.justToggleClaw) {
-                if (outtake.claw.opened && Settings.Movement.easeTransfer) {
-                    intake.geckoWheels.outtake();
-                    scheduleTask(() -> intake.geckoWheels.stop(), 30);
+                if (outtake.outtakeClaw.opened && Settings.Movement.easeTransfer) {
+                    outtake.outtakeClaw.close();
+                    intake.intakeClaw.open();
                 }
-                outtake.claw.toggle();
             }
 
             if (contextualActions.justShoulderUp) {

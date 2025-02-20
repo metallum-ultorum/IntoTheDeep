@@ -70,7 +70,7 @@ public class RightStateAuto extends LinearOpMode {
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(roadRunner.actionBuilder(initialPose), 0);
         TrajectoryActionBuilder sampleTrajectory = pushSamples(placingTrajectory);
         TrajectoryActionBuilder placingTrajectory2 = getPlacingTrajectory(sampleTrajectory, 0);
-        baseRobot.outtake.claw.close();
+        baseRobot.outtake.outtakeClaw.close();
         baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
         baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
 
@@ -182,7 +182,7 @@ public class RightStateAuto extends LinearOpMode {
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 650);
             pause(1000);
-            baseRobot.outtake.claw.open();
+            baseRobot.outtake.outtakeClaw.open();
             return false;
         }
     }
@@ -199,7 +199,7 @@ public class RightStateAuto extends LinearOpMode {
     public class GrabSpecimenFromHumanPlayer implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            baseRobot.outtake.claw.close();
+            baseRobot.outtake.outtakeClaw.close();
             pause(500);
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
             baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
