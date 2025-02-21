@@ -23,13 +23,13 @@ public class OuttakeClaw {
     }
 
     public void open() {
-        clawServo.setPosition(Settings.Hardware.Servo.Claw.OPEN);
+        clawServo.setPosition(Settings.Hardware.Servo.OuttakeClaw.OPEN);
         opened = true;
     }
 
     /* Close both servos */
     public void close() {
-        clawServo.setPosition(Settings.Hardware.Servo.Claw.CLOSED);
+        clawServo.setPosition(Settings.Hardware.Servo.OuttakeClaw.CLOSED);
         opened = false;
     }
 

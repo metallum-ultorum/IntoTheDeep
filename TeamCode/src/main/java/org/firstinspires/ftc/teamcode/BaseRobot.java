@@ -72,10 +72,10 @@ public class BaseRobot {
         rearRightMotor = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.REAR_RIGHT_MOTOR);
 
         // IF A WHEEL IS GOING THE WRONG DIRECTION CHECK WIRING red/black
-        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        rearLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        rearRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        rearLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        rearRightMotor.setDirection(DcMotor.Direction.REVERSE);
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -128,10 +128,10 @@ public class BaseRobot {
     public void mecanumDrive(double drivePower, double strafePower, double rotation) {
         // Adjust the values for strafing and rotation
         strafePower *= Settings.Movement.strafe_power_coefficient;
-        double frontLeft = (drivePower + strafePower) * Settings.Movement.flip_movement - rotation;
-        double frontRight = (drivePower - strafePower) * Settings.Movement.flip_movement + rotation;
-        double rearLeft = (drivePower - strafePower) * Settings.Movement.flip_movement - rotation;
-        double rearRight = (drivePower + strafePower) * Settings.Movement.flip_movement + rotation;
+        double frontLeft = (drivePower + strafePower) * Settings.Movement.flip_movement + rotation;
+        double frontRight = (drivePower - strafePower) * Settings.Movement.flip_movement - rotation;
+        double rearLeft = (drivePower - strafePower) * Settings.Movement.flip_movement + rotation;
+        double rearRight = (drivePower + strafePower) * Settings.Movement.flip_movement - rotation;
 
         logger.update("FRONT LEFT", String.valueOf(frontLeft));
         logger.update("FRONT RIGHT", String.valueOf(frontRight));
@@ -178,16 +178,17 @@ public class BaseRobot {
         DynamicInput.ContextualActions contextualActions = input.getContextualActions();
         if (Settings.Deploy.INTAKE) {
 
-            if (contextualActions.intakeIn) {
-                intake.intakeClaw.close();
+            if (contextualActions.justIntakeIn) {
+                intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
+                scheduleTask(() -> intake.intakeClaw.close(), 1000);
             } else if (contextualActions.intakeOut) {
                 intake.intakeClaw.open();
             }
 
             if (contextualActions.justWristUp) {
-                intake.wrist.cyclePosition();
+                intake.wrist.setPosition(Wrist.Position.VERTICAL);
             } else if (contextualActions.wristDown) {
-                intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
+                intake.wrist.setPosition(Wrist.Position.READY);
             }
             logger.update("freaky?", String.valueOf(input.subSettings.freaky_horizontal));
             if (input.subSettings.freaky_horizontal) {
@@ -204,7 +205,7 @@ public class BaseRobot {
                     intake.horizontalSlide.retract();
                 }
             }
-            intake.rotator.setPosition((contextualActions.rotator/4) + 0.25);
+            intake.rotator.setPosition(contextualActions.rotator);
         }
 
         if (Settings.Deploy.OUTTAKE) {

@@ -23,13 +23,13 @@ public class IntakeClaw {
     }
 
     public void open() {
-        clawServo.setPosition(Settings.Hardware.Servo.Claw.OPEN);
+        clawServo.setPosition(Settings.Hardware.Servo.IntakeClaw.OPEN);
         opened = true;
     }
 
     /* Close both servos */
     public void close() {
-        clawServo.setPosition(Settings.Hardware.Servo.Claw.CLOSED);
+        clawServo.setPosition(Settings.Hardware.Servo.IntakeClaw.CLOSED);
         opened = false;
     }
 

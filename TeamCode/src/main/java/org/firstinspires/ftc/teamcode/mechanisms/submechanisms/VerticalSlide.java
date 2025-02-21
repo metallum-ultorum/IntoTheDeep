@@ -15,7 +15,26 @@ public class VerticalSlide implements ViperSlide {
     private VerticalPosition currentPosition;
     private final String LOG_PREFIX = "Vertical Slide: ";
 
+    // Main Constructor that doesn't reset motor encoders - for TeleOP
     public VerticalSlide(@NonNull BaseRobot baseRobot) {
+        this.baseRobot = baseRobot;
+        this.verticalMotorLeft = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT);
+        this.verticalMotorRight = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
+
+        verticalMotorRight.setDirection(DcMotor.Direction.REVERSE);
+
+        setPosition(VerticalPosition.TRANSFER);
+
+        // Set to RUN_TO_POSITION mode for position control
+        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.currentPosition = VerticalPosition.TRANSFER;
+        encoderTarget = verticalMotorLeft.getTargetPosition();
+        encoderTarget = verticalMotorRight.getTargetPosition();
+    }
+
+    // Alternate Constructor that resets the motor encoders - for Autonomous
+    public VerticalSlide(@NonNull BaseRobot baseRobot, boolean resetEncoders) {
         this.baseRobot = baseRobot;
         this.verticalMotorLeft = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT);
         this.verticalMotorRight = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);

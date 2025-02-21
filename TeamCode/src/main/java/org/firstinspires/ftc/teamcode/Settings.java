@@ -66,10 +66,16 @@ public class Settings {
         @Config
         public static class Servo {
             @Config
-            public static class Claw {
+            public static class OuttakeClaw {
                 /** Values for open and closed positions on the outtake claw */
                 public static double OPEN = 0;
                 public static double CLOSED = 1;
+            }
+            @Config
+            public static class IntakeClaw {
+                /** Values for open and closed positions on the outtake claw */
+                public static double OPEN = 0.25;
+                public static double CLOSED = 0.8;
             }
 
             @Config
@@ -77,13 +83,14 @@ public class Settings {
                 // we removed the right servo so just change the left value lol
                 public static double[] HORIZONTAL_POSITION = {0, 0.0};
                 public static double[] CHAMBER_POSITION = {0.3, 0.0};
-                public static double[] VERTICAL_POSITION = {0.5, 0.0};
+                public static double[] VERTICAL_POSITION = {0.4, 0.0};
+                public static double[] READY_POSITION = {0.15, 0};
             }
 
             @Config
             public static class Rotator {
-                public static double Horizontal_Position = 0; //TODO: PHYSICALLY ADJUST TO MAKE THIS AS CLOSE TO THE MIDDLE AS POSSIBLE, THEN TUNE
-                public static double Vertical_Position = .5; //TODO: SWAP WITH LEFT_LIMIT IF NEEDED
+                public static double LEFT_LIMIT = 0; //TODO: PHYSICALLY ADJUST TO MAKE THIS AS CLOSE TO THE MIDDLE AS POSSIBLE, THEN TUNE
+                public static double RIGHT_LIMIT = 1; //TODO: SWAP WITH LEFT_LIMIT IF NEEDED
             }
 
             @Config
@@ -145,7 +152,7 @@ public class Settings {
 
             public static int HIGH_RUNG_PREP_AUTO = 1500;
             public static int HIGH_RUNG = 1800; // TODO TUNE
-            public static int HIGH_BASKET = 3190;
+            public static int HIGH_BASKET = 3200;
 
             // Motor power settings
             public static double MOVEMENT_POWER = 0.9;

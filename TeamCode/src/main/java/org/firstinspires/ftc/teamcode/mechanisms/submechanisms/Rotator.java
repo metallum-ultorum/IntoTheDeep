@@ -12,8 +12,8 @@ public class Rotator {
     public final Servo rotator;
     private final BaseRobot baseRobot;
     private final HardwareMap hardwareMap;
-    public static double horizontalPos = Settings.Hardware.Servo.Rotator.Horizontal_Position;
-    public static double verticalPos = Settings.Hardware.Servo.Rotator.Vertical_Position;
+    public static double horizontalPos = Settings.Hardware.Servo.Rotator.LEFT_LIMIT;
+    public static double verticalPos = Settings.Hardware.Servo.Rotator.RIGHT_LIMIT;
 
     public Rotator(BaseRobot baseRobot) {
         this.baseRobot = baseRobot;
