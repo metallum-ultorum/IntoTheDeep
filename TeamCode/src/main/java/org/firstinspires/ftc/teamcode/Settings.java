@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
+import com.pedropathing.localization.Pose;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -227,6 +228,18 @@ public class Settings {
             public static Vector2d LEFT_SAMPLE_1_VEC = new Vector2d(-48.1, -40);
             public static Vector2d LEFT_SAMPLE_2_VEC = new Vector2d(-58.3, -40);
             public static Vector2d LEFT_SAMPLE_3_VEC = new Vector2d(-65.6, -40);
+
+            // this is all of the pedro stuff
+            private final Pose startPose = new Pose(9, 111, Math.toRadians(0));
+            private final Pose scorePose = new Pose(14, 129, Math.toRadians(0));
+
+            private final Pose preset1Pose = new Pose(37, 121, Math.toRadians(0));
+
+            private final Pose preset2Pose = new Pose(43, 130, Math.toRadians(0));
+
+            private final Pose preset3Pose = new Pose(49, 135, Math.toRadians(0));
+
+            private final Pose rightParkPose = new Pose(60, 98, Math.toRadians(0));
 
         }
 
