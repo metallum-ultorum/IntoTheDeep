@@ -69,13 +69,14 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
     double oldTime = 0;
 
 
+
     @Override
     public void runOpMode() {
 
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
 
-        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+        odo = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
 
         /*
         Set the odometry pod positions relative to the point that the odometry computer tracks around.
@@ -102,7 +103,7 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         increase when you move the robot forward. And the Y (strafe) pod should increase when
         you move the robot to the left.
          */
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
 
         /*
@@ -119,6 +120,8 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset", odo.getXOffset());
         telemetry.addData("Y offset", odo.getYOffset());
+        telemetry.addData("X velocity", odo.getVelX());
+        telemetry.addData("Y velocity", odo.getVelY());
         telemetry.addData("Device Version Number:", odo.getDeviceVersion());
         telemetry.addData("Device Scalar", odo.getYawScalar());
         telemetry.update();
