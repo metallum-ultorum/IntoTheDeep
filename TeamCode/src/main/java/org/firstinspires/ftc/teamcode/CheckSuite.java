@@ -26,6 +26,7 @@ public class CheckSuite extends LinearOpMode {
     private static final String[] SERVO_OPTIONS = {
             Settings.Hardware.IDs.WRIST_LEFT,
             Settings.Hardware.IDs.WRIST_RIGHT,
+            Settings.Hardware.IDs.OUTER_WRIST,
     };
 
     private static final String[] CRSERVO_OPTIONS = {

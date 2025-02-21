@@ -70,7 +70,7 @@ public class RightStateAuto extends LinearOpMode {
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(roadRunner.actionBuilder(initialPose), 0);
         TrajectoryActionBuilder sampleTrajectory = pushSamples(placingTrajectory);
         TrajectoryActionBuilder placingTrajectory2 = getPlacingTrajectory(sampleTrajectory, 0);
-        baseRobot.outtake.claw.close();
+        baseRobot.outtake.outtakeClaw.close();
         baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
         baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
 
@@ -139,7 +139,7 @@ public class RightStateAuto extends LinearOpMode {
         return previousTrajectory.endTrajectory().fresh()
                 .strafeTo(new Vector2d(Settings.Autonomous.FieldPositions.HP_POSE.position.x, Settings.Autonomous.FieldPositions.HP_POSE.position.y), speedyVel, speedyAccel)
                 .waitSeconds(.1)
-                .lineToY(Settings.Autonomous.FieldPositions.HP_POSE.position.y - 10, cautiousVel, cautiousAccel)
+                .lineToY(Settings.Autonomous.FieldPositions.HP_POSE.position.y - 6, cautiousVel, cautiousAccel)
                 .waitSeconds(0.5);
     }
 
@@ -156,10 +156,10 @@ public class RightStateAuto extends LinearOpMode {
                 .strafeTo(Settings.Autonomous.FieldPositions.SAMPLE_MIDDLEMAN, speedyVel, speedyAccel)
                 .splineToLinearHeading(new Pose2d(Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.position,
                         Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.heading), Math.toRadians(270))
-                .lineToY(Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.position.y - 50, speedyVel, speedyAccel)
+                .lineToY(Settings.Autonomous.FieldPositions.FIRST_PRESET_SAMPLE_POSE.position.y - 50)
                 .setTangent(90)
                 .splineToLinearHeading(new Pose2d(Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.position,
-                        Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.heading), Math.toRadians(270), speedyVel, speedyAccel)
+                        Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.heading), Math.toRadians(270))
                 .lineToY(Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.position.y - 40, speedyVel, speedyAccel)
                 .lineToY(Settings.Autonomous.FieldPositions.SECOND_PRESET_SAMPLE_POSE.position.y - 58, cautiousVel, cautiousAccel);
     }
@@ -182,7 +182,7 @@ public class RightStateAuto extends LinearOpMode {
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 650);
             pause(1000);
-            baseRobot.outtake.claw.open();
+            baseRobot.outtake.outtakeClaw.open();
             return false;
         }
     }
@@ -199,7 +199,7 @@ public class RightStateAuto extends LinearOpMode {
     public class GrabSpecimenFromHumanPlayer implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            baseRobot.outtake.claw.close();
+            baseRobot.outtake.outtakeClaw.close();
             pause(500);
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
             baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);

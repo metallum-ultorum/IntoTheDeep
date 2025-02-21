@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 
-import static android.os.SystemClock.sleep;
-
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -17,7 +14,8 @@ public class Wrist {
     public static long rightServoDelay = 45;
     public static double[] verticalPos = Settings.Hardware.Servo.Wrist.VERTICAL_POSITION;
 //    public final double[] chamberPos = Settings.Hardware.Servo.Wrist.CHAMBER_POSITION;
-    public static double[] horizPos = Settings.Hardware.Servo.Wrist.HORIZONTAL_POSITION;
+public static double[] horizPos = Settings.Hardware.Servo.Wrist.HORIZONTAL_POSITION;
+public static double[] readyPos = Settings.Hardware.Servo.Wrist.READY_POSITION;
 
     private final BaseRobot baseRobot;
     private final HardwareMap hardwareMap;
@@ -36,11 +34,11 @@ public class Wrist {
             case VERTICAL:
                 position = verticalPos;
                 break;
-//            case CHAMBER:
-//                position = chamberPos;
-//                break;
-            default:
+            case HORIZONTAL:
                 position = horizPos;
+                break;
+            default:
+                position = readyPos;
                 break;
         }
         wristLeft.setPosition(position[0]);
@@ -51,9 +49,9 @@ public class Wrist {
         if (position == verticalPos) {
             return Position.VERTICAL;
           }
-//        else if (position == chamberPos) {
-//            return Position.CHAMBER;
-//        }
+        else if (position == readyPos) {
+            return Position.READY;
+        }
         else if (position == horizPos) {
             return Position.HORIZONTAL;
         } else {
@@ -66,14 +64,14 @@ public class Wrist {
         Position nextPosition;
 
         switch (currentPosition) {
-            case HORIZONTAL:
+            case READY:
                 nextPosition = Position.VERTICAL;
                 break;
             case VERTICAL:
-                nextPosition = Position.HORIZONTAL;
+                nextPosition = Position.READY;
                 break;
             default:
-                nextPosition = Position.HORIZONTAL; // Fallback to HORIZONTAL if unknown
+                nextPosition = Position.READY; // Fallback to READY if unknown
                 break;
         }
 
@@ -83,7 +81,9 @@ public class Wrist {
     public enum Position {
         HORIZONTAL,
         VERTICAL,
+        READY,
         CHAMBER,
+
         UNKNOWN,
     }
 

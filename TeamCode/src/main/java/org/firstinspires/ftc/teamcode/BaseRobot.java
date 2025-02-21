@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PWMOutput;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,10 +12,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.mechanisms.Intake;
 import org.firstinspires.ftc.teamcode.mechanisms.Outtake;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.LinearActuator;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
 import org.firstinspires.ftc.teamcode.systems.Logger;
 import org.firstinspires.ftc.teamcode.systems.Odometry;
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -177,20 +178,17 @@ public class BaseRobot {
         DynamicInput.ContextualActions contextualActions = input.getContextualActions();
         if (Settings.Deploy.INTAKE) {
 
-            if (contextualActions.intakeIn) {
-                intake.geckoWheels.intake();
-            } else if (contextualActions.intakeOut) {
-                intake.geckoWheels.outtake();
-            } else {
-                intake.geckoWheels.stop();
-            }
-            if (contextualActions.intakeStop) {
-                intake.geckoWheels.stop();
-            }
-            if (contextualActions.justWristUp) {
-                intake.wrist.cyclePosition();
-            } else if (contextualActions.wristDown) {
+            if (contextualActions.justIntakeIn) {
                 intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
+                scheduleTask(() -> intake.intakeClaw.close(), 1000);
+            } else if (contextualActions.intakeOut) {
+                intake.intakeClaw.open();
+            }
+
+            if (contextualActions.justWristUp) {
+                intake.wrist.setPosition(Wrist.Position.VERTICAL);
+            } else if (contextualActions.wristDown) {
+                intake.wrist.setPosition(Wrist.Position.READY);
             }
             logger.update("freaky?", String.valueOf(input.subSettings.freaky_horizontal));
             if (input.subSettings.freaky_horizontal) {
@@ -207,6 +205,7 @@ public class BaseRobot {
                     intake.horizontalSlide.retract();
                 }
             }
+            intake.rotator.setPosition(contextualActions.rotator);
         }
 
         if (Settings.Deploy.OUTTAKE) {
@@ -226,11 +225,10 @@ public class BaseRobot {
             }
 
             if (contextualActions.justToggleClaw) {
-                if (outtake.claw.opened && Settings.Movement.easeTransfer) {
-                    intake.geckoWheels.outtake();
-                    scheduleTask(() -> intake.geckoWheels.stop(), 30);
+                if (outtake.outtakeClaw.opened && Settings.Movement.easeTransfer) {
+                    outtake.outtakeClaw.close();
+                    intake.intakeClaw.open();
                 }
-                outtake.claw.toggle();
             }
 
             if (contextualActions.justShoulderUp) {

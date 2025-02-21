@@ -38,9 +38,9 @@ public class MainOp extends LinearOpMode {
 
         while (!isStarted() && !isStopRequested() && menuActive) {
             // Build options array
-            String[] options = new String[Settings.AVAILABLE_PROFILES.length + 1];
-            for (int i = 0; i < Settings.AVAILABLE_PROFILES.length; i++) {
-                options[i] = Settings.AVAILABLE_PROFILES[i].name;
+            String[] options = new String[Settings.MAIN_AVAILABLE_PROFILES.length + 1];
+            for (int i = 0; i < Settings.MAIN_AVAILABLE_PROFILES.length; i++) {
+                options[i] = Settings.MAIN_AVAILABLE_PROFILES[i].name;
             }
             options[options.length - 1] = "Confirm";
 
@@ -66,8 +66,8 @@ public class MainOp extends LinearOpMode {
                 } else if (gamepad1.dpad_down) {
                     mainSelection.set((mainSelection.get() + 1) % options.length);
                 } else if (gamepad1.a) {
-                    if (mainSelection.get() < Settings.AVAILABLE_PROFILES.length) {
-                        mainProfile.set(Settings.AVAILABLE_PROFILES[mainSelection.get()]);
+                    if (mainSelection.get() < Settings.MAIN_AVAILABLE_PROFILES.length) {
+                        mainProfile.set(Settings.MAIN_AVAILABLE_PROFILES[mainSelection.get()]);
                     } else {
                         mainConfirmed.set(true);
                     }
@@ -80,8 +80,8 @@ public class MainOp extends LinearOpMode {
                 } else if (gamepad2.dpad_down) {
                     subSelection.set((subSelection.get() + 1) % options.length);
                 } else if (gamepad2.a) {
-                    if (subSelection.get() < Settings.AVAILABLE_PROFILES.length) {
-                        subProfile.set(Settings.AVAILABLE_PROFILES[subSelection.get()]);
+                    if (subSelection.get() < Settings.MAIN_AVAILABLE_PROFILES.length) {
+                        subProfile.set(Settings.MAIN_AVAILABLE_PROFILES[subSelection.get()]);
                     } else {
                         subConfirmed.set(true);
                     }

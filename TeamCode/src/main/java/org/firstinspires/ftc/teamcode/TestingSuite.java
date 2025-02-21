@@ -24,7 +24,8 @@ public class TestingSuite extends LinearOpMode {
             Settings.Hardware.IDs.REAR_LEFT_MOTOR,
             Settings.Hardware.IDs.REAR_RIGHT_MOTOR,
             // Settings.Hardware.IDs.LINEAR_ACTUATOR,
-            Settings.Hardware.IDs.SLIDE_VERTICAL,
+            Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT,
+            Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT,
             Settings.Hardware.IDs.SLIDE_HORIZONTAL,
     };
 
@@ -33,9 +34,12 @@ public class TestingSuite extends LinearOpMode {
             Settings.Hardware.IDs.GECKO_RIGHT,
             Settings.Hardware.IDs.WRIST_LEFT,
             Settings.Hardware.IDs.WRIST_RIGHT,
-            Settings.Hardware.IDs.LINKAGE,
-            Settings.Hardware.IDs.CLAW,
+            Settings.Hardware.IDs.OUTER_WRIST,
+            Settings.Hardware.IDs.LEFT_SHOULDER,
+            Settings.Hardware.IDs.RIGHT_SHOULDER,
+            Settings.Hardware.IDs.INTAKE_CLAW,
     };
+
 
     private static final String[] LIST_OPTIONS = Stream.concat(Arrays.stream(MOTOR_OPTIONS),
             Arrays.stream(SERVO_OPTIONS)).toArray(String[]::new);
@@ -116,7 +120,7 @@ public class TestingSuite extends LinearOpMode {
                     testServo.setDirection(Servo.Direction.FORWARD);
                     boolean ltLastClicked = false;
                     boolean rtLastClicked = false;
-                    boolean fineControl = false;
+                    boolean fineControl = true;
                     double position = 0.5; // Start at middle position
                     testServo.setPosition(position);
 
