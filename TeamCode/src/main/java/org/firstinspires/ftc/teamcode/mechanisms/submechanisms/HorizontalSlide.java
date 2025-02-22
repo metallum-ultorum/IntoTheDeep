@@ -67,7 +67,7 @@ public class HorizontalSlide implements ViperSlide {
         setPosition(HorizontalPosition.COLLAPSED);
 
         // Set to RUN_TO_POSITION mode for position control
-        // horizontalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        horizontalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.currentPosition = HorizontalPosition.COLLAPSED;
         encoderTarget = horizontalMotor.getTargetPosition();
     }

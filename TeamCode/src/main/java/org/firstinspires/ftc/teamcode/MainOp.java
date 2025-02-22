@@ -166,7 +166,7 @@ public class MainOp extends LinearOpMode {
             if (contextualActions.justWristUp) {
                 mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
             } else if (contextualActions.wristDown) {
-                mechanisms.intake.wrist.setPosition(Wrist.Position.READY);
+                mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
             }
 
             if (input.subSettings.freaky_horizontal) {

@@ -26,7 +26,7 @@ public class Settings {
          * Determines if the gecko wheels outtake a little when closing the claw to ease
          * transfer
          **/
-        public static boolean easeTransfer = true;
+        public static boolean easeTransfer = false;
     }
 
     public static final ControllerProfile AGNEY_PROFILE = new ControllerProfile("Mr. Boost Button",
@@ -115,7 +115,7 @@ public class Settings {
 
         public boolean use_absolute_positioning = false;
 
-        public boolean freaky_horizontal = true;
+        public boolean freaky_horizontal = false;
         public boolean freaky_vertical = true;
 
         public final ButtonMapping buttonMapping;
@@ -284,9 +284,9 @@ public class Settings {
             @Config
             public static class Wrist {
                 // we removed the right servo so just change the left value lol
-                public static double HORIZONTAL_POSITION = 0;
-                public static double VERTICAL_POSITION = 0.4;
-                public static double READY_POSITION = 0.15;
+                public static double HORIZONTAL_POSITION = .6;
+                public static double VERTICAL_POSITION = 1;
+                public static double READY_POSITION = .7;
             }
 
             @Config
@@ -357,8 +357,7 @@ public class Settings {
             // TODO: TUNE
             public static int COLLAPSED = 0;
             public static int LEVEL_1 = -200;
-            public static int LEVEL_2 = -400;
-            public static int EXPANDED = -600;
+            public static int EXPANDED = -300;
 
             // Motor power settings
             public static double MOVEMENT_POWER = 0.7;
@@ -448,8 +447,8 @@ public class Settings {
 
     public static class ButtonMapping {
         // Extensor controls
-        public GamepadButton extendHorizontal = GamepadButton.X;
-        public GamepadButton retractHorizontal = GamepadButton.B;
+        public GamepadButton extendHorizontal = GamepadButton.B;
+        public GamepadButton retractHorizontal = GamepadButton.X;
         public final GamepadButton retractVertical = GamepadButton.LEFT_BUMPER;
         public final GamepadButton extendVertical = GamepadButton.RIGHT_BUMPER;
 

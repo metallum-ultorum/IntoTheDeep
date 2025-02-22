@@ -45,7 +45,7 @@ public class TestingSuite extends LinearOpMode {
     };
 
     private static final String[] LIST_OPTIONS = Stream.concat(Stream.concat(Arrays.stream(MOTOR_OPTIONS),
-            Arrays.stream(SERVO_OPTIONS)), Stream.concat(Arrays.stream(DUAL_MOTOR_OPTIONS),
+            Arrays.stream(DUAL_MOTOR_OPTIONS)), Stream.concat(Arrays.stream(SERVO_OPTIONS),
             Arrays.stream(DUAL_SERVO_OPTIONS))).toArray(String[]::new);
 
     @Override
