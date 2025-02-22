@@ -30,10 +30,7 @@ public class TestingSuite extends LinearOpMode {
     };
 
     private static final String[] SERVO_OPTIONS = {
-            Settings.Hardware.IDs.GECKO_LEFT,
-            Settings.Hardware.IDs.GECKO_RIGHT,
-            Settings.Hardware.IDs.WRIST_LEFT,
-            Settings.Hardware.IDs.WRIST_RIGHT,
+            Settings.Hardware.IDs.WRIST,
             Settings.Hardware.IDs.OUTER_WRIST,
             Settings.Hardware.IDs.LEFT_SHOULDER,
             Settings.Hardware.IDs.RIGHT_SHOULDER,
@@ -137,9 +134,6 @@ public class TestingSuite extends LinearOpMode {
                             position = 0.5;
                             testServo.setPosition(position);
                         }
-
-                        continuousMode.set(selectedServo[0].equals(Settings.Hardware.IDs.GECKO_LEFT) ||
-                                selectedServo[0].equals(Settings.Hardware.IDs.GECKO_RIGHT));
 
                         double step = fineControl ? 0.05 : 0.2;
 
