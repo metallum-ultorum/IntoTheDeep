@@ -47,8 +47,6 @@ public interface ViperSlide {
 
     void retract();
 
-    void min();
-
     void max();
 
     void increment();

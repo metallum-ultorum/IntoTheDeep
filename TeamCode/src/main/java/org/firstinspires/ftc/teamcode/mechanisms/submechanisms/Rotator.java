@@ -1,24 +1,20 @@
 package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
-/** @noinspection FieldCanBeLocal, unused */
+/**
+ * @noinspection unused
+ */
 public class Rotator {
     public static double position = 0;
-    public final Servo rotator;
-    private final BaseRobot baseRobot;
-    private final HardwareMap hardwareMap;
-    public static double horizontalPos = Settings.Hardware.Servo.Rotator.LEFT_LIMIT;
-    public static double verticalPos = Settings.Hardware.Servo.Rotator.RIGHT_LIMIT;
+    public static final double horizontalPos = Settings.Hardware.Servo.Rotator.LEFT_LIMIT;
+    public static final double verticalPos = Settings.Hardware.Servo.Rotator.RIGHT_LIMIT;
+    public final Servo rotatorServo;
 
-    public Rotator(BaseRobot baseRobot) {
-        this.baseRobot = baseRobot;
-        this.hardwareMap = baseRobot.hardwareMap;
-        rotator = hardwareMap.get(Servo.class, Settings.Hardware.IDs.OUTER_WRIST);
+    public Rotator(Servo rotatorServo) {
+        this.rotatorServo = rotatorServo;
     }
 
     // Intended to be used with a joystick for variable control
@@ -29,6 +25,10 @@ public class Rotator {
             newPosition = verticalPos;
         }
         position = newPosition;
-        rotator.setPosition(position);
+        rotatorServo.setPosition(position);
+    }
+
+    public void init() {
+        setPosition(horizontalPos);
     }
 }

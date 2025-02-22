@@ -1,27 +1,14 @@
 package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
 public class LinearActuator  {
     private final DcMotor actuatorMotor;
-    private final BaseRobot baseRobot;
-    public LinearActuator(@NonNull BaseRobot baseRobot) {
-        this.baseRobot = baseRobot;
-        this.actuatorMotor = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.LINEAR_ACTUATOR);
 
-        // Reset encoders
-        actuatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        retract();
-
-        // Set to RUN_TO_POSITION mode for position control
-        actuatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public LinearActuator(DcMotor actuatorMotor) {
+        this.actuatorMotor = actuatorMotor;
     }
 
     public void extend() {
@@ -34,5 +21,15 @@ public class LinearActuator  {
 
     public void stop() {
         actuatorMotor.setTargetPosition(actuatorMotor.getCurrentPosition());
+    }
+
+    public void init() {
+        // Reset encoders
+        actuatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        retract();
+
+        // Set to RUN_TO_POSITION mode for position control
+        actuatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }

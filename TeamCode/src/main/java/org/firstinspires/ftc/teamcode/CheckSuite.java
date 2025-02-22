@@ -24,18 +24,12 @@ public class CheckSuite extends LinearOpMode {
     };
 
     private static final String[] SERVO_OPTIONS = {
-            Settings.Hardware.IDs.WRIST_LEFT,
-            Settings.Hardware.IDs.WRIST_RIGHT,
-            Settings.Hardware.IDs.OUTER_WRIST,
-    };
-
-    private static final String[] CRSERVO_OPTIONS = {
-            Settings.Hardware.IDs.GECKO_LEFT,
-            Settings.Hardware.IDs.GECKO_RIGHT,
+            Settings.Hardware.IDs.WRIST,
+            Settings.Hardware.IDs.ROTATOR,
     };
 
     private static final String[] LIST_OPTIONS = Stream.concat(Arrays.stream(MOTOR_OPTIONS),
-            Stream.concat(Arrays.stream(SERVO_OPTIONS), Arrays.stream(CRSERVO_OPTIONS))).toArray(String[]::new);
+            Arrays.stream(SERVO_OPTIONS)).toArray(String[]::new);
 
     private void assertHardwareExists(String id) {
         try {
@@ -170,16 +164,6 @@ public class CheckSuite extends LinearOpMode {
             testMotor(motor, motorId);
         }
 
-        // Test CR Servos
-        for (String servoId : CRSERVO_OPTIONS) {
-            if (!opModeIsActive())
-                return;
-
-            CRServo servo = hardwareMap.get(CRServo.class, servoId);
-            servo.setDirection(CRServo.Direction.FORWARD);
-
-            testCRServo(servo, servoId);
-        }
 
         // Test Regular Servos
         for (String servoId : SERVO_OPTIONS) {

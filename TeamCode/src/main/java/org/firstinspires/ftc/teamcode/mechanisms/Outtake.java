@@ -1,19 +1,26 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
-import org.firstinspires.ftc.teamcode.BaseRobot;
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.IntakeClaw;
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Linkage;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.OuttakeClaw;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.VerticalSlide;
 
 public class Outtake {
     public final VerticalSlide verticalSlide;
-    public final Linkage linkage;
+    public final Shoulder shoulder;
     public final OuttakeClaw outtakeClaw;
 
-    public Outtake(BaseRobot baseRobot) {
-        verticalSlide = new VerticalSlide(baseRobot);
-        linkage = new Linkage(baseRobot);
-        outtakeClaw = new OuttakeClaw(baseRobot);
+    public Outtake(DcMotor verticalMotorLeft, DcMotor verticalMotorRight, Servo leftShoulderServo, Servo rightShoulderServo, Servo clawServo) {
+        verticalSlide = new VerticalSlide(verticalMotorLeft, verticalMotorRight);
+        shoulder = new Shoulder(leftShoulderServo, rightShoulderServo);
+        outtakeClaw = new OuttakeClaw(clawServo);
+    }
+
+    public void init() {
+        verticalSlide.init();
+        shoulder.init();
+        outtakeClaw.init();
     }
 }
