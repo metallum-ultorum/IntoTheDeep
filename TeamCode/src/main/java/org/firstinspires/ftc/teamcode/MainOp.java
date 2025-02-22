@@ -54,6 +54,7 @@ public class MainOp extends LinearOpMode {
 
         // Main loop
         waitForStart();
+        mechanisms.init();
         while (opModeIsActive()) {
             gamepadPrimary();
             gamepadAuxiliary();
@@ -202,14 +203,18 @@ public class MainOp extends LinearOpMode {
             }
 
             if (contextualActions.justToggleClaw) {
-                if (mechanisms.outtake.outtakeClaw.opened && Settings.Movement.easeTransfer) {
+                if (mechanisms.outtake.outtakeClaw.opened) {
                     mechanisms.outtake.outtakeClaw.close();
-                    mechanisms.intake.intakeClaw.open();
+                    if (Settings.Movement.easeTransfer) {
+                        mechanisms.intake.intakeClaw.open();
+                    }
+                } else {
+                    mechanisms.outtake.outtakeClaw.open();
                 }
             }
 
             if (contextualActions.justShoulderUp) {
-                mechanisms.outtake.linkage.cyclePosition();
+                mechanisms.outtake.shoulder.cyclePosition();
             }
 
             if (contextualActions.justFlipMovement) {
