@@ -17,6 +17,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Linkage;
@@ -26,8 +27,10 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.systems.AdaptiveCalibration;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
 
-@Autonomous(name = "Left State Auto", group = "Autonomous")
-public class LeftStateAuto extends LinearOpMode {
+@Deprecated
+@Disabled
+@Autonomous(name = "Roadrunner Left State Auto", group = "Autonomous")
+public class RoadrunnerLeftStateAuto extends LinearOpMode {
     private BaseRobot baseRobot;
     private MecanumDrive roadRunner;
     private Pose2d initialPose;
