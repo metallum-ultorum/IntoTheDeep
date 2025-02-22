@@ -7,23 +7,24 @@ import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
 /** @noinspection FieldCanBeLocal, unused */
-public class InnerWrist {
+public class Wrist {
     public static double[] position = {0,0};
     public final Servo wristLeft;
     public final Servo wristRight;
     public static long rightServoDelay = 45;
-    public static double[] verticalPos = Settings.Hardware.Servo.InnerWrist.VERTICAL_POSITION;
+    public static double[] verticalPos = Settings.Hardware.Servo.Wrist.VERTICAL_POSITION;
 //    public final double[] chamberPos = Settings.Hardware.Servo.Wrist.CHAMBER_POSITION;
-    public static double[] horizPos = Settings.Hardware.Servo.InnerWrist.HORIZONTAL_POSITION;
+public static double[] horizPos = Settings.Hardware.Servo.Wrist.HORIZONTAL_POSITION;
+public static double[] readyPos = Settings.Hardware.Servo.Wrist.READY_POSITION;
 
     private final BaseRobot baseRobot;
     private final HardwareMap hardwareMap;
 
-    public InnerWrist(BaseRobot baseRobot) {
+    public Wrist(BaseRobot baseRobot) {
         this.baseRobot = baseRobot;
         this.hardwareMap = baseRobot.hardwareMap;
-        wristLeft = hardwareMap.get(Servo.class, Settings.Hardware.IDs.INNER_WRIST_LEFT);
-        wristRight = hardwareMap.get(Servo.class, Settings.Hardware.IDs.INNER_WRIST_RIGHT);
+        wristLeft = hardwareMap.get(Servo.class, Settings.Hardware.IDs.WRIST_LEFT);
+        wristRight = hardwareMap.get(Servo.class, Settings.Hardware.IDs.WRIST_RIGHT);
         wristRight.setDirection(Servo.Direction.REVERSE);
     }
 
@@ -33,11 +34,11 @@ public class InnerWrist {
             case VERTICAL:
                 position = verticalPos;
                 break;
-//            case CHAMBER:
-//                position = chamberPos;
-//                break;
-            default:
+            case HORIZONTAL:
                 position = horizPos;
+                break;
+            default:
+                position = readyPos;
                 break;
         }
         wristLeft.setPosition(position[0]);
@@ -48,9 +49,9 @@ public class InnerWrist {
         if (position == verticalPos) {
             return Position.VERTICAL;
           }
-//        else if (position == chamberPos) {
-//            return Position.CHAMBER;
-//        }
+        else if (position == readyPos) {
+            return Position.READY;
+        }
         else if (position == horizPos) {
             return Position.HORIZONTAL;
         } else {
@@ -63,14 +64,14 @@ public class InnerWrist {
         Position nextPosition;
 
         switch (currentPosition) {
-            case HORIZONTAL:
+            case READY:
                 nextPosition = Position.VERTICAL;
                 break;
             case VERTICAL:
-                nextPosition = Position.HORIZONTAL;
+                nextPosition = Position.READY;
                 break;
             default:
-                nextPosition = Position.HORIZONTAL; // Fallback to HORIZONTAL if unknown
+                nextPosition = Position.READY; // Fallback to READY if unknown
                 break;
         }
 
@@ -80,7 +81,9 @@ public class InnerWrist {
     public enum Position {
         HORIZONTAL,
         VERTICAL,
+        READY,
         CHAMBER,
+
         UNKNOWN,
     }
 
