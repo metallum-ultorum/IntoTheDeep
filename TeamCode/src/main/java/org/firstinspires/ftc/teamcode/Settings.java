@@ -389,57 +389,10 @@ public class Settings {
         }
     }
 
-    /**
-     * @noinspection CommentedOutCode
-     */ // Autonomous settings
+    // Autonomous settings
     @Config
     public static class Autonomous {
-        // TODO: PEDRO TIME!
-//        public static VelConstraint speedyVel = new MinVelConstraint(Arrays.asList(
-//                new TranslationalVelConstraint(80),
-//                new AngularVelConstraint(Math.PI)
-//        ));
-//        public static AccelConstraint speedyAccel = new ProfileAccelConstraint(-70, 75);
-//
-//        public static VelConstraint cautiousVel = new MinVelConstraint(Arrays.asList(
-//                new TranslationalVelConstraint(10),
-//                new AngularVelConstraint(Math.PI)
-//        ));
-//        public static AccelConstraint cautiousAccel = new ProfileAccelConstraint(-10, 10);
-//        @Config
-//        public static class FieldPositions {
-//            // Updated poses for initial robot positions based on IdealLoop
-//            public static Pose2d LEFT_INITIAL_POSE = new Pose2d(-11.5, -63.5, Math.toRadians(90));
-//            public static Pose2d RIGHT_INITIAL_POSE = new Pose2d(11.5, -63.5, Math.toRadians(90));
-//
-//            // Updated parked positions for each starting position
-//            public static Vector2d LEFT_JUST_PARK_VEC = new Vector2d(45, -58);
-//            public static Vector2d RIGHT_JUST_PARK_VEC = new Vector2d(55, -58);
-//
-//            // place positions for each starting position
-//            public static Pose2d LEFT_CHAMBER_POSE = new Pose2d(0, -29.5, Math.toRadians(90));
-//            public static Pose2d RIGHT_CHAMBER_POSE = new Pose2d(0, -32.5, Math.toRadians(90));
-//            public static Vector2d SAFE_CHAMBER_VEC = new Vector2d(0, -50);
-//            public static Pose2d BASKET_POSE = new Pose2d(-58.2, -58.6, Math.toRadians(45));
-//
-//            public static Pose2d HP_POSE = new Pose2d(55, -50, Math.toRadians(90));
-//
-//            public static Vector2d PARK_MIDDLEMAN = new Vector2d(-45, -30);
-//
-//            public static Pose2d LEFT_BEFORE_PARK_POSE = new Pose2d(-45, 14, Math.toRadians(90));
-//            public static Pose2d RIGHT_BEFORE_PARK_POSE = new Pose2d(-45, -9.5, Math.toRadians(90));
-//            public static Pose2d LEFT_PARK_POSE = new Pose2d(-23, 13, Math.toRadians(180));
-//            public static Pose2d RIGHT_PARK_POSE = new Pose2d(60, -60, Math.toRadians(180));
-//            public static Pose2d FIRST_PRESET_SAMPLE_POSE = new Pose2d(43.5, -5, Math.toRadians(90));
-//            public static Pose2d SECOND_PRESET_SAMPLE_POSE = new Pose2d(50, -10, Math.toRadians(90));
-//            public static Vector2d SAMPLE_MIDDLEMAN = new Vector2d(22, -38);
-//            public static Vector2d BASKET_MIDDLEMAN = new Vector2d(-36.3, -60.0);
-//
-//            public static Vector2d LEFT_SAMPLE_1_VEC = new Vector2d(-48.1, -40);
-//            public static Vector2d LEFT_SAMPLE_2_VEC = new Vector2d(-58.3, -40);
-//            public static Vector2d LEFT_SAMPLE_3_VEC = new Vector2d(-65.6, -40);
-//
-//        }
+        public static boolean ECHOLOCATE_ENABLED = false;
 
         @Config
         public static class Movement {
