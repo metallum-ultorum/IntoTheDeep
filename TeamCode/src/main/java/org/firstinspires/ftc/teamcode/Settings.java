@@ -82,10 +82,10 @@ public class Settings {
             @Config
             public static class Wrist {
                 // we removed the right servo so just change the left value lol
-                public static double[] HORIZONTAL_POSITION = {0, 0.0};
-                public static double[] CHAMBER_POSITION = {0.3, 0.0};
-                public static double[] VERTICAL_POSITION = {0.4, 0.0};
-                public static double[] READY_POSITION = {0.15, 0};
+                public static double HORIZONTAL_POSITION = 0;
+                public static double CHAMBER_POSITION = 0.3;
+                public static double VERTICAL_POSITION = 0.4;
+                public static double READY_POSITION = 0.15;
             }
 
             @Config
@@ -120,10 +120,7 @@ public class Settings {
             public static final String SLIDE_VERTICAL_RIGHT = "slideVerticalRight";
             public static final String SLIDE_HORIZONTAL = "slideHorizontal";
             public static final String LINEAR_ACTUATOR = "linearActuator";
-            public static final String GECKO_LEFT = "geckoLeft";
-            public static final String GECKO_RIGHT = "geckoRight";
-            public static final String WRIST_LEFT = "wristLeft";
-            public static final String WRIST_RIGHT = "wristRight";
+            public static final String WRIST = "wrist";
             public static final String OUTER_WRIST = "rotator";
             public static final String LEFT_SHOULDER = "shoulderLeft";
             public static final String RIGHT_SHOULDER = "shoulderRight";

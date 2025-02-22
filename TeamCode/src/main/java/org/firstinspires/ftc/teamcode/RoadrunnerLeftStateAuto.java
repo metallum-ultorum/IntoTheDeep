@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Linkage;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
@@ -73,7 +73,7 @@ public class RoadrunnerLeftStateAuto extends LinearOpMode {
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(roadRunner.actionBuilder(initialPose));
         baseRobot.outtake.outtakeClaw.close();
         baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
-        baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
+        baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_BACKWARD);
 
         Actions.runBlocking(
                 new SequentialAction(
@@ -87,7 +87,7 @@ public class RoadrunnerLeftStateAuto extends LinearOpMode {
         baseRobot.telemetry.addData("Autonomous phase", "Grabbing next sample");
         baseRobot.telemetry.update();
         baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
-        baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
+        baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_BACKWARD);
         previousTrajectory = getNextSample(previousTrajectory, samplesTaken);
         baseRobot.logger.update("Autonomous phase", "Getting next sample");
         previousTrajectory = placeSample(previousTrajectory);
@@ -105,7 +105,7 @@ public class RoadrunnerLeftStateAuto extends LinearOpMode {
     }
 
     public TrajectoryActionBuilder placeSample(TrajectoryActionBuilder previousTrajectory) {
-        baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
+        baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_FORWARD);
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(previousTrajectory);
         Actions.runBlocking(
                 new SequentialAction(
@@ -163,14 +163,14 @@ public class RoadrunnerLeftStateAuto extends LinearOpMode {
     public class PlaceBasket implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
+            baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_FORWARD);
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
             pause(1000);
-            baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
+            baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_BACKWARD);
             pause(500);
             baseRobot.outtake.outtakeClaw.open();
             pause(100);
-            baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
+            baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_FORWARD);
             pause(300);
             return false;
         }
@@ -190,7 +190,7 @@ public class RoadrunnerLeftStateAuto extends LinearOpMode {
             baseRobot.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.COLLAPSED);
             baseRobot.intake.wrist.setPosition(Wrist.Position.VERTICAL);
             sleep(300);
-            baseRobot.outtake.linkage.setPosition(Linkage.Position.TRANSFER);
+            baseRobot.outtake.linkage.setPosition(Shoulder.Position.TRANSFER);
             baseRobot.outtake.outtakeClaw.open();
             sleep(200);
             baseRobot.outtake.outtakeClaw.close();

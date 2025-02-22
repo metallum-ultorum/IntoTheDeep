@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
 /** @noinspection FieldCanBeLocal, unused */
-public class Linkage {
+public class Shoulder {
     public static double position = 0;
     public final Servo leftShoulderServo;
     public final Servo rightShoulderServo;
@@ -17,7 +17,7 @@ public class Linkage {
     private final BaseRobot baseRobot;
     private final HardwareMap hardwareMap;
 
-    public Linkage(BaseRobot baseRobot) {
+    public Shoulder(BaseRobot baseRobot) {
         this.baseRobot = baseRobot;
         this.hardwareMap = baseRobot.hardwareMap;
         leftShoulderServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.LEFT_SHOULDER);

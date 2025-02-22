@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Linkage;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
@@ -75,7 +75,7 @@ public class RoadrunnerRightStateAuto extends LinearOpMode {
         TrajectoryActionBuilder placingTrajectory2 = getPlacingTrajectory(sampleTrajectory, 0);
         baseRobot.outtake.outtakeClaw.close();
         baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
-        baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
+        baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_FORWARD);
 
         Actions.runBlocking(
                 new SequentialAction(
@@ -95,7 +95,7 @@ public class RoadrunnerRightStateAuto extends LinearOpMode {
         baseRobot.telemetry.addData("Autonomous phase", "Grabbing next specimen");
         baseRobot.telemetry.update();
         baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
-        baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
+        baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_BACKWARD);
         baseRobot.logger.update("Autonomous phase", "Getting next specimen");
         previousTrajectory = getNextSpecimen(previousTrajectory);
         previousTrajectory = placeNextSpecimenOnChamber(previousTrajectory, placementHeight, blocksScored);
@@ -182,7 +182,7 @@ public class RoadrunnerRightStateAuto extends LinearOpMode {
     public class HookChamber implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
+            baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_BACKWARD);
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 650);
             pause(1000);
             baseRobot.outtake.outtakeClaw.open();
@@ -194,7 +194,7 @@ public class RoadrunnerRightStateAuto extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
-            baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
+            baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_BACKWARD);
             return false;
         }
     }
@@ -204,7 +204,7 @@ public class RoadrunnerRightStateAuto extends LinearOpMode {
         public boolean run(@NonNull TelemetryPacket packet) {
             baseRobot.outtake.outtakeClaw.close();
             pause(500);
-            baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
+            baseRobot.outtake.linkage.setPosition(Shoulder.Position.PLACE_FORWARD);
             baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
             pause(500);
             return false;

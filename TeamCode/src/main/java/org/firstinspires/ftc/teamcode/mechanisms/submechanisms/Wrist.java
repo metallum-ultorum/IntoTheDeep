@@ -8,14 +8,12 @@ import org.firstinspires.ftc.teamcode.Settings;
 
 /** @noinspection FieldCanBeLocal, unused */
 public class Wrist {
-    public static double[] position = {0,0};
-    public final Servo wristLeft;
-    public final Servo wristRight;
+    public static double position = 0;
+    public final Servo wrist;
     public static long rightServoDelay = 45;
-    public static double[] verticalPos = Settings.Hardware.Servo.Wrist.VERTICAL_POSITION;
-//    public final double[] chamberPos = Settings.Hardware.Servo.Wrist.CHAMBER_POSITION;
-public static double[] horizPos = Settings.Hardware.Servo.Wrist.HORIZONTAL_POSITION;
-public static double[] readyPos = Settings.Hardware.Servo.Wrist.READY_POSITION;
+    public static double verticalPos = Settings.Hardware.Servo.Wrist.VERTICAL_POSITION;
+    public static double horizPos = Settings.Hardware.Servo.Wrist.HORIZONTAL_POSITION;
+    public static double readyPos = Settings.Hardware.Servo.Wrist.READY_POSITION;
 
     private final BaseRobot baseRobot;
     private final HardwareMap hardwareMap;
@@ -23,13 +21,11 @@ public static double[] readyPos = Settings.Hardware.Servo.Wrist.READY_POSITION;
     public Wrist(BaseRobot baseRobot) {
         this.baseRobot = baseRobot;
         this.hardwareMap = baseRobot.hardwareMap;
-        wristLeft = hardwareMap.get(Servo.class, Settings.Hardware.IDs.WRIST_LEFT);
-        wristRight = hardwareMap.get(Servo.class, Settings.Hardware.IDs.WRIST_RIGHT);
-        wristRight.setDirection(Servo.Direction.REVERSE);
+        wrist = hardwareMap.get(Servo.class, Settings.Hardware.IDs.WRIST);
     }
 
     public void setPosition(Position newPosition) {
-        double[] oldPosition = position;
+        double oldPosition = position;
         switch (newPosition) {
             case VERTICAL:
                 position = verticalPos;
@@ -41,8 +37,7 @@ public static double[] readyPos = Settings.Hardware.Servo.Wrist.READY_POSITION;
                 position = readyPos;
                 break;
         }
-        wristLeft.setPosition(position[0]);
-        wristRight.setPosition(position[1]);
+        wrist.setPosition(position);
     }
 
     public Position position() {
@@ -82,8 +77,6 @@ public static double[] readyPos = Settings.Hardware.Servo.Wrist.READY_POSITION;
         HORIZONTAL,
         VERTICAL,
         READY,
-        CHAMBER,
-
         UNKNOWN,
     }
 
