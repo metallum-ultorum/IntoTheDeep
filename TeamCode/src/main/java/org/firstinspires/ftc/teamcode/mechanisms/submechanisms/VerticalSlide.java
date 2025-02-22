@@ -3,38 +3,64 @@ package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
 public class VerticalSlide implements ViperSlide {
-    private final DcMotor verticalMotor;
+    private final DcMotor verticalMotorLeft;
+    private final DcMotor verticalMotorRight;
     private final BaseRobot baseRobot;
     private double encoderTarget;
     private VerticalPosition currentPosition;
     private final String LOG_PREFIX = "Vertical Slide: ";
 
+    // Main Constructor that doesn't reset motor encoders - for TeleOP
     public VerticalSlide(@NonNull BaseRobot baseRobot) {
         this.baseRobot = baseRobot;
-        this.verticalMotor = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL);
+        this.verticalMotorLeft = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT);
+        this.verticalMotorRight = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
 
-        verticalMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        verticalMotorRight.setDirection(DcMotor.Direction.REVERSE);
 
         setPosition(VerticalPosition.TRANSFER);
 
         // Set to RUN_TO_POSITION mode for position control
-        verticalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.currentPosition = VerticalPosition.TRANSFER;
-        encoderTarget = verticalMotor.getTargetPosition();
+        encoderTarget = verticalMotorLeft.getTargetPosition();
+        encoderTarget = verticalMotorRight.getTargetPosition();
+    }
+
+    // Alternate Constructor that resets the motor encoders - for Autonomous
+    public VerticalSlide(@NonNull BaseRobot baseRobot, boolean resetEncoders) {
+        this.baseRobot = baseRobot;
+        this.verticalMotorLeft = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT);
+        this.verticalMotorRight = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
+
+        verticalMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        verticalMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        verticalMotorRight.setDirection(DcMotor.Direction.REVERSE);
+
+        setPosition(VerticalPosition.TRANSFER);
+
+        // Set to RUN_TO_POSITION mode for position control
+        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.currentPosition = VerticalPosition.TRANSFER;
+        encoderTarget = verticalMotorLeft.getTargetPosition();
+        encoderTarget = verticalMotorRight.getTargetPosition();
     }
 
     // Sets target position
     @Override
     public void setPosition(double position) {
         int targetPosition = (int) position;
-        verticalMotor.setTargetPosition(targetPosition);
-        verticalMotor.setPower(Settings.Hardware.Extensor.MOVEMENT_POWER);
+        verticalMotorLeft.setTargetPosition(targetPosition);
+        verticalMotorLeft.setPower(Settings.Hardware.Extensor.MOVEMENT_POWER);
+        verticalMotorRight.setTargetPosition(targetPosition);
+        verticalMotorRight.setPower(Settings.Hardware.Extensor.MOVEMENT_POWER);
     }
 
     // Converts position name to double

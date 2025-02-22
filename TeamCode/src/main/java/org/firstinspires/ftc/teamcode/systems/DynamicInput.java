@@ -13,8 +13,8 @@ public class DynamicInput {
     public Settings.ControllerProfile subProfile;
 
     // Track previous button states for justPressed functionality
-    private boolean prevExtendHorizontal, prevRetractHorizontal, prevExtendVertical, prevRetractVertical, prevInnerWrist,
-            prevInwardClaw, prevOutwardClaw, prevToggleClaw, prevShoulderUp, prevShoulderDown, prevFlipMovement;
+    private boolean prevExtendHorizontal, prevRetractHorizontal, prevExtendVertical, prevRetractVertical, prevWrist,
+            prevInwardClaw, prevOutwardClaw, prevToggleClaw, prevShoulderUp, prevShoulderDown, prevFlipMovement, prevIntakeIn;
 
     public DynamicInput(Gamepad gamepad1, Gamepad gamepad2, Settings.ControllerProfile mainProfile,
             Settings.ControllerProfile subProfile) {
@@ -71,7 +71,7 @@ public class DynamicInput {
             rotationRight = rotation > 0 ? rotation : 0;
             rotationLeft = rotation < 0 ? -rotation : 0;
 
-            rotationRight += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateRight)
+            rotationRight += getButtonState(mainCtrl, mainSettings.buttonMapping.rotatoright)
                     ? mainSettings.bumper_rotation_speed
                     : 0;
             rotationLeft += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateLeft)
@@ -96,14 +96,14 @@ public class DynamicInput {
     public static class Actions {
         public final boolean extendHorizontal, retractHorizontal, retractVertical, extendVertical, extensorBusy;
         public final boolean intakeIn, intakeOut, intakeStop;
-        public final boolean innerWristUp, innerWristDown;
+        public final boolean wristUp, wristDown;
         public final boolean ascendExtensorExtend, ascendExtensorRetract, ascendExtensorGround, ascendExtensorCeiling;
         public final double boostAmount, brakeAmount;
         public final boolean linearActuatorExtend, linearActuatorRetract;
         public final boolean inwardClaw, outwardClaw, toggleClaw;
         public final boolean shoulderUp, shoulderDown;
         public boolean flipMovement;
-        public double outerWrist;
+        public double rotator;
 
         public Actions(Gamepad mainCtrl, Settings.DefaultGamepadSettings mainSettings,
                 Gamepad subCtrl, Settings.DefaultGamepadSettings subSettings) {
@@ -115,8 +115,8 @@ public class DynamicInput {
             this.intakeIn = getButtonState(subCtrl, subSettings.buttonMapping.intakeIn);
             this.intakeOut = getButtonState(subCtrl, subSettings.buttonMapping.intakeOut);
             this.intakeStop = getButtonState(subCtrl, subSettings.buttonMapping.intakeStop);
-            this.innerWristUp = getButtonState(subCtrl, subSettings.buttonMapping.innerWristUp);
-            this.innerWristDown = getButtonState(subCtrl, subSettings.buttonMapping.innerWristDown);
+            this.wristUp = getButtonState(subCtrl, subSettings.buttonMapping.wristUp);
+            this.wristDown = getButtonState(subCtrl, subSettings.buttonMapping.wristDown);
             this.ascendExtensorExtend = getButtonState(subCtrl,
                     subSettings.buttonMapping.ascendExtensorExtend);
             this.ascendExtensorRetract = getButtonState(subCtrl,
@@ -137,33 +137,34 @@ public class DynamicInput {
             this.shoulderDown = getButtonState(subCtrl, subSettings.buttonMapping.shoulderDown);
             this.shoulderUp = getButtonState(subCtrl, subSettings.buttonMapping.shoulderUp);
             this.flipMovement = getButtonState(mainCtrl, mainSettings.buttonMapping.flipMovement);
-            this.outerWrist = getAxisValue(subCtrl, subSettings.buttonMapping.outerWrist);
+            this.rotator = (getAxisValue(subCtrl, subSettings.buttonMapping.rotator)/-2) + 0.5;
         }
     }
 
     public static class ContextualActions extends Actions {
         public final boolean justExtendHorizontal, justRetractHorizontal, justRetractVertical, justExtendVertical,
-                justInnerWristUp, justInwardClaw, justOutwardClaw, justToggleClaw, justShoulderUp, justShoulderDown,
-                justFlipMovement;
+                justWristUp, justInwardClaw, justOutwardClaw, justToggleClaw, justShoulderUp, justShoulderDown,
+                justFlipMovement, justIntakeIn;
 
         public ContextualActions(Gamepad mainCtrl, Settings.DefaultGamepadSettings mainSettings,
                 Gamepad subCtrl, Settings.DefaultGamepadSettings subSettings,
                                  boolean prevExtendHorizontal, boolean prevRetractHorizontal, boolean prevExtendVertical,
-                                 boolean prevRetractVertical, boolean prevInnerWrist, boolean prevInwardClaw, boolean prevOutwardClaw,
-                                 boolean prevToggleClaw, boolean prevShoulderUp, boolean prevShoulderDown, boolean prevFlipMovement) {
+                                 boolean prevRetractVertical, boolean prevWrist, boolean prevInwardClaw, boolean prevOutwardClaw,
+                                 boolean prevToggleClaw, boolean prevShoulderUp, boolean prevShoulderDown, boolean prevFlipMovement, boolean prevIntakeIn) {
             super(mainCtrl, mainSettings, subCtrl, subSettings);
 
             this.justExtendHorizontal = extendHorizontal && !prevExtendHorizontal;
             this.justRetractHorizontal = retractHorizontal && !prevRetractHorizontal;
             this.justRetractVertical = retractVertical && !prevRetractVertical;
             this.justExtendVertical = extendVertical && !prevExtendVertical;
-            this.justInnerWristUp = innerWristUp && !prevInnerWrist;
+            this.justWristUp = wristUp && !prevWrist;
             this.justInwardClaw = inwardClaw && !prevInwardClaw;
             this.justOutwardClaw = outwardClaw && !prevOutwardClaw;
             this.justToggleClaw = toggleClaw && !prevToggleClaw;
             this.justShoulderUp = shoulderUp && !prevShoulderUp;
             this.justShoulderDown = shoulderDown && !prevShoulderDown;
             this.justFlipMovement = flipMovement && !prevFlipMovement;
+            this.justIntakeIn = intakeIn && !prevIntakeIn;
         }
     }
 
@@ -177,21 +178,22 @@ public class DynamicInput {
 
     public ContextualActions getContextualActions() {
         ContextualActions actions = new ContextualActions(mainCtrl, mainSettings, subCtrl, subSettings,
-                prevExtendHorizontal, prevRetractHorizontal, prevExtendVertical, prevRetractVertical, prevInnerWrist,
-                prevInwardClaw, prevOutwardClaw, prevToggleClaw, prevShoulderUp, prevShoulderDown, prevFlipMovement);
+                prevExtendHorizontal, prevRetractHorizontal, prevExtendVertical, prevRetractVertical, prevWrist,
+                prevInwardClaw, prevOutwardClaw, prevToggleClaw, prevShoulderUp, prevShoulderDown, prevFlipMovement, prevIntakeIn);
 
         // Update previous states
         prevExtendHorizontal = actions.extendHorizontal;
         prevRetractHorizontal = actions.retractHorizontal;
         prevExtendVertical = actions.extendVertical;
         prevRetractVertical = actions.retractVertical;
-        prevInnerWrist = actions.innerWristUp;
+        prevWrist = actions.wristUp;
         prevInwardClaw = actions.inwardClaw;
         prevOutwardClaw = actions.outwardClaw;
         prevToggleClaw = actions.toggleClaw;
         prevShoulderUp = actions.shoulderUp;
         prevShoulderDown = actions.shoulderDown;
         prevFlipMovement = actions.flipMovement;
+        prevIntakeIn = actions.intakeIn;
 
         return actions;
     }

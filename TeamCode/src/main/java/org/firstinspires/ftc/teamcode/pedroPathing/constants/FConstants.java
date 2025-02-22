@@ -1,19 +1,19 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.constants;
 
-import com.pedropathing.localization.Localizers;
 import com.pedropathing.follower.FollowerConstants;
-import com.pedropathing.util.CustomFilteredPIDFCoefficients;
-import com.pedropathing.util.CustomPIDFCoefficients;
+import com.pedropathing.localization.Localizers;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.teamcode.Settings;
 
 public class FConstants {
     static {
         FollowerConstants.localizers = Localizers.PINPOINT;
 
-        FollowerConstants.leftFrontMotorName = "frontLeft";
-        FollowerConstants.leftRearMotorName = "rearLeft";
-        FollowerConstants.rightFrontMotorName = "frontRight";
-        FollowerConstants.rightRearMotorName = "rearRight";
+        FollowerConstants.leftFrontMotorName = Settings.Hardware.IDs.FRONT_LEFT_MOTOR;
+        FollowerConstants.leftRearMotorName = Settings.Hardware.IDs.REAR_LEFT_MOTOR;
+        FollowerConstants.rightFrontMotorName = Settings.Hardware.IDs.FRONT_RIGHT_MOTOR;
+        FollowerConstants.rightRearMotorName = Settings.Hardware.IDs.REAR_RIGHT_MOTOR;
 
         FollowerConstants.leftFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
         FollowerConstants.leftRearMotorDirection = DcMotorSimple.Direction.FORWARD;

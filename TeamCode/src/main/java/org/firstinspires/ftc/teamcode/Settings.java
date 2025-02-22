@@ -67,24 +67,31 @@ public class Settings {
         @Config
         public static class Servo {
             @Config
-            public static class Claw {
+            public static class OuttakeClaw {
                 /** Values for open and closed positions on the outtake claw */
                 public static double OPEN = 0;
                 public static double CLOSED = 1;
             }
-
             @Config
-            public static class InnerWrist {
-                // we removed the right servo so just change the left value lol
-                public static double[] HORIZONTAL_POSITION = {0.45, 0.0};
-                public static double[] CHAMBER_POSITION = {0.3, 0.0};
-                public static double[] VERTICAL_POSITION = {0.85, 0.0};
+            public static class IntakeClaw {
+                /** Values for open and closed positions on the outtake claw */
+                public static double OPEN = 0.25;
+                public static double CLOSED = 0.8;
             }
 
             @Config
-            public static class OuterWrist {
-                public static double Horizontal_Position = 0; //TODO: PHYSICALLY ADJUST TO MAKE THIS AS CLOSE TO THE MIDDLE AS POSSIBLE, THEN TUNE
-                public static double Vertical_Position = .5; //TODO: SWAP WITH LEFT_LIMIT IF NEEDED
+            public static class Wrist {
+                // we removed the right servo so just change the left value lol
+                public static double[] HORIZONTAL_POSITION = {0, 0.0};
+                public static double[] CHAMBER_POSITION = {0.3, 0.0};
+                public static double[] VERTICAL_POSITION = {0.4, 0.0};
+                public static double[] READY_POSITION = {0.15, 0};
+            }
+
+            @Config
+            public static class Rotator {
+                public static double LEFT_LIMIT = 0; //TODO: PHYSICALLY ADJUST TO MAKE THIS AS CLOSE TO THE MIDDLE AS POSSIBLE, THEN TUNE
+                public static double RIGHT_LIMIT = 1; //TODO: SWAP WITH LEFT_LIMIT IF NEEDED
             }
 
             @Config
@@ -109,16 +116,19 @@ public class Settings {
             public static final String REAR_RIGHT_MOTOR = "rearRight";
 
             // Arm components
-            public static final String SLIDE_VERTICAL = "slideVertical";
+            public static final String SLIDE_VERTICAL_LEFT = "slideVerticalLeft";
+            public static final String SLIDE_VERTICAL_RIGHT = "slideVerticalRight";
             public static final String SLIDE_HORIZONTAL = "slideHorizontal";
             public static final String LINEAR_ACTUATOR = "linearActuator";
             public static final String GECKO_LEFT = "geckoLeft";
             public static final String GECKO_RIGHT = "geckoRight";
-            public static final String INNER_WRIST_LEFT = "wristLeft";
-            public static final String INNER_WRIST_RIGHT = "wristRight";
-            public static final String OUTER_WRIST = "outerWrist";
-            public static final String SHOULDER = "shoulder";
-            public static final String CLAW = "claw";
+            public static final String WRIST_LEFT = "wristLeft";
+            public static final String WRIST_RIGHT = "wristRight";
+            public static final String OUTER_WRIST = "rotator";
+            public static final String LEFT_SHOULDER = "shoulderLeft";
+            public static final String RIGHT_SHOULDER = "shoulderRight";
+            public static final String INTAKE_CLAW = "intakeClaw";
+            public static final String OUTTAKE_CLAW = "outtakeClaw";
             public static final String PINPOINT = "pinpoint";
 
         }
@@ -143,7 +153,7 @@ public class Settings {
 
             public static int HIGH_RUNG_PREP_AUTO = 1500;
             public static int HIGH_RUNG = 1800; // TODO TUNE
-            public static int HIGH_BASKET = 3190;
+            public static int HIGH_BASKET = 3200;
 
             // Motor power settings
             public static double MOVEMENT_POWER = 0.9;
@@ -321,7 +331,7 @@ public class Settings {
         public final GamepadAxis rotate = GamepadAxis.RIGHT_STICK_X;
         public final GamepadButton flipMovement = GamepadButton.A;
 
-        public GamepadButton rotateRight = GamepadButton.A;
+        public GamepadButton rotatoright = GamepadButton.A;
         public GamepadButton rotateLeft = GamepadButton.X;
 
         // Claw controls
@@ -331,11 +341,11 @@ public class Settings {
         public final GamepadButton clawIn = GamepadButton.OPTIONS;
         public final GamepadButton clawOut = GamepadButton.START;
         public final GamepadButton clawToggle = GamepadButton.RIGHT_STICK_BUTTON;
-        public final GamepadAxis outerWrist = GamepadAxis.RIGHT_STICK_X;
+        public final GamepadAxis rotator = GamepadAxis.RIGHT_STICK_X;
 
         // Inner Wrist controls
-        public GamepadButton innerWristUp = GamepadButton.DPAD_LEFT;
-        public GamepadButton innerWristDown = GamepadButton.DPAD_RIGHT;
+        public GamepadButton wristUp = GamepadButton.DPAD_LEFT;
+        public GamepadButton wristDown = GamepadButton.DPAD_RIGHT;
 
         // Ascend extensor controls
         public final GamepadButton ascendExtensorExtend = GamepadButton.DPAD_RIGHT;

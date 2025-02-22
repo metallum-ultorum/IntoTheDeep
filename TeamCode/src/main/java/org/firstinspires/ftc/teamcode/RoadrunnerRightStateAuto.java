@@ -16,17 +16,20 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.InnerWrist;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Linkage;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.systems.AdaptiveCalibration;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
 
-@Autonomous(name = "Right State Auto", group = "Autonomous")
-public class RightStateAuto extends LinearOpMode {
+@Deprecated
+@Disabled
+@Autonomous(name = "Roadrunner Right State Auto", group = "Autonomous")
+public class RoadrunnerRightStateAuto extends LinearOpMode {
     private BaseRobot baseRobot;
     private MecanumDrive roadRunner;
     private Pose2d initialPose;
@@ -52,7 +55,7 @@ public class RightStateAuto extends LinearOpMode {
     }
 
     public void run() {
-        baseRobot.intake.innerWrist.setPosition(InnerWrist.Position.VERTICAL);
+        baseRobot.intake.wrist.setPosition(Wrist.Position.VERTICAL);
         TrajectoryActionBuilder previousChamberTrajectory = gameLoopSetup(PlacementHeight.CHAMBER_HIGH);
         int phase = 0;
         while (phase < 2) {
@@ -70,7 +73,7 @@ public class RightStateAuto extends LinearOpMode {
         TrajectoryActionBuilder placingTrajectory = getPlacingTrajectory(roadRunner.actionBuilder(initialPose), 0);
         TrajectoryActionBuilder sampleTrajectory = pushSamples(placingTrajectory);
         TrajectoryActionBuilder placingTrajectory2 = getPlacingTrajectory(sampleTrajectory, 0);
-        baseRobot.outtake.claw.close();
+        baseRobot.outtake.outtakeClaw.close();
         baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
         baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
 
@@ -182,7 +185,7 @@ public class RightStateAuto extends LinearOpMode {
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_BACKWARD);
             baseRobot.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 650);
             pause(1000);
-            baseRobot.outtake.claw.open();
+            baseRobot.outtake.outtakeClaw.open();
             return false;
         }
     }
@@ -199,7 +202,7 @@ public class RightStateAuto extends LinearOpMode {
     public class GrabSpecimenFromHumanPlayer implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            baseRobot.outtake.claw.close();
+            baseRobot.outtake.outtakeClaw.close();
             pause(500);
             baseRobot.outtake.linkage.setPosition(Linkage.Position.PLACE_FORWARD);
             baseRobot.outtake.verticalSlide.setPosition(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
