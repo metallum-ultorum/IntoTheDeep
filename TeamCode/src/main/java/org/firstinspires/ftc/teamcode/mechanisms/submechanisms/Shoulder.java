@@ -11,9 +11,9 @@ public class Shoulder {
     public static double position = 0;
     public final Servo leftShoulderServo;
     public final Servo rightShoulderServo;
-    public static final double transferPos = Settings.Hardware.Servo.Linkage.TRANSFER_POSITION;
-    public static final double placeForwardPos = Settings.Hardware.Servo.Linkage.PLACE_FORWARD_POSITION;
-    public static final double placeBackwardPos = Settings.Hardware.Servo.Linkage.PLACE_BACKWARD_POSITION;
+    public static final double transferPos = Settings.Hardware.Servo.Shoulder.TRANSFER_POSITION;
+    public static final double placeForwardPos = Settings.Hardware.Servo.Shoulder.PLACE_FORWARD_POSITION;
+    public static final double placeBackwardPos = Settings.Hardware.Servo.Shoulder.PLACE_BACKWARD_POSITION;
 
     public Shoulder(Servo leftShoulderServo, Servo rightShoulderServo) {
         this.leftShoulderServo = leftShoulderServo;
@@ -78,7 +78,6 @@ public class Shoulder {
     }
 
     public void init() {
-        leftShoulderServo.setDirection(Servo.Direction.REVERSE);
     }
 
 }

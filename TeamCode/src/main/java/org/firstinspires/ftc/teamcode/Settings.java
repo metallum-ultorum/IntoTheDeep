@@ -64,8 +64,6 @@ public class Settings {
             }, new DefaultGamepadSettings() {
                 {
                     // Customize sub gamepad settings
-                    buttonMapping.extendHorizontal = GamepadButton.Y;
-                    buttonMapping.retractHorizontal = GamepadButton.A;
                     trigger_threshold = 0.2;
                 }
     });
@@ -189,15 +187,8 @@ public class Settings {
     public static class Deploy {
         // Core Mechanisms
         public static final boolean INTAKE = true;
-        public static final boolean LED = false;
         public static final boolean OUTTAKE = true;
         public static final boolean LINEAR_ACTUATOR = false;
-
-        // Navigation Systems
-        public static final boolean ODOMETRY = true;
-
-        // Development Features
-        public static final boolean DEBUG = true;
 
         public static AutonomousMode AUTONOMOUS_MODE_LEFT = AutonomousMode.BASKET;
         public static AutonomousMode AUTONOMOUS_MODE_RIGHT = AutonomousMode.CHAMBER;
@@ -305,11 +296,11 @@ public class Settings {
             }
 
             @Config
-            public static class Linkage {
+            public static class Shoulder {
                 // TODO: TUNE WHEN NEW SERVO GOES IN
-                public static double TRANSFER_POSITION = 0.87;
-                public static double PLACE_FORWARD_POSITION = 0.75;
-                public static double PLACE_BACKWARD_POSITION = 0.0;
+                public static double TRANSFER_POSITION = 0.25;
+                public static double PLACE_FORWARD_POSITION = 0;
+                public static double PLACE_BACKWARD_POSITION = 0.65;
 
             }
         }
