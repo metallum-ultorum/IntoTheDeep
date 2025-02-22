@@ -31,7 +31,7 @@ public class TestingSuite extends LinearOpMode {
 
     private static final String[] SERVO_OPTIONS = {
             Settings.Hardware.IDs.WRIST,
-            Settings.Hardware.IDs.OUTER_WRIST,
+            Settings.Hardware.IDs.ROTATOR,
             Settings.Hardware.IDs.LEFT_SHOULDER,
             Settings.Hardware.IDs.RIGHT_SHOULDER,
             Settings.Hardware.IDs.INTAKE_CLAW,

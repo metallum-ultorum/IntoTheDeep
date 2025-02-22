@@ -1,24 +1,21 @@
 package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 
-import androidx.annotation.NonNull;
-
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
-/** @noinspection FieldCanBeLocal, unused */
+/**
+ * @noinspection unused
+ */
 public class OuttakeClaw {
     public final Servo clawServo;
-    private final BaseRobot baseRobot;
-    private final HardwareMap hardwareMap;
     public boolean opened = true;
 
-    public OuttakeClaw(@NonNull BaseRobot baseRobot) {
-        this.baseRobot = baseRobot;
-        this.hardwareMap = baseRobot.hardwareMap;
-        clawServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.OUTTAKE_CLAW);
+    public OuttakeClaw(Servo clawServo) {
+        this.clawServo = clawServo;
+    }
+
+    public void init() {
         close();
     }
 

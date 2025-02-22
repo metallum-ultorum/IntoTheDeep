@@ -1,28 +1,23 @@
 package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
-/** @noinspection FieldCanBeLocal, unused */
+/**
+ * @noinspection unused
+ */
 public class Shoulder {
     public static double position = 0;
     public final Servo leftShoulderServo;
     public final Servo rightShoulderServo;
-    public static double transferPos = Settings.Hardware.Servo.Linkage.TRANSFER_POSITION;
-    public static double placeForwardPos = Settings.Hardware.Servo.Linkage.PLACE_FORWARD_POSITION;
-    public static double placeBackwardPos = Settings.Hardware.Servo.Linkage.PLACE_BACKWARD_POSITION;
-    private final BaseRobot baseRobot;
-    private final HardwareMap hardwareMap;
+    public static final double transferPos = Settings.Hardware.Servo.Linkage.TRANSFER_POSITION;
+    public static final double placeForwardPos = Settings.Hardware.Servo.Linkage.PLACE_FORWARD_POSITION;
+    public static final double placeBackwardPos = Settings.Hardware.Servo.Linkage.PLACE_BACKWARD_POSITION;
 
-    public Shoulder(BaseRobot baseRobot) {
-        this.baseRobot = baseRobot;
-        this.hardwareMap = baseRobot.hardwareMap;
-        leftShoulderServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.LEFT_SHOULDER);
-        rightShoulderServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.RIGHT_SHOULDER);
-        leftShoulderServo.setDirection(Servo.Direction.REVERSE);
+    public Shoulder(Servo leftShoulderServo, Servo rightShoulderServo) {
+        this.leftShoulderServo = leftShoulderServo;
+        this.rightShoulderServo = rightShoulderServo;
     }
 
     public void setPosition(Position newPosition) {
@@ -80,6 +75,10 @@ public class Shoulder {
         PLACE_FORWARD,
         PLACE_BACKWARD,
         UNKNOWN,
+    }
+
+    public void init() {
+        leftShoulderServo.setDirection(Servo.Direction.REVERSE);
     }
 
 }

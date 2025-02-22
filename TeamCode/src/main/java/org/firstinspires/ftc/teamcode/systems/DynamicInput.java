@@ -29,6 +29,28 @@ public class DynamicInput {
         this.subSettings = subProfile.subGamepad;
     }
 
+    /**
+     * @noinspection unused
+     */ // Method to switch between different control profiles
+    public void switchProfiles(String mainProfileName, String subProfileName) {
+        boolean mainFound = false, subFound = false;
+        for (Settings.ControllerProfile profile : Settings.MAIN_AVAILABLE_PROFILES) {
+            if (profile.name.equals(mainProfileName)) {
+                this.mainProfile = profile;
+                this.mainSettings = profile.mainGamepad;
+                mainFound = true;
+            }
+            if (profile.name.equals(subProfileName)) {
+                this.subProfile = profile;
+                this.subSettings = profile.subGamepad;
+                subFound = true;
+            }
+        }
+        if (!mainFound || !subFound) {
+            throw new IllegalArgumentException("Invalid profile name(s)");
+        }
+    }
+
     public static class Movements {
         public final double up, right, down, left, rotation, x, y;
 
@@ -64,14 +86,14 @@ public class DynamicInput {
                 leftPower = mainSettings.dpad_movement_speed;
 
             // Handle rotation based on settings
-            double rotationRight = 0;
-            double rotationLeft = 0;
+            double rotationRight;
+            double rotationLeft;
 
             double rotation = rightStickX * mainSettings.right_stick_sensitivity;
             rotationRight = rotation > 0 ? rotation : 0;
             rotationLeft = rotation < 0 ? -rotation : 0;
 
-            rotationRight += getButtonState(mainCtrl, mainSettings.buttonMapping.rotatoright)
+            rotationRight += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateRight)
                     ? mainSettings.bumper_rotation_speed
                     : 0;
             rotationLeft += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateLeft)
@@ -90,54 +112,6 @@ public class DynamicInput {
 
         private double applyDeadzone(double value, double deadzone) {
             return Math.abs(value) > deadzone ? value : 0;
-        }
-    }
-
-    public static class Actions {
-        public final boolean extendHorizontal, retractHorizontal, retractVertical, extendVertical, extensorBusy;
-        public final boolean intakeIn, intakeOut, intakeStop;
-        public final boolean wristUp, wristDown;
-        public final boolean ascendExtensorExtend, ascendExtensorRetract, ascendExtensorGround, ascendExtensorCeiling;
-        public final double boostAmount, brakeAmount;
-        public final boolean linearActuatorExtend, linearActuatorRetract;
-        public final boolean inwardClaw, outwardClaw, toggleClaw;
-        public final boolean shoulderUp, shoulderDown;
-        public boolean flipMovement;
-        public double rotator;
-
-        public Actions(Gamepad mainCtrl, Settings.DefaultGamepadSettings mainSettings,
-                Gamepad subCtrl, Settings.DefaultGamepadSettings subSettings) {
-            this.extendHorizontal = getButtonState(subCtrl, subSettings.buttonMapping.extendHorizontal);
-            this.retractHorizontal = getButtonState(subCtrl, subSettings.buttonMapping.retractHorizontal);
-            this.retractVertical = getButtonState(mainCtrl, mainSettings.buttonMapping.retractVertical);
-            this.extendVertical = getButtonState(mainCtrl, mainSettings.buttonMapping.extendVertical);
-            this.extensorBusy = extendHorizontal || retractHorizontal || retractVertical;
-            this.intakeIn = getButtonState(subCtrl, subSettings.buttonMapping.intakeIn);
-            this.intakeOut = getButtonState(subCtrl, subSettings.buttonMapping.intakeOut);
-            this.intakeStop = getButtonState(subCtrl, subSettings.buttonMapping.intakeStop);
-            this.wristUp = getButtonState(subCtrl, subSettings.buttonMapping.wristUp);
-            this.wristDown = getButtonState(subCtrl, subSettings.buttonMapping.wristDown);
-            this.ascendExtensorExtend = getButtonState(subCtrl,
-                    subSettings.buttonMapping.ascendExtensorExtend);
-            this.ascendExtensorRetract = getButtonState(subCtrl,
-                    subSettings.buttonMapping.ascendExtensorRetract);
-            this.ascendExtensorGround = getButtonState(subCtrl,
-                    subSettings.buttonMapping.ascendExtensorGround);
-            this.ascendExtensorCeiling = getButtonState(subCtrl,
-                    subSettings.buttonMapping.ascendExtensorCeiling);
-            this.boostAmount = mainSettings.applyBoostCurve(
-                    getAxisValue(mainCtrl, mainSettings.buttonMapping.boost));
-            this.brakeAmount = mainSettings.applyBoostCurve(
-                    getAxisValue(mainCtrl, mainSettings.buttonMapping.brake));
-            this.linearActuatorExtend = getButtonState(subCtrl, subSettings.buttonMapping.linearActuatorExtend);
-            this.linearActuatorRetract = getButtonState(subCtrl, subSettings.buttonMapping.linearActuatorRetract);
-            this.inwardClaw = getButtonState(subCtrl, subSettings.buttonMapping.clawIn);
-            this.outwardClaw = getButtonState(subCtrl, subSettings.buttonMapping.clawOut);
-            this.toggleClaw = getButtonState(subCtrl, subSettings.buttonMapping.clawToggle);
-            this.shoulderDown = getButtonState(subCtrl, subSettings.buttonMapping.shoulderDown);
-            this.shoulderUp = getButtonState(subCtrl, subSettings.buttonMapping.shoulderUp);
-            this.flipMovement = getButtonState(mainCtrl, mainSettings.buttonMapping.flipMovement);
-            this.rotator = (getAxisValue(subCtrl, subSettings.buttonMapping.rotator)/-2) + 0.5;
         }
     }
 
@@ -198,23 +172,51 @@ public class DynamicInput {
         return actions;
     }
 
-    // Method to switch between different control profiles
-    public void switchProfiles(String mainProfileName, String subProfileName) {
-        boolean mainFound = false, subFound = false;
-        for (Settings.ControllerProfile profile : Settings.MAIN_AVAILABLE_PROFILES) {
-            if (profile.name.equals(mainProfileName)) {
-                this.mainProfile = profile;
-                this.mainSettings = profile.mainGamepad;
-                mainFound = true;
-            }
-            if (profile.name.equals(subProfileName)) {
-                this.subProfile = profile;
-                this.subSettings = profile.subGamepad;
-                subFound = true;
-            }
-        }
-        if (!mainFound || !subFound) {
-            throw new IllegalArgumentException("Invalid profile name(s)");
+    public static class Actions {
+        public final boolean extendHorizontal, retractHorizontal, retractVertical, extendVertical, extensorBusy;
+        public final boolean intakeIn, intakeOut, intakeStop;
+        public final boolean wristUp, wristDown;
+        public final boolean ascendExtensorExtend, ascendExtensorRetract, ascendExtensorGround, ascendExtensorCeiling;
+        public final double boostAmount, brakeAmount;
+        public final boolean linearActuatorExtend, linearActuatorRetract;
+        public final boolean inwardClaw, outwardClaw, toggleClaw;
+        public final boolean shoulderUp, shoulderDown;
+        public final boolean flipMovement;
+        public final double rotator;
+
+        public Actions(Gamepad mainCtrl, Settings.DefaultGamepadSettings mainSettings,
+                Gamepad subCtrl, Settings.DefaultGamepadSettings subSettings) {
+            this.extendHorizontal = getButtonState(subCtrl, subSettings.buttonMapping.extendHorizontal);
+            this.retractHorizontal = getButtonState(subCtrl, subSettings.buttonMapping.retractHorizontal);
+            this.retractVertical = getButtonState(mainCtrl, mainSettings.buttonMapping.retractVertical);
+            this.extendVertical = getButtonState(mainCtrl, mainSettings.buttonMapping.extendVertical);
+            this.extensorBusy = extendHorizontal || retractHorizontal || retractVertical;
+            this.intakeIn = getButtonState(subCtrl, subSettings.buttonMapping.intakeIn);
+            this.intakeOut = getButtonState(subCtrl, subSettings.buttonMapping.intakeOut);
+            this.intakeStop = getButtonState(subCtrl, subSettings.buttonMapping.intakeStop);
+            this.wristUp = getButtonState(subCtrl, subSettings.buttonMapping.wristUp);
+            this.wristDown = getButtonState(subCtrl, subSettings.buttonMapping.wristDown);
+            this.ascendExtensorExtend = getButtonState(subCtrl,
+                    subSettings.buttonMapping.ascendExtensorExtend);
+            this.ascendExtensorRetract = getButtonState(subCtrl,
+                    subSettings.buttonMapping.ascendExtensorRetract);
+            this.ascendExtensorGround = getButtonState(subCtrl,
+                    subSettings.buttonMapping.ascendExtensorGround);
+            this.ascendExtensorCeiling = getButtonState(subCtrl,
+                    subSettings.buttonMapping.ascendExtensorCeiling);
+            this.boostAmount = mainSettings.applyBoostCurve(
+                    getAxisValue(mainCtrl, mainSettings.buttonMapping.boost));
+            this.brakeAmount = mainSettings.applyBoostCurve(
+                    getAxisValue(mainCtrl, mainSettings.buttonMapping.brake));
+            this.linearActuatorExtend = getButtonState(subCtrl, subSettings.buttonMapping.linearActuatorExtend);
+            this.linearActuatorRetract = getButtonState(subCtrl, subSettings.buttonMapping.linearActuatorRetract);
+            this.inwardClaw = getButtonState(subCtrl, subSettings.buttonMapping.clawIn);
+            this.outwardClaw = getButtonState(subCtrl, subSettings.buttonMapping.clawOut);
+            this.toggleClaw = getButtonState(subCtrl, subSettings.buttonMapping.clawToggle);
+            this.shoulderDown = getButtonState(subCtrl, subSettings.buttonMapping.shoulderDown);
+            this.shoulderUp = getButtonState(subCtrl, subSettings.buttonMapping.shoulderUp);
+            this.flipMovement = getButtonState(mainCtrl, mainSettings.buttonMapping.flipMovement);
+            this.rotator = (getAxisValue(subCtrl, subSettings.buttonMapping.rotator)/-2) + 0.5;
         }
     }
 

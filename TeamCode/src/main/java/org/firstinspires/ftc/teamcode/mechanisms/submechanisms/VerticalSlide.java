@@ -4,53 +4,17 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
 public class VerticalSlide implements ViperSlide {
     private final DcMotor verticalMotorLeft;
     private final DcMotor verticalMotorRight;
-    private final BaseRobot baseRobot;
     private double encoderTarget;
     private VerticalPosition currentPosition;
-    private final String LOG_PREFIX = "Vertical Slide: ";
 
-    // Main Constructor that doesn't reset motor encoders - for TeleOP
-    public VerticalSlide(@NonNull BaseRobot baseRobot) {
-        this.baseRobot = baseRobot;
-        this.verticalMotorLeft = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT);
-        this.verticalMotorRight = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
-
-        verticalMotorRight.setDirection(DcMotor.Direction.REVERSE);
-
-        setPosition(VerticalPosition.TRANSFER);
-
-        // Set to RUN_TO_POSITION mode for position control
-        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        this.currentPosition = VerticalPosition.TRANSFER;
-        encoderTarget = verticalMotorLeft.getTargetPosition();
-        encoderTarget = verticalMotorRight.getTargetPosition();
-    }
-
-    // Alternate Constructor that resets the motor encoders - for Autonomous
-    public VerticalSlide(@NonNull BaseRobot baseRobot, boolean resetEncoders) {
-        this.baseRobot = baseRobot;
-        this.verticalMotorLeft = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT);
-        this.verticalMotorRight = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
-
-        verticalMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        verticalMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        verticalMotorRight.setDirection(DcMotor.Direction.REVERSE);
-
-        setPosition(VerticalPosition.TRANSFER);
-
-        // Set to RUN_TO_POSITION mode for position control
-        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        this.currentPosition = VerticalPosition.TRANSFER;
-        encoderTarget = verticalMotorLeft.getTargetPosition();
-        encoderTarget = verticalMotorRight.getTargetPosition();
+    public VerticalSlide(DcMotor verticalMotorLeft, DcMotor verticalMotorRight) {
+        this.verticalMotorLeft = verticalMotorLeft;
+        this.verticalMotorRight = verticalMotorRight;
     }
 
     // Sets target position
@@ -58,9 +22,9 @@ public class VerticalSlide implements ViperSlide {
     public void setPosition(double position) {
         int targetPosition = (int) position;
         verticalMotorLeft.setTargetPosition(targetPosition);
-        verticalMotorLeft.setPower(Settings.Hardware.Extensor.MOVEMENT_POWER);
+        verticalMotorLeft.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
         verticalMotorRight.setTargetPosition(targetPosition);
-        verticalMotorRight.setPower(Settings.Hardware.Extensor.MOVEMENT_POWER);
+        verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
     }
 
     // Converts position name to double
@@ -85,11 +49,6 @@ public class VerticalSlide implements ViperSlide {
     }
 
     @Override
-    public void min() {
-        setPosition(VerticalPosition.TRANSFER);
-    }
-
-    @Override
     public void max() {
         setPosition(VerticalPosition.HIGH_BASKET);
     }
@@ -108,5 +67,18 @@ public class VerticalSlide implements ViperSlide {
             encoderTarget -= Settings.Hardware.VerticalSlide.FREAKY_MOVEMENT_POWER;
         }
         setPosition(encoderTarget);
+    }
+
+    public void init() {
+        verticalMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        verticalMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        verticalMotorRight.setDirection(DcMotor.Direction.REVERSE);
+
+        setPosition(VerticalPosition.TRANSFER);
+
+        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.currentPosition = VerticalPosition.TRANSFER;
+        encoderTarget = verticalMotorRight.getTargetPosition();
     }
 }

@@ -25,7 +25,7 @@ public class CheckSuite extends LinearOpMode {
 
     private static final String[] SERVO_OPTIONS = {
             Settings.Hardware.IDs.WRIST,
-            Settings.Hardware.IDs.OUTER_WRIST,
+            Settings.Hardware.IDs.ROTATOR,
     };
 
     private static final String[] LIST_OPTIONS = Stream.concat(Arrays.stream(MOTOR_OPTIONS),

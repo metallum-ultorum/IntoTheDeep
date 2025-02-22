@@ -4,28 +4,15 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.BaseRobot;
 import org.firstinspires.ftc.teamcode.Settings;
 
 public class HorizontalSlide implements ViperSlide {
     private final DcMotor horizontalMotor;
-    private final BaseRobot baseRobot;
     private double encoderTarget;
     private HorizontalPosition currentPosition;
-    private String deepak = "bad at coding";
 
-    public HorizontalSlide(@NonNull BaseRobot baseRobot) {
-        this.baseRobot = baseRobot;
-        this.horizontalMotor = baseRobot.hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_HORIZONTAL);
-
-        horizontalMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        setPosition(HorizontalPosition.COLLAPSED);
-
-        // Set to RUN_TO_POSITION mode for position control
-//        horizontalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        this.currentPosition = HorizontalPosition.COLLAPSED;
-        encoderTarget = horizontalMotor.getTargetPosition();
+    public HorizontalSlide(DcMotor horizontalMotor) {
+        this.horizontalMotor = horizontalMotor;
     }
 
     // Sets target position
@@ -33,7 +20,7 @@ public class HorizontalSlide implements ViperSlide {
     public void setPosition(double position) {
         int targetPosition = (int) position;
         horizontalMotor.setTargetPosition(targetPosition);
-        horizontalMotor.setPower(Settings.Hardware.Extensor.MOVEMENT_POWER);
+        horizontalMotor.setPower(Settings.Hardware.HorizontalSlide.MOVEMENT_POWER);
     }
 
     // Converts position name to double
@@ -58,11 +45,6 @@ public class HorizontalSlide implements ViperSlide {
     }
 
     @Override
-    public void min() {
-        setPosition(HorizontalPosition.COLLAPSED);
-    }
-
-    @Override
     public void max() {
         setPosition(HorizontalPosition.EXPANDED);
     }
@@ -77,5 +59,16 @@ public class HorizontalSlide implements ViperSlide {
     public void decrement() {
         encoderTarget -= Settings.Hardware.HorizontalSlide.FREAKY_MOVEMENT_POWER;
         setPosition(encoderTarget);
+    }
+
+    public void init() {
+        horizontalMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        setPosition(HorizontalPosition.COLLAPSED);
+
+        // Set to RUN_TO_POSITION mode for position control
+        // horizontalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.currentPosition = HorizontalPosition.COLLAPSED;
+        encoderTarget = horizontalMotor.getTargetPosition();
     }
 }
