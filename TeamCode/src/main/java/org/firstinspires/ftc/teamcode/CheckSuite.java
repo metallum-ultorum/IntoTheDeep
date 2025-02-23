@@ -20,12 +20,18 @@ public class CheckSuite extends LinearOpMode {
             Settings.Hardware.IDs.FRONT_RIGHT_MOTOR,
             Settings.Hardware.IDs.REAR_LEFT_MOTOR,
             Settings.Hardware.IDs.REAR_RIGHT_MOTOR,
-            Settings.Hardware.IDs.LINEAR_ACTUATOR,
+            Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT,
+            Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT,
+            Settings.Hardware.IDs.SLIDE_HORIZONTAL,
     };
 
     private static final String[] SERVO_OPTIONS = {
             Settings.Hardware.IDs.WRIST,
             Settings.Hardware.IDs.ROTATOR,
+            Settings.Hardware.IDs.INTAKE_CLAW,
+            Settings.Hardware.IDs.OUTTAKE_CLAW,
+            Settings.Hardware.IDs.RIGHT_SHOULDER,
+            Settings.Hardware.IDs.LEFT_SHOULDER
     };
 
     private static final String[] LIST_OPTIONS = Stream.concat(Arrays.stream(MOTOR_OPTIONS),
