@@ -13,6 +13,7 @@ public class VerticalSlide implements ViperSlide {
     private final RevTouchSensor touchSensor;
     private double encoderTarget;
     private VerticalPosition currentPosition;
+    private double currentOffset;
 
     public VerticalSlide(DcMotor verticalMotorLeft, DcMotor verticalMotorRight, RevTouchSensor verticalMotorTouchSensor) {
         this.verticalMotorLeft = verticalMotorLeft;
@@ -58,7 +59,7 @@ public class VerticalSlide implements ViperSlide {
 
     @Override
     public void increment() {
-        if (encoderTarget < VerticalPosition.HIGH_BASKET.getValue()) {
+        if (encoderTarget - currentOffset < VerticalPosition.HIGH_BASKET.getValue()) {
             encoderTarget += Settings.Hardware.VerticalSlide.FREAKY_MOVEMENT_POWER;
         }
         setPosition(encoderTarget);
@@ -66,10 +67,14 @@ public class VerticalSlide implements ViperSlide {
 
     @Override
     public void decrement() {
-        if (!Settings.Hardware.VerticalSlide.ENABLE_LOWER_LIMIT || !touchSensor.isPressed()) {
+        if (!Settings.Hardware.VerticalSlide.ENABLE_LOWER_LIMIT || !touchSensor.isPressed() || encoderTarget - currentOffset > VerticalPosition.TRANSFER.getValue()) {
             encoderTarget -= Settings.Hardware.VerticalSlide.FREAKY_MOVEMENT_POWER;
         }
         setPosition(encoderTarget);
+    }
+
+    public void setToZero() {
+        currentOffset = encoderTarget;
     }
 
     public void reset() {
