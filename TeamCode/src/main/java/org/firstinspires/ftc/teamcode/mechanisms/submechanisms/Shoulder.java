@@ -78,6 +78,11 @@ public class Shoulder {
     }
 
     public void init() {
+        setPosition(Position.TRANSFER);
+    }
+
+    public void reset() {
+
     }
 
 }

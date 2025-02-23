@@ -13,7 +13,6 @@ public class VerticalSlide implements ViperSlide {
     private final RevTouchSensor touchSensor;
     private double encoderTarget;
     private VerticalPosition currentPosition;
-    private double verticalSlideOffset;
 
     public VerticalSlide(DcMotor verticalMotorLeft, DcMotor verticalMotorRight, RevTouchSensor verticalMotorTouchSensor) {
         this.verticalMotorLeft = verticalMotorLeft;
@@ -73,13 +72,12 @@ public class VerticalSlide implements ViperSlide {
         setPosition(encoderTarget);
     }
 
-    public void resetEncoders() {
+    public void reset() {
             verticalMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             verticalMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void init() {
-//        resetEncoders();
         verticalMotorRight.setDirection(DcMotor.Direction.REVERSE);
 
         setPosition(VerticalPosition.TRANSFER);

@@ -49,4 +49,16 @@ public class MechanismManager {
             linearActuator.init();
         }
     }
+
+    public void reset() {
+        if (Settings.Deploy.INTAKE) {
+            intake.reset();
+        }
+        if (Settings.Deploy.OUTTAKE) {
+            outtake.reset();
+        }
+        if (Settings.Deploy.LINEAR_ACTUATOR) {
+            linearActuator.reset();
+        }
+    }
 }

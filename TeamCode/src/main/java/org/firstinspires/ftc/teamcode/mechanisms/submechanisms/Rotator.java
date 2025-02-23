@@ -31,4 +31,7 @@ public class Rotator {
     public void init() {
         setPosition(horizontalPos);
     }
+
+    public void reset() {
+    }
 }

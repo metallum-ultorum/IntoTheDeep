@@ -24,4 +24,10 @@ public class Outtake {
         shoulder.init();
         outtakeClaw.init();
     }
+
+    public void reset() {
+        verticalSlide.reset();
+        shoulder.reset();
+        outtakeClaw.reset();
+    }
 }

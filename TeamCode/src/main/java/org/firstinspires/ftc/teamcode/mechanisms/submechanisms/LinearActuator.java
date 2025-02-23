@@ -24,12 +24,13 @@ public class LinearActuator  {
     }
 
     public void init() {
-        // Reset encoders
-        actuatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         retract();
 
         // Set to RUN_TO_POSITION mode for position control
         actuatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void reset() {
+        actuatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }
