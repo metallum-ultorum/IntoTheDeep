@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -27,7 +28,8 @@ public class MechanismManager {
             DcMotor verticalMotorRight = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
             Servo leftShoulderServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.LEFT_SHOULDER);
             Servo rightShoulderServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.RIGHT_SHOULDER);
-            outtake = new Outtake(verticalMotorLeft, verticalMotorRight, leftShoulderServo, rightShoulderServo, clawServo);
+            RevTouchSensor verticalSlideTouchSensor = hardwareMap.get(RevTouchSensor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_TOUCH_SENSOR);
+            outtake = new Outtake(verticalMotorLeft, verticalMotorRight, leftShoulderServo, rightShoulderServo, clawServo, verticalSlideTouchSensor);
         }
 
         if (Settings.Deploy.LINEAR_ACTUATOR) {

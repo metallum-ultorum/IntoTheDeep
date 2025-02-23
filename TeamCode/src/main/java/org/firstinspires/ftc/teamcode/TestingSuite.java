@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.utils.MenuHelper;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -43,10 +45,13 @@ public class TestingSuite extends LinearOpMode {
     private static final String[] DUAL_SERVO_OPTIONS = {
             "DUAL_SERVO_SHOULDERS",
     };
+    private static final String[] SENSOR_OPTIONS = {
+            Settings.Hardware.IDs.SLIDE_VERTICAL_TOUCH_SENSOR,
+    };
 
     private static final String[] LIST_OPTIONS = Stream.concat(Stream.concat(Arrays.stream(MOTOR_OPTIONS),
-            Arrays.stream(DUAL_MOTOR_OPTIONS)), Stream.concat(Arrays.stream(SERVO_OPTIONS),
-            Arrays.stream(DUAL_SERVO_OPTIONS))).toArray(String[]::new);
+            Arrays.stream(DUAL_MOTOR_OPTIONS)), Stream.concat(Stream.concat(Arrays.stream(SERVO_OPTIONS),
+            Arrays.stream(DUAL_SERVO_OPTIONS)), Arrays.stream(SENSOR_OPTIONS))).toArray(String[]::new);
 
     @Override
     public void runOpMode() {
@@ -55,6 +60,8 @@ public class TestingSuite extends LinearOpMode {
         AtomicBoolean listConfirmed = new AtomicBoolean(false);
         final String[] selectedItem = new String[1];
         AtomicBoolean isMotor = new AtomicBoolean(true);
+        AtomicBoolean isServo = new AtomicBoolean(false);
+
 
         while (opModeIsActive() || !isStopRequested() && menuActive.get()) {
             telemetry.addLine("=== Motor/Servo Testing Selection ===");
@@ -71,6 +78,7 @@ public class TestingSuite extends LinearOpMode {
                 } else if (gamepad1.a) {
                     selectedItem[0] = LIST_OPTIONS[listSelection.get()];
                     isMotor.set(listSelection.get() < MOTOR_OPTIONS.length + DUAL_MOTOR_OPTIONS.length);
+                    isServo.set(listSelection.get() >= MOTOR_OPTIONS.length + DUAL_MOTOR_OPTIONS.length && listSelection.get() < MOTOR_OPTIONS.length + DUAL_MOTOR_OPTIONS.length + SERVO_OPTIONS.length + DUAL_SERVO_OPTIONS.length);
                     listConfirmed.set(true);
                     menuActive.set(false);
                 }
@@ -104,7 +112,7 @@ public class TestingSuite extends LinearOpMode {
                             telemetry.update();
                         }
                     }
-                } else {
+                } else if (isServo.get()) {
                     if (selectedItem[0].equals("DUAL_SERVO_SHOULDERS")) {
                         Servo servo1 = hardwareMap.get(Servo.class, Settings.Hardware.IDs.LEFT_SHOULDER);
                         Servo servo2 = hardwareMap.get(Servo.class, Settings.Hardware.IDs.RIGHT_SHOULDER);
@@ -127,8 +135,6 @@ public class TestingSuite extends LinearOpMode {
                         Servo testServo = hardwareMap.get(Servo.class, selectedItem[0]);
                         double position = 0.5;
                         testServo.setPosition(position);
-                        waitForStart();
-                        while (opModeIsActive()) {
                             if (gamepad1.left_trigger > 0.5) {
                                 position = Math.max(0, position - 0.05);
                             } else if (gamepad1.right_trigger > 0.5) {
@@ -136,6 +142,14 @@ public class TestingSuite extends LinearOpMode {
                             }
                             testServo.setPosition(position);
                             telemetry.addData("Servo Position", "%.3f", position);
+                        }
+                    }
+                } else {
+                    if (Objects.equals(selectedItem[0], SENSOR_OPTIONS[0])) {
+                        RevTouchSensor testSensor = hardwareMap.get(RevTouchSensor.class, selectedItem[0]);
+                        waitForStart();
+                        while (opModeIsActive()) {
+                            telemetry.addData("Sensor State", testSensor.isPressed() ? "Pressed" : "Not Pressed");
                             telemetry.update();
                         }
                     }
@@ -145,4 +159,4 @@ public class TestingSuite extends LinearOpMode {
             }
         }
     }
-}
+

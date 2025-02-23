@@ -328,7 +328,7 @@ public class Settings {
             public static final String INTAKE_CLAW = "intakeClaw";
             public static final String OUTTAKE_CLAW = "outtakeClaw";
             public static final String PINPOINT = "pinpoint";
-
+            public static final String SLIDE_VERTICAL_TOUCH_SENSOR = "slideVerticalSensor";
         }
 
         @Config
@@ -344,7 +344,7 @@ public class Settings {
             public static int HIGH_BASKET = 3200;
 
             // Motor power settings
-            public static double MOVEMENT_POWER = 0.9;
+            public static double MOVEMENT_POWER = 0.5;
 
             public static double FREAKY_MOVEMENT_POWER = 20;
 

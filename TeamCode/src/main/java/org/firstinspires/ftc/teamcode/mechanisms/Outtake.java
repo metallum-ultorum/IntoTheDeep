@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,8 +13,8 @@ public class Outtake {
     public final Shoulder shoulder;
     public final OuttakeClaw outtakeClaw;
 
-    public Outtake(DcMotor verticalMotorLeft, DcMotor verticalMotorRight, Servo leftShoulderServo, Servo rightShoulderServo, Servo clawServo) {
-        verticalSlide = new VerticalSlide(verticalMotorLeft, verticalMotorRight);
+    public Outtake(DcMotor verticalMotorLeft, DcMotor verticalMotorRight, Servo leftShoulderServo, Servo rightShoulderServo, Servo clawServo, RevTouchSensor verticalMotorTouchSensor) {
+        verticalSlide = new VerticalSlide(verticalMotorLeft, verticalMotorRight, verticalMotorTouchSensor);
         shoulder = new Shoulder(leftShoulderServo, rightShoulderServo);
         outtakeClaw = new OuttakeClaw(clawServo);
     }
