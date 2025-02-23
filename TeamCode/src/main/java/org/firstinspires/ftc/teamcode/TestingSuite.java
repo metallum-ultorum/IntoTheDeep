@@ -135,6 +135,8 @@ public class TestingSuite extends LinearOpMode {
                         Servo testServo = hardwareMap.get(Servo.class, selectedItem[0]);
                         double position = 0.5;
                         testServo.setPosition(position);
+                        waitForStart();
+                        while (opModeIsActive()) {
                             if (gamepad1.left_trigger > 0.5) {
                                 position = Math.max(0, position - 0.05);
                             } else if (gamepad1.right_trigger > 0.5) {
@@ -142,6 +144,7 @@ public class TestingSuite extends LinearOpMode {
                             }
                             testServo.setPosition(position);
                             telemetry.addData("Servo Position", "%.3f", position);
+                            telemetry.update();
                         }
                     }
                 } else {
@@ -159,4 +162,4 @@ public class TestingSuite extends LinearOpMode {
             }
         }
     }
-
+}

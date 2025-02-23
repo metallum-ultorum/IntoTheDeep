@@ -328,7 +328,7 @@ public class Settings {
             public static final String INTAKE_CLAW = "intakeClaw";
             public static final String OUTTAKE_CLAW = "outtakeClaw";
             public static final String PINPOINT = "pinpoint";
-            public static final String SLIDE_VERTICAL_TOUCH_SENSOR = "slideVerticalSensor";
+            public static final String SLIDE_VERTICAL_TOUCH_SENSOR = "verticalSlideSensor";
         }
 
         @Config
