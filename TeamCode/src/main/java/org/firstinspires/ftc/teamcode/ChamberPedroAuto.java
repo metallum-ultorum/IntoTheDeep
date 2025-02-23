@@ -286,8 +286,6 @@ public class ChamberPedroAuto extends OpMode {
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         mechanisms = new MechanismManager(hardwareMap);
-        mechanisms.reset();
-        mechanisms.init();
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
@@ -308,6 +306,8 @@ public class ChamberPedroAuto extends OpMode {
      **/
     @Override
     public void start() {
+        mechanisms.reset();
+        mechanisms.init();
         opmodeTimer.resetTimer();
         setPathState(0);
     }

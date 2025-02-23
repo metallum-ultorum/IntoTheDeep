@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Settings.ControllerProfile;
 import org.firstinspires.ftc.teamcode.mechanisms.MechanismManager;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.systems.Drivetrain;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
@@ -58,6 +60,7 @@ public class MainOp extends LinearOpMode {
         while (opModeIsActive()) {
             gamepadPrimary();
             gamepadAuxiliary();
+            checkEasingConditions();
         }
     }
 
@@ -205,9 +208,6 @@ public class MainOp extends LinearOpMode {
             if (contextualActions.justToggleClaw) {
                 if (mechanisms.outtake.outtakeClaw.opened) {
                     mechanisms.outtake.outtakeClaw.close();
-                    if (Settings.Movement.easeTransfer) {
-                        mechanisms.intake.intakeClaw.open();
-                    }
                 } else {
                     mechanisms.outtake.outtakeClaw.open();
                 }
@@ -231,6 +231,18 @@ public class MainOp extends LinearOpMode {
             }
             if (actions.linearActuatorRetract) {
                 mechanisms.linearActuator.retract();
+            }
+        }
+    }
+
+    public void checkEasingConditions() {
+        if (Settings.Movement.easeTransfer) {
+            // automatically transfer when everything is collapsed
+            if (mechanisms.intake.horizontalSlide.currentPosition == ViperSlide.HorizontalPosition.COLLAPSED &&
+                    !mechanisms.intake.intakeClaw.opened && !mechanisms.outtake.outtakeClaw.opened) {
+                mechanisms.intake.intakeClaw.open();
+                mechanisms.outtake.outtakeClaw.close();
+                mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_BACKWARD);
             }
         }
     }

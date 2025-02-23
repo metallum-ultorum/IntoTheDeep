@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Settings;
 public class HorizontalSlide implements ViperSlide {
     private final DcMotor horizontalMotor;
     private double encoderTarget;
-    private HorizontalPosition currentPosition;
+    public HorizontalPosition currentPosition;
 
     public HorizontalSlide(DcMotor horizontalMotor) {
         this.horizontalMotor = horizontalMotor;
