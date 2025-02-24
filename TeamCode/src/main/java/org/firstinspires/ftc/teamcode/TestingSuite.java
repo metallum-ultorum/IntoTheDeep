@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.utils.MenuHelper;
 
 import java.util.Arrays;
@@ -47,6 +51,7 @@ public class TestingSuite extends LinearOpMode {
     };
     private static final String[] SENSOR_OPTIONS = {
             Settings.Hardware.IDs.SLIDE_VERTICAL_TOUCH_SENSOR,
+            Settings.Hardware.IDs.LIMELIGHT,
     };
 
     private static final String[] LIST_OPTIONS = Stream.concat(Stream.concat(Arrays.stream(MOTOR_OPTIONS),
@@ -93,6 +98,7 @@ public class TestingSuite extends LinearOpMode {
                         DcMotor motor2 = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
                         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
                         waitForStart();
                         while (opModeIsActive()) {
                             float power = -gamepad1.left_trigger + gamepad1.right_trigger;
@@ -116,6 +122,7 @@ public class TestingSuite extends LinearOpMode {
                     if (selectedItem[0].equals("DUAL_SERVO_SHOULDERS")) {
                         Servo servo1 = hardwareMap.get(Servo.class, Settings.Hardware.IDs.LEFT_SHOULDER);
                         Servo servo2 = hardwareMap.get(Servo.class, Settings.Hardware.IDs.RIGHT_SHOULDER);
+                        servo2.setDirection(Servo.Direction.REVERSE);
                         double position = 0.5;
                         servo1.setPosition(position);
                         servo2.setPosition(position);
@@ -149,11 +156,30 @@ public class TestingSuite extends LinearOpMode {
                     }
                 } else {
                     if (Objects.equals(selectedItem[0], SENSOR_OPTIONS[0])) {
-                        RevTouchSensor testSensor = hardwareMap.get(RevTouchSensor.class, selectedItem[0]);
+                        RevTouchSensor touchSensor = hardwareMap.get(RevTouchSensor.class, selectedItem[0]);
                         waitForStart();
                         while (opModeIsActive()) {
-                            telemetry.addData("Sensor State", testSensor.isPressed() ? "Pressed" : "Not Pressed");
+                            telemetry.addData("Sensor State", touchSensor.isPressed() ? "Pressed" : "Not Pressed");
                             telemetry.update();
+                        }
+                    }
+                    if (Objects.equals(selectedItem[0], SENSOR_OPTIONS[1])) {
+                        Limelight3A limelight = hardwareMap.get(Limelight3A.class, selectedItem[0]);
+                        telemetry.setMsTransmissionInterval(11);
+                        limelight.pipelineSwitch(0);
+                        waitForStart();
+                        limelight.start();
+                        while (opModeIsActive()) {
+                            LLResult result = limelight.getLatestResult();
+                            if (result != null) {
+                                if (result.isValid()) {
+                                    Pose3D botpose = result.getBotpose();
+                                    telemetry.addData("tx", result.getTx());
+                                    telemetry.addData("ty", result.getTy());
+                                    telemetry.addData("Botpose", botpose.toString());
+                                    telemetry.update();
+                                }
+                            }
                         }
                     }
                 }
