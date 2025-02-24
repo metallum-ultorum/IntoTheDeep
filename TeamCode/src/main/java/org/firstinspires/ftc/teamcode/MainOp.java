@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Settings.ControllerProfile;
 import org.firstinspires.ftc.teamcode.mechanisms.MechanismManager;
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.systems.Drivetrain;
@@ -242,7 +241,7 @@ public class MainOp extends LinearOpMode {
                     !mechanisms.intake.intakeClaw.opened && !mechanisms.outtake.outtakeClaw.opened) {
                 mechanisms.intake.intakeClaw.open();
                 mechanisms.outtake.outtakeClaw.close();
-                mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_BACKWARD);
+                mechanisms.outtake.moveShoulderToBack();
             }
         }
     }

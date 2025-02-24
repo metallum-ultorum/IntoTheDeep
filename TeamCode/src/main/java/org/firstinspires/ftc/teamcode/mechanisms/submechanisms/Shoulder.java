@@ -78,7 +78,7 @@ public class Shoulder {
     }
 
     public void init() {
-        setPosition(Position.TRANSFER);
+        setPosition(Position.PLACE_FORWARD);
     }
 
     public void reset() {

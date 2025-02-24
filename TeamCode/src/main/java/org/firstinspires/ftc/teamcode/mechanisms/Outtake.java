@@ -19,6 +19,16 @@ public class Outtake {
         outtakeClaw = new OuttakeClaw(clawServo);
     }
 
+    public void moveShoulderToBack() {
+        outtakeClaw.close();
+        shoulder.setPosition(Shoulder.Position.PLACE_BACKWARD);
+    }
+
+    public void moveShoulderToFront() {
+        outtakeClaw.close();
+        shoulder.setPosition(Shoulder.Position.PLACE_FORWARD);
+    }
+
     public void init() {
         verticalSlide.init();
         shoulder.init();
