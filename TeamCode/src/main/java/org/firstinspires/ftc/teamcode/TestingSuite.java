@@ -53,7 +53,9 @@ public class TestingSuite extends LinearOpMode {
     };
     private static final String[] SENSOR_OPTIONS = {
             Settings.Hardware.IDs.SLIDE_VERTICAL_TOUCH_SENSOR,
-            Settings.Hardware.IDs.LIMELIGHT,
+            Settings.Hardware.IDs.LIMELIGHT + " yellow detection",
+            Settings.Hardware.IDs.LIMELIGHT + " red detection",
+            Settings.Hardware.IDs.LIMELIGHT + " blue detection",
     };
 
     private static final String[] LIST_OPTIONS = Stream.concat(Stream.concat(Arrays.stream(MOTOR_OPTIONS),
@@ -166,29 +168,54 @@ public class TestingSuite extends LinearOpMode {
                         }
                     }
                     if (Objects.equals(selectedItem[0], SENSOR_OPTIONS[1])) {
-                        Limelight3A limelight = hardwareMap.get(Limelight3A.class, selectedItem[0]);
+                        Limelight3A limelight = hardwareMap.get(Limelight3A.class, Settings.Hardware.IDs.LIMELIGHT);
                         telemetry.setMsTransmissionInterval(10);
-                        limelight.pipelineSwitch(0);
-                        waitForStart();
+                        limelight.pipelineSwitch(1);
                         limelight.start();
                         limelight.setPollRateHz(100);
+                        waitForStart();
                         while (opModeIsActive()) {
                             LLResult result = limelight.getLatestResult();
-                            if (result != null) {
-                                if (result.isValid()) {
                                     // Access positional results
                                     telemetry.addData("Target X", result.getTx());
                                     telemetry.addData("Target Y", result.getTy());
                                     telemetry.addLine("Target Size: " + result.getTa()*100 + "%");
 
-                                    // Access color results
-                                    List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-                                    for (LLResultTypes.ColorResult cr : colorResults) {
-                                        telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
-                                    }
                                     telemetry.update();
                                 }
-                            }
+                    }
+                    if (Objects.equals(selectedItem[0], SENSOR_OPTIONS[2])) {
+                        Limelight3A limelight = hardwareMap.get(Limelight3A.class, Settings.Hardware.IDs.LIMELIGHT);
+                        telemetry.setMsTransmissionInterval(10);
+                        limelight.pipelineSwitch(2);
+                        limelight.start();
+                        limelight.setPollRateHz(100);
+                        waitForStart();
+                        while (opModeIsActive()) {
+                            LLResult result = limelight.getLatestResult();
+                            // Access positional results
+                            telemetry.addData("Target X", result.getTx());
+                            telemetry.addData("Target Y", result.getTy());
+                            telemetry.addLine("Target Size: " + result.getTa()*100 + "%");
+
+                            telemetry.update();
+                        }
+                    }
+                    if (Objects.equals(selectedItem[0], SENSOR_OPTIONS[3])) {
+                        Limelight3A limelight = hardwareMap.get(Limelight3A.class, Settings.Hardware.IDs.LIMELIGHT);
+                        telemetry.setMsTransmissionInterval(10);
+                        limelight.pipelineSwitch(3);
+                        limelight.start();
+                        limelight.setPollRateHz(100);
+                        waitForStart();
+                        while (opModeIsActive()) {
+                            LLResult result = limelight.getLatestResult();
+                            // Access positional results
+                            telemetry.addData("Target X", result.getTx());
+                            telemetry.addData("Target Y", result.getTy());
+                            telemetry.addLine("Target Size: " + result.getTa()*100 + "%");
+
+                            telemetry.update();
                         }
                     }
                 }
