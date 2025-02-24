@@ -12,6 +12,9 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.mechanisms.MechanismManager;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
@@ -29,6 +32,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 public class ChamberPedroAuto extends OpMode {
     public double hpSpecimensPlaced = 0;
     private Follower follower;
+    private MechanismManager mechanisms;
     private Timer pathTimer, actionTimer, opmodeTimer;
     /**
      * This is the variable where we store the state of our auto.
@@ -257,11 +261,15 @@ public class ChamberPedroAuto extends OpMode {
     }
 
     public void score() {
-        // TODO write the logic to score the specimens on chamber (we are in position already)
+        mechanisms.outtake.outtakeClaw.close();
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG);
+        mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_BACKWARD);
     }
 
     public void collapse() {
-        // TODO collapse the extensions / linkages before moving again
+        mechanisms.outtake.outtakeClaw.open();
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
+        mechanisms.outtake.shoulder.setPosition(Shoulder.Position.TRANSFER);
     }
 
     public void grab() {
@@ -277,6 +285,7 @@ public class ChamberPedroAuto extends OpMode {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
+        mechanisms = new MechanismManager(hardwareMap);
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
@@ -297,6 +306,8 @@ public class ChamberPedroAuto extends OpMode {
      **/
     @Override
     public void start() {
+        mechanisms.reset();
+        mechanisms.init();
         opmodeTimer.resetTimer();
         setPathState(0);
     }

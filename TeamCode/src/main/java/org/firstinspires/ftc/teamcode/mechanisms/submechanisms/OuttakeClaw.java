@@ -38,5 +38,8 @@ public class OuttakeClaw {
         }
     }
 
+    public void reset() {
+    }
+
 
 }

@@ -79,4 +79,7 @@ public class Wrist {
         setPosition(Position.READY);
     }
 
+    public void reset() {
+    }
+
 }

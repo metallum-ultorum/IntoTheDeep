@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Settings;
 public class HorizontalSlide implements ViperSlide {
     private final DcMotor horizontalMotor;
     private double encoderTarget;
-    private HorizontalPosition currentPosition;
+    public HorizontalPosition currentPosition;
 
     public HorizontalSlide(DcMotor horizontalMotor) {
         this.horizontalMotor = horizontalMotor;
@@ -62,13 +62,15 @@ public class HorizontalSlide implements ViperSlide {
     }
 
     public void init() {
-        horizontalMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         setPosition(HorizontalPosition.COLLAPSED);
 
         // Set to RUN_TO_POSITION mode for position control
         horizontalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.currentPosition = HorizontalPosition.COLLAPSED;
         encoderTarget = horizontalMotor.getTargetPosition();
+    }
+
+    public void reset() {
+        horizontalMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }

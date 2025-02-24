@@ -37,4 +37,7 @@ public class IntakeClaw {
     public void init() {
         close();
     }
+
+    public void reset() {
+    }
 }

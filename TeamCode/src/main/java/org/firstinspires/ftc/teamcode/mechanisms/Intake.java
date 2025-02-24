@@ -27,4 +27,11 @@ public class Intake {
         rotator.init();
         wrist.init();
     }
+
+    public void reset() {
+        intakeClaw.reset();
+        horizontalSlide.reset();
+        rotator.reset();
+        wrist.reset();
+    }
 }
