@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.utils.MenuHelper;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -165,18 +167,25 @@ public class TestingSuite extends LinearOpMode {
                     }
                     if (Objects.equals(selectedItem[0], SENSOR_OPTIONS[1])) {
                         Limelight3A limelight = hardwareMap.get(Limelight3A.class, selectedItem[0]);
-                        telemetry.setMsTransmissionInterval(11);
+                        telemetry.setMsTransmissionInterval(10);
                         limelight.pipelineSwitch(0);
                         waitForStart();
                         limelight.start();
+                        limelight.setPollRateHz(100);
                         while (opModeIsActive()) {
                             LLResult result = limelight.getLatestResult();
                             if (result != null) {
                                 if (result.isValid()) {
-                                    Pose3D botpose = result.getBotpose();
-                                    telemetry.addData("tx", result.getTx());
-                                    telemetry.addData("ty", result.getTy());
-                                    telemetry.addData("Botpose", botpose.toString());
+                                    // Access positional results
+                                    telemetry.addData("Target X", result.getTx());
+                                    telemetry.addData("Target Y", result.getTy());
+                                    telemetry.addLine("Target Size: " + result.getTa()*100 + "%");
+
+                                    // Access color results
+                                    List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+                                    for (LLResultTypes.ColorResult cr : colorResults) {
+                                        telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
+                                    }
                                     telemetry.update();
                                 }
                             }

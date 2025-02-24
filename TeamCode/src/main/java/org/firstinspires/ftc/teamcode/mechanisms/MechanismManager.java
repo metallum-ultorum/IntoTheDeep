@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -19,7 +20,8 @@ public class MechanismManager {
             DcMotor horizontalMotor = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_HORIZONTAL);
             Servo rotatorServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.ROTATOR);
             Servo wristServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.WRIST);
-            intake = new Intake(clawServo, horizontalMotor, rotatorServo, wristServo);
+            Limelight3A limelight = hardwareMap.get(Limelight3A.class, Settings.Hardware.IDs.LIMELIGHT);
+            intake = new Intake(clawServo, horizontalMotor, rotatorServo, wristServo, limelight);
         }
 
         if (Settings.Deploy.OUTTAKE) {
