@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
@@ -12,6 +14,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.mechanisms.MechanismManager;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
@@ -34,6 +37,8 @@ public class ChamberPedroAuto extends OpMode {
     private Follower follower;
     private MechanismManager mechanisms;
     private Timer pathTimer, actionTimer, opmodeTimer;
+    private double actionState;
+    private Telemetry visualization;
     /**
      * This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method.
@@ -52,9 +57,9 @@ public class ChamberPedroAuto extends OpMode {
         initialPlaceOnChamber = new Path(
                 // Line 1
                 new BezierCurve(
-                        new Point(10.623, 84.060, Point.CARTESIAN),
-                        new Point(37.076, 74.400, Point.CARTESIAN),
-                        new Point(40.297, 67.884, Point.CARTESIAN)
+                        new Point(10.767, 59.940, Point.CARTESIAN),
+                        new Point(31.999, 64.417, Point.CARTESIAN),
+                        new Point(39.076, 63.406, Point.CARTESIAN)
                 )
         );
         prepSample1 = new Path(
@@ -67,14 +72,15 @@ public class ChamberPedroAuto extends OpMode {
                 )
         );
         prepSample1.setConstantHeadingInterpolation(Math.toRadians(0));
+
         pushSample1 = new Path(
                 // Line 3
                 new BezierLine(
                         new Point(61.168, 24.000, Point.CARTESIAN),
-                        new Point(17.230, 24.185, Point.CARTESIAN))
+                        new Point(21.16653084252758, 24.185, Point.CARTESIAN))
         );
-        pushSample1.setTangentHeadingInterpolation();
-        pushSample1.setReversed(true);
+        pushSample1.setConstantHeadingInterpolation(Math.toRadians(0));
+
 
         prepSample2 = new Path(
                 // Line 4
@@ -84,14 +90,14 @@ public class ChamberPedroAuto extends OpMode {
                         new Point(60.245, 12.923, Point.CARTESIAN)
                 )
         );
-        prepSample2.setTangentHeadingInterpolation();
-        prepSample2.setReversed(true);
+        prepSample2.setConstantHeadingInterpolation(Math.toRadians(0));
+
 
         pushSample2 = new Path(
                 // Line 5
                 new BezierLine(
                         new Point(60.245, 12.923, Point.CARTESIAN),
-                        new Point(17.784, 13.292, Point.CARTESIAN)
+                        new Point(21.16653084252758, 13.292, Point.CARTESIAN)
                 )
         );
         pushSample2.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -103,14 +109,13 @@ public class ChamberPedroAuto extends OpMode {
                         new Point(60.061, 8.492, Point.CARTESIAN)
                 )
         );
-        prepSample3.setTangentHeadingInterpolation();
-        prepSample3.setReversed(true);
+        prepSample3.setConstantHeadingInterpolation(Math.toRadians(0));
 
         pushSample3 = new Path(
                 // Line 7
                 new BezierLine(
-                        new Point(60.061, 8.492, Point.CARTESIAN),
-                        new Point(17.599, 8.677, Point.CARTESIAN)
+                        new Point(60.164, 10.544, Point.CARTESIAN),
+                        new Point(21.16653084252758, 10.544, Point.CARTESIAN)
                 )
         );
         pushSample3.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -123,8 +128,7 @@ public class ChamberPedroAuto extends OpMode {
                         new Point(10.478, 31.631, Point.CARTESIAN)
                 )
         );
-        initialGrabFromHumanPlayer.setTangentHeadingInterpolation();
-        initialGrabFromHumanPlayer.setReversed(true);
+        initialGrabFromHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(0));
 
         placeOnChamber = new Path(
                 // Line 9
@@ -160,44 +164,88 @@ public class ChamberPedroAuto extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
+                actionState = 0;
                 follower.followPath(initialPlaceOnChamber);
                 setPathState(1);
                 break;
             case 1:
-                /* This won't continue until the robot is done with the last trajectory */
+                double firstActionLengthSeconds = 1.5; // 1.5s to vertically place specimen
+                double secondActionLengthSeconds = 0.2; // .2s to collapse
 
-                if (!follower.isBusy()) {
-                    /* After the previous path is finished, score onto the chamber */
+                if (!follower.isBusy() && actionState == 0) {
+                    // once the robot finished previous trajectory for the first time, begin scoring
+                    actionState = 1;
+                    actionTimer.resetTimer();
                     score();
-                    collapse();
+                }
 
-                    /* Prep and push all the samples in a chain, then prep to grab the first specimen */
-                    follower.followPath(new PathChain(
-                            prepSample1, pushSample1,
-                            prepSample2, pushSample2,
-                            prepSample3, pushSample3,
-                            initialGrabFromHumanPlayer
-                    ), true);
-                    setPathState(2);
+                if (actionState == 1) {
+                    // once the robot spent enough time scoring, collapse
+                    if (actionTimer.getElapsedTimeSeconds() > firstActionLengthSeconds) {
+                        actionState = 2;
+                        actionTimer.resetTimer();
+                        collapse();
+                    }
+                }
+
+                if (actionState == 2) {
+                    // once the robot spent enough time collapsing, continue pathing
+                    if (actionTimer.getElapsedTimeSeconds() > secondActionLengthSeconds) {
+                        actionState = 0;
+                        /* Prep and push all the samples in a chain, then prep to grab the first specimen */
+                        mechanisms.outtake.moveShoulderToBack(); // so we're ready to grab from hp later
+                        follower.followPath(new PathChain(
+                                prepSample1, pushSample1,
+                                prepSample2, pushSample2,
+                                prepSample3, pushSample3,
+                                initialGrabFromHumanPlayer
+                        ), true);
+                        setPathState(2);
+                    }
                 }
                 break;
             case 2:
-                /* Wait until in position to grab from the HP */
-                if (!follower.isBusy()) {
-                    // Grab
-                    grab();
+                double prepLengthSeconds = 0.1; // 3 seconds to get ready to grab specimen
+                //noinspection SpellCheckingInspection
+                double grabLengthSeconds = 0.1; // half a second to yoinky sploinky
 
-                    // Head to score
-                    follower.followPath(placeOnChamber);
-                    setPathState(3);
+                if (!follower.isBusy() && actionState == 0) {
+                    // once the robot finished previous trajectory for the first time, begin g
+                    actionState = 1;
+                    actionTimer.resetTimer();
+                    prepGrab();
+                }
+
+                if (actionState == 1) {
+                    // once the robot spent enough time scoring, collapse
+                    if (actionTimer.getElapsedTimeSeconds() > prepLengthSeconds) {
+                        actionState = 2;
+                        actionTimer.resetTimer();
+                        grab();
+                    }
+                }
+
+                if (actionState == 2) {
+                    // once the robot spent enough time collapsing, continue pathing
+                    if (actionTimer.getElapsedTimeSeconds() > grabLengthSeconds) {
+                        actionState = 0;
+                        follower.followPath(placeOnChamber);
+                        setPathState(3);
+                    }
                 }
                 break;
             case 3:
                 /* Wait until we are in position to score */
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && actionState == 0) {
                     /* Score Sample */
                     score();
+                    actionTimer.resetTimer();
+                    actionState = 1;
+                }
 
+                double placementSeconds = 1.5;
+                if (actionState == 1 && actionTimer.getElapsedTimeSeconds() >= placementSeconds) {
+                    actionState = 0;
                     /* Move all the samples over to make room for more */
                     follower.followPath(consolidateSpecimens);
                     setPathState(4);
@@ -257,13 +305,14 @@ public class ChamberPedroAuto extends OpMode {
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
+        follower.telemetryDebug(visualization);
         telemetry.update();
     }
 
     public void score() {
         mechanisms.outtake.outtakeClaw.close();
         mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG);
-        mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_BACKWARD);
+        mechanisms.outtake.moveShoulderToBack();
     }
 
     public void collapse() {
@@ -272,8 +321,13 @@ public class ChamberPedroAuto extends OpMode {
         mechanisms.outtake.shoulder.setPosition(Shoulder.Position.TRANSFER);
     }
 
+    public void prepGrab() {
+        mechanisms.outtake.outtakeClaw.open();
+    }
+
     public void grab() {
-        // TODO write the logic to grab the specimens from HP
+        mechanisms.outtake.outtakeClaw.close();
+        mechanisms.outtake.moveShoulderToFront();
     }
 
 
@@ -284,13 +338,15 @@ public class ChamberPedroAuto extends OpMode {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
+        actionTimer = new Timer();
         opmodeTimer.resetTimer();
         mechanisms = new MechanismManager(hardwareMap);
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
-        follower.setStartingPose(new Pose(10.623, 84.060));
+        follower.setStartingPose(new Pose(10.767, 59.940));
         buildPaths();
+        visualization = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     /**
