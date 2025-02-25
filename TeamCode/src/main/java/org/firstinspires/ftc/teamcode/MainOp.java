@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Main TeleOp class for driver-controlled period.
  * Handles controller profile selection and robot operation during matches.
  */
-@TeleOp(name = "MainOp", group = "TeleOp")
+@TeleOp(name = "MainOp", group = "AAA Competition Modes")
 public class MainOp extends LinearOpMode {
 
     MechanismManager mechanisms;
