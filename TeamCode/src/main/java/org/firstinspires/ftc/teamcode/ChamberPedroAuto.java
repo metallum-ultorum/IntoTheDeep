@@ -323,7 +323,7 @@ public class ChamberPedroAuto extends OpMode {
     public void collapse() {
         mechanisms.outtake.outtakeClaw.open();
         mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
-        mechanisms.outtake.shoulder.setPosition(Shoulder.Position.TRANSFER);
+        mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_FORWARD);
     }
 
     public void prepGrab() {
