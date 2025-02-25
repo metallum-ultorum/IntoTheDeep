@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.IntakeClaw;
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Limelight;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.LimelightManager;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Rotator;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 
@@ -15,14 +15,14 @@ public class Intake {
     public final Wrist wrist;
     public final HorizontalSlide horizontalSlide;
     public final IntakeClaw intakeClaw;
-    public final Limelight limelight;
+    public final LimelightManager limelight;
 
-    public Intake(Servo clawServo, DcMotor horizontalMotor, Servo rotatorServo, Servo wristServo, Limelight3A limelight) {
+    public Intake(Servo clawServo, DcMotor horizontalMotor, Servo rotatorServo, Servo wristServo, Limelight3A limelight3a) {
         intakeClaw = new IntakeClaw(clawServo);
         horizontalSlide = new HorizontalSlide(horizontalMotor);
         rotator = new Rotator(rotatorServo);
         wrist = new Wrist(wristServo);
-        this.limelight = new Limelight(limelight);
+        limelight = new LimelightManager(limelight3a);
     }
 
     public void init() {
@@ -30,6 +30,7 @@ public class Intake {
         horizontalSlide.init();
         rotator.init();
         wrist.init();
+        limelight.init();
     }
 
     public void reset() {
