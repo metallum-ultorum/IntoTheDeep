@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
@@ -32,6 +33,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
  */
 
 @Autonomous(name = "Chamber Auto (Pedro)", group = "Competition Modes")
+@Config
 public class ChamberPedroAuto extends OpMode {
     public double hpSpecimensPlaced = 0;
     private Follower follower;
@@ -39,6 +41,7 @@ public class ChamberPedroAuto extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private double actionState;
     private Telemetry visualization;
+    public static double tuningOffset = 0;
     /**
      * This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method.
@@ -48,6 +51,8 @@ public class ChamberPedroAuto extends OpMode {
     private Path initialPlaceOnChamber, prepSample1, pushSample1, prepSample2,
             pushSample2, prepSample3, pushSample3, initialGrabFromHumanPlayer, placeOnChamber,
             consolidateSpecimens, grabFromHumanPlayer, park;
+
+
 
     /**
      * Build the paths for the auto (adds, for example, constant/linear headings while doing paths)
@@ -66,9 +71,9 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(40.297, 67.884, Point.CARTESIAN),
                         new Point(6.891, 32.677, Point.CARTESIAN),
-                        new Point(69.199, 35.631, Point.CARTESIAN),
-                        new Point(80.737, 23.662, Point.CARTESIAN),
-                        new Point(61.168, 22.000, Point.CARTESIAN)
+                        new Point(69.199, 33.631, Point.CARTESIAN),
+                        new Point(80.737, 26.162, Point.CARTESIAN),
+                        new Point(61.168, 24.500, Point.CARTESIAN)
                 )
         );
         prepSample1.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -76,8 +81,8 @@ public class ChamberPedroAuto extends OpMode {
         pushSample1 = new Path(
                 // Line 3
                 new BezierLine(
-                        new Point(61.168, 22.000, Point.CARTESIAN),
-                        new Point(21.16653084252758, 22.185, Point.CARTESIAN))
+                        new Point(61.168, 24.50, Point.CARTESIAN),
+                        new Point(21.16653084252758, 23.685, Point.CARTESIAN))
         );
         pushSample1.setConstantHeadingInterpolation(Math.toRadians(0));
 
@@ -87,7 +92,7 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(17.230, 24.185, Point.CARTESIAN),
                         new Point(70.768, 27.138, Point.CARTESIAN),
-                        new Point(60.245, 12.923, Point.CARTESIAN)
+                        new Point(60.245, 12.923 + tuningOffset, Point.CARTESIAN)
                 )
         );
         prepSample2.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -96,8 +101,8 @@ public class ChamberPedroAuto extends OpMode {
         pushSample2 = new Path(
                 // Line 5
                 new BezierLine(
-                        new Point(60.245, 12.923, Point.CARTESIAN),
-                        new Point(21.16653084252758, 13.292, Point.CARTESIAN)
+                        new Point(60.245, 12.923 + tuningOffset, Point.CARTESIAN),
+                        new Point(21.16653084252758, 13.292 + tuningOffset, Point.CARTESIAN)
                 )
         );
         pushSample2.setConstantHeadingInterpolation(Math.toRadians(0));

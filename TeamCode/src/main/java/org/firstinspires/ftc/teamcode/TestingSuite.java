@@ -109,6 +109,9 @@ public class TestingSuite extends LinearOpMode {
                             motor1.setPower(power);
                             motor2.setPower(power);
                             telemetry.addData("Dual Motor Power", "%.2f", power);
+                            telemetry.addData("Left Motor Position", motor1.getCurrentPosition());
+                            telemetry.addData("Right Motor Position", motor2.getCurrentPosition());
+
                             telemetry.update();
                         }
                     } else {
@@ -119,6 +122,7 @@ public class TestingSuite extends LinearOpMode {
                             float power = -gamepad1.left_trigger + gamepad1.right_trigger;
                             testMotor.setPower(power);
                             telemetry.addData("Motor Power", "%.2f", power);
+                            telemetry.addData("Motor Position", testMotor.getCurrentPosition());
                             telemetry.update();
                         }
                     }

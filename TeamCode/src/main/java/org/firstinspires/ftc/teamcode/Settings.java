@@ -35,6 +35,8 @@ public class Settings {
                     // Customize main gamepad settings
                     dpad_movement_speed = 0.6;
                     bumper_rotation_speed = 0.8;
+
+                    GamepadButton extendVertical = GamepadButton.B;
                 }
 
                 @Override
@@ -277,7 +279,7 @@ public class Settings {
             @Config
             public static class IntakeClaw {
                 /** Values for open and closed positions on the outtake claw */
-                public static double OPEN = 0.25;
+                public static double OPEN = 0.4;
                 public static double CLOSED = 0.8;
             }
 
@@ -342,10 +344,10 @@ public class Settings {
 
             public static int HIGH_RUNG_PREP_AUTO = 1500;
             public static int HIGH_RUNG = 1800; // TODO TUNE
-            public static int HIGH_BASKET = 3200;
+            public static int HIGH_BASKET = 3350;
 
             // Motor power settings
-            public static double MOVEMENT_POWER = 0.5;
+            public static double MOVEMENT_POWER = 0.8;
 
             public static double FREAKY_MOVEMENT_POWER = 20;
 
@@ -357,8 +359,8 @@ public class Settings {
             // Positions in encoder ticks
             // TODO: TUNE
             public static int COLLAPSED = 0;
-            public static int LEVEL_1 = -200;
-            public static int EXPANDED = -300;
+            public static int LEVEL_1 = 200;
+            public static int EXPANDED = 350;
 
             // Motor power settings
             public static double MOVEMENT_POWER = 0.7;
