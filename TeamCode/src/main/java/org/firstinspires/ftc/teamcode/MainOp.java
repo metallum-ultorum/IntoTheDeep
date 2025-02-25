@@ -176,7 +176,7 @@ public class MainOp extends LinearOpMode {
                 }
             }
 
-            if (input.subSettings.freaky_horizontal) {
+            if (input.subSettings.incremental_horizontal) {
                 if (contextualActions.extendHorizontal) {
                     mechanisms.intake.horizontalSlide.increment();
                 } else if (contextualActions.retractHorizontal) {
@@ -197,7 +197,7 @@ public class MainOp extends LinearOpMode {
         }
 
         if (Settings.Deploy.OUTTAKE) {
-            if (input.mainSettings.freaky_vertical) {
+            if (input.mainSettings.incremental_vertical) {
                 if (contextualActions.extendVertical) {
                     mechanisms.outtake.verticalSlide.increment();
                 } else if (contextualActions.retractVertical) {

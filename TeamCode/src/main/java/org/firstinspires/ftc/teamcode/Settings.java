@@ -117,8 +117,8 @@ public class Settings {
 
         public boolean use_absolute_positioning = false;
 
-        public boolean freaky_horizontal = false;
-        public boolean freaky_vertical = true;
+        public boolean incremental_horizontal = false;
+        public boolean incremental_vertical = true;
 
         public final ButtonMapping buttonMapping;
 
@@ -348,7 +348,7 @@ public class Settings {
             // Motor power settings
             public static double MOVEMENT_POWER = 1;
 
-            public static double FREAKY_MOVEMENT_POWER = 10;
+            public static double INCREMENTAL_MOVEMENT_POWER = 10;
 
             public static boolean ENABLE_LOWER_LIMIT = false;
         }
@@ -363,7 +363,7 @@ public class Settings {
 
             // Motor power settings
             public static double MOVEMENT_POWER = 0.5;
-            public static double FREAKY_MOVEMENT_POWER = 15;
+            public static double INCREMENTAL_MOVEMENT_POWER = 15;
         }
 
         @Config

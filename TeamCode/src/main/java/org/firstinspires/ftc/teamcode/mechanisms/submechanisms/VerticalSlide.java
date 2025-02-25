@@ -60,7 +60,7 @@ public class VerticalSlide implements ViperSlide {
     @Override
     public void increment() {
         if (encoderTarget - currentOffset < VerticalPosition.HIGH_BASKET.getValue()) {
-            encoderTarget += Settings.Hardware.VerticalSlide.FREAKY_MOVEMENT_POWER;
+            encoderTarget += Settings.Hardware.VerticalSlide.INCREMENTAL_MOVEMENT_POWER;
         }
         setPosition(encoderTarget);
     }
@@ -68,7 +68,7 @@ public class VerticalSlide implements ViperSlide {
     @Override
     public void decrement() {
         if (!Settings.Hardware.VerticalSlide.ENABLE_LOWER_LIMIT || !touchSensor.isPressed() || encoderTarget - currentOffset > VerticalPosition.TRANSFER.getValue()) {
-            encoderTarget -= Settings.Hardware.VerticalSlide.FREAKY_MOVEMENT_POWER;
+            encoderTarget -= Settings.Hardware.VerticalSlide.INCREMENTAL_MOVEMENT_POWER;
         }
         setPosition(encoderTarget);
     }
