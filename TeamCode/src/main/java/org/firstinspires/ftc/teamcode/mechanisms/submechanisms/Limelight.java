@@ -3,13 +3,12 @@ package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
-import org.firstinspires.ftc.teamcode.systems.DynamicInput;
-
 /**
  * Incoming Yap Session:
  * Limelight returns Tx and Ty values, which return angles for where a detected object is,
  * and trig is required to get pixel or distance values.
  * IMPORTANT: Tx and Ty are zero when no desired object is detected.
+ * Contact Rishu if any of this is confusing
  */
 public class Limelight {
     Limelight3A limelight;
