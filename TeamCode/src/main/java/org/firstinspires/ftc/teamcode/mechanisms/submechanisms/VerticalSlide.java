@@ -73,6 +73,10 @@ public class VerticalSlide implements ViperSlide {
         setPosition(encoderTarget);
     }
 
+    public boolean isTouchingSensor() {
+        return touchSensor.isPressed();
+    }
+
     public void setToZero() {
         currentOffset = encoderTarget;
     }

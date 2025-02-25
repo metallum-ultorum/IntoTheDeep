@@ -100,12 +100,14 @@ public class TestingSuite extends LinearOpMode {
                     if (selectedItem[0].equals("DUAL_MOTOR_SLIDE_VERTICAL")) {
                         DcMotor motor1 = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT);
                         DcMotor motor2 = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
+                        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         motor2.setDirection(DcMotorSimple.Direction.REVERSE);
                         waitForStart();
                         while (opModeIsActive()) {
-                            float power = -gamepad1.left_trigger + gamepad1.right_trigger;
+                            float power = -gamepad1.left_trigger - gamepad2.left_trigger + gamepad1.right_trigger + gamepad2.right_trigger;
                             motor1.setPower(power);
                             motor2.setPower(power);
                             telemetry.addData("Dual Motor Power", "%.2f", power);
@@ -116,10 +118,11 @@ public class TestingSuite extends LinearOpMode {
                         }
                     } else {
                         DcMotor testMotor = hardwareMap.get(DcMotor.class, selectedItem[0]);
+                        testMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         testMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         waitForStart();
                         while (opModeIsActive()) {
-                            float power = -gamepad1.left_trigger + gamepad1.right_trigger;
+                            float power = -gamepad1.left_trigger - gamepad2.left_trigger + gamepad1.right_trigger + gamepad2.right_trigger;
                             testMotor.setPower(power);
                             telemetry.addData("Motor Power", "%.2f", power);
                             telemetry.addData("Motor Position", testMotor.getCurrentPosition());
@@ -136,9 +139,9 @@ public class TestingSuite extends LinearOpMode {
                         servo2.setPosition(position);
                         waitForStart();
                         while (opModeIsActive()) {
-                            if (gamepad1.left_trigger > 0.5) {
+                            if (gamepad1.left_trigger > 0.5 || gamepad2.left_trigger > 0.5) {
                                 position = Math.max(0, position - 0.05);
-                            } else if (gamepad1.right_trigger > 0.5) {
+                            } else if (gamepad1.right_trigger > 0.5 || gamepad2.right_trigger > 0.5) {
                                 position = Math.min(1, position + 0.05);
                             }
                             servo1.setPosition(position);
@@ -151,13 +154,17 @@ public class TestingSuite extends LinearOpMode {
                         double position = 0.5;
                         testServo.setPosition(position);
                         waitForStart();
+                        boolean lastLeftTrigger = false;
+                        boolean lastRightTrigger = false;
                         while (opModeIsActive()) {
-                            if (gamepad1.left_trigger > 0.5) {
+                            if ((gamepad1.left_trigger > 0.5 || gamepad2.left_trigger > 0.5) && !lastLeftTrigger) {
                                 position = Math.max(0, position - 0.05);
-                            } else if (gamepad1.right_trigger > 0.5) {
+                            } else if ((gamepad1.right_trigger > 0.5 || gamepad2.right_trigger > 0.5) && !lastRightTrigger) {
                                 position = Math.min(1, position + 0.05);
                             }
                             testServo.setPosition(position);
+                            lastLeftTrigger = gamepad1.left_trigger > 0.5 || gamepad2.left_trigger > 0.5;
+                            lastRightTrigger = gamepad1.right_trigger > 0.5 || gamepad2.right_trigger > 0.5;
                             telemetry.addData("Servo Position", "%.3f", position);
                             telemetry.update();
                         }

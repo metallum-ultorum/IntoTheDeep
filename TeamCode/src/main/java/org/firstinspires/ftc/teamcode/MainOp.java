@@ -160,6 +160,7 @@ public class MainOp extends LinearOpMode {
         if (Settings.Deploy.INTAKE) {
 
             if (contextualActions.justIntakeIn) {
+                mechanisms.intake.wrist.setPosition(Wrist.Position.READY);
                 mechanisms.intake.intakeClaw.close();
             } else if (contextualActions.intakeOut) {
                 mechanisms.intake.intakeClaw.open();
@@ -168,7 +169,12 @@ public class MainOp extends LinearOpMode {
             if (contextualActions.justWristUp) {
                 mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
             } else if (contextualActions.wristDown) {
-                mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
+                if (mechanisms.intake.horizontalSlide.currentPosition.getValue() > 100) {
+                    mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
+
+                } else {
+                    mechanisms.intake.wrist.setPosition(Wrist.Position.READY);
+                }
             }
 
             if (input.subSettings.freaky_horizontal) {
@@ -182,6 +188,9 @@ public class MainOp extends LinearOpMode {
                     mechanisms.intake.horizontalSlide.extend();
                 }
                 if (contextualActions.justRetractHorizontal) {
+                    if (mechanisms.intake.horizontalSlide.currentPosition == ViperSlide.HorizontalPosition.COLLAPSED){
+                        mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
+                    }
                     mechanisms.intake.horizontalSlide.retract();
                 }
             }
@@ -194,6 +203,9 @@ public class MainOp extends LinearOpMode {
                     mechanisms.outtake.verticalSlide.increment();
                 } else if (contextualActions.retractVertical) {
                     mechanisms.outtake.verticalSlide.decrement();
+                }
+                if (mechanisms.outtake.verticalSlide.isTouchingSensor()) {
+                    mechanisms.outtake.verticalSlide.increment();
                 }
             } else {
                 if (contextualActions.justExtendVertical) {

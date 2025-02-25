@@ -347,9 +347,9 @@ public class Settings {
             public static int HIGH_BASKET = 3350;
 
             // Motor power settings
-            public static double MOVEMENT_POWER = 0.8;
+            public static double MOVEMENT_POWER = 1;
 
-            public static double FREAKY_MOVEMENT_POWER = 20;
+            public static double FREAKY_MOVEMENT_POWER = 10;
 
             public static boolean ENABLE_LOWER_LIMIT = false;
         }
@@ -360,10 +360,10 @@ public class Settings {
             // TODO: TUNE
             public static int COLLAPSED = 0;
             public static int LEVEL_1 = 200;
-            public static int EXPANDED = 350;
+            public static int EXPANDED = 320;
 
             // Motor power settings
-            public static double MOVEMENT_POWER = 0.7;
+            public static double MOVEMENT_POWER = 0.5;
             public static double FREAKY_MOVEMENT_POWER = 15;
         }
 
