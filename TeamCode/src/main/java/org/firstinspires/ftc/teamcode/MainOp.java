@@ -160,7 +160,6 @@ public class MainOp extends LinearOpMode {
         if (Settings.Deploy.INTAKE) {
 
             if (contextualActions.justIntakeIn) {
-                mechanisms.intake.wrist.setPosition(Wrist.Position.READY);
                 mechanisms.intake.intakeClaw.close();
             } else if (contextualActions.intakeOut) {
                 mechanisms.intake.intakeClaw.open();
