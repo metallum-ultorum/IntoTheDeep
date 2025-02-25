@@ -285,10 +285,9 @@ public class Settings {
 
             @Config
             public static class Wrist {
-                // we removed the right servo so just change the left value lol
-                public static double HORIZONTAL_POSITION = .6;
-                public static double VERTICAL_POSITION = 1;
-                public static double READY_POSITION = .7;
+                public static double HORIZONTAL_POSITION = .5;
+                public static double VERTICAL_POSITION = 0.85;
+                public static double READY_POSITION = .65;
             }
 
             @Config
