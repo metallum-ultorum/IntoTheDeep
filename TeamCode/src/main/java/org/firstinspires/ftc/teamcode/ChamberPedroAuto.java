@@ -67,8 +67,8 @@ public class ChamberPedroAuto extends OpMode {
                         new Point(40.297, 67.884, Point.CARTESIAN),
                         new Point(6.891, 32.677, Point.CARTESIAN),
                         new Point(69.199, 35.631, Point.CARTESIAN),
-                        new Point(80.737, 25.662, Point.CARTESIAN),
-                        new Point(61.168, 24.000, Point.CARTESIAN)
+                        new Point(80.737, 23.662, Point.CARTESIAN),
+                        new Point(61.168, 22.000, Point.CARTESIAN)
                 )
         );
         prepSample1.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -76,8 +76,8 @@ public class ChamberPedroAuto extends OpMode {
         pushSample1 = new Path(
                 // Line 3
                 new BezierLine(
-                        new Point(61.168, 24.000, Point.CARTESIAN),
-                        new Point(21.16653084252758, 24.185, Point.CARTESIAN))
+                        new Point(61.168, 22.000, Point.CARTESIAN),
+                        new Point(21.16653084252758, 22.185, Point.CARTESIAN))
         );
         pushSample1.setConstantHeadingInterpolation(Math.toRadians(0));
 
