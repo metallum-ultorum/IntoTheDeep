@@ -11,6 +11,9 @@ import org.firstinspires.ftc.teamcode.systems.Drivetrain;
 import org.firstinspires.ftc.teamcode.systems.DynamicInput;
 import org.firstinspires.ftc.teamcode.utils.MenuHelper;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -25,6 +28,7 @@ public class MainOp extends LinearOpMode {
     MechanismManager mechanisms;
     DynamicInput input;
     Drivetrain drivetrain;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /**
      * Main execution flow:
@@ -161,6 +165,7 @@ public class MainOp extends LinearOpMode {
 
             if (contextualActions.justIntakeIn) {
                 mechanisms.intake.intakeClaw.close();
+                scheduleTask(() -> mechanisms.intake.wrist.setPosition(Wrist.Position.READY), 200);
             } else if (contextualActions.intakeOut) {
                 mechanisms.intake.intakeClaw.open();
             }
@@ -258,6 +263,10 @@ public class MainOp extends LinearOpMode {
                 mechanisms.outtake.moveShoulderToBack();
             }
         }
+    }
+
+    public void scheduleTask(Runnable task, long delayMillis) {
+        scheduler.schedule(task, delayMillis, TimeUnit.MILLISECONDS);
     }
 
 }
