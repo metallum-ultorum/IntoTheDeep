@@ -10,16 +10,15 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
  * IMPORTANT: Tx and Ty are zero when no desired object is detected.
  * Contact Rishu if any of this is confusing
  */
-public class Limelight {
+public class LimelightManager {
     Limelight3A limelight;
     LLResult currentResult;
     LimelightPipeline currentPipeline = LimelightPipeline.YELLOW;
     double lastTx = 0;
     double lastTy = 0;
 
-    public Limelight(Limelight3A limelight) {
+    public LimelightManager(Limelight3A limelight) {
         this.limelight = limelight;
-        init();
     }
 
     /**

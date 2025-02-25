@@ -20,8 +20,8 @@ public class MechanismManager {
             DcMotor horizontalMotor = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_HORIZONTAL);
             Servo rotatorServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.ROTATOR);
             Servo wristServo = hardwareMap.get(Servo.class, Settings.Hardware.IDs.WRIST);
-            Limelight3A limelight = hardwareMap.get(Limelight3A.class, Settings.Hardware.IDs.LIMELIGHT);
-            intake = new Intake(clawServo, horizontalMotor, rotatorServo, wristServo, limelight);
+            Limelight3A limelight3A = hardwareMap.get(Limelight3A.class, Settings.Hardware.IDs.LIMELIGHT);
+            intake = new Intake(clawServo, horizontalMotor, rotatorServo, wristServo, limelight3A);
         }
 
         if (Settings.Deploy.OUTTAKE) {
