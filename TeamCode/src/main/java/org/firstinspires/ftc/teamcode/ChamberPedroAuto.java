@@ -41,7 +41,7 @@ public class ChamberPedroAuto extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private double actionState;
     private Telemetry visualization;
-    public static double tuningOffset = 0;
+    public static double sample2PushingYOffset = 0;
     /**
      * This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method.
@@ -92,7 +92,7 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(17.230, 24.185, Point.CARTESIAN),
                         new Point(70.768, 27.138, Point.CARTESIAN),
-                        new Point(60.245, 12.923 + tuningOffset, Point.CARTESIAN)
+                        new Point(60.245, 12.923 + sample2PushingYOffset, Point.CARTESIAN)
                 )
         );
         prepSample2.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -101,8 +101,8 @@ public class ChamberPedroAuto extends OpMode {
         pushSample2 = new Path(
                 // Line 5
                 new BezierLine(
-                        new Point(60.245, 12.923 + tuningOffset, Point.CARTESIAN),
-                        new Point(21.16653084252758, 13.292 + tuningOffset, Point.CARTESIAN)
+                        new Point(60.245, 12.923 + sample2PushingYOffset, Point.CARTESIAN),
+                        new Point(21.16653084252758, 13.292 + sample2PushingYOffset, Point.CARTESIAN)
                 )
         );
         pushSample2.setConstantHeadingInterpolation(Math.toRadians(0));
