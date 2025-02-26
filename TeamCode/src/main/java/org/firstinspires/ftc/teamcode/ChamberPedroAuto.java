@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
  * @version 2.0, 11/28/2024
  */
 
-@Autonomous(name = "Chamber Auto", group = "AAA Competition Modes", preselectTeleOp = "MainOp")
+@Autonomous(name = "Chamber Auto", group = ".Competition Modes", preselectTeleOp = "MainOp")
 @Config
 public class ChamberPedroAuto extends OpMode {
     public double hpSpecimensPlaced = 0;
