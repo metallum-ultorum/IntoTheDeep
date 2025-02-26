@@ -178,11 +178,7 @@ public class MainOp extends LinearOpMode {
                     mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
                 }
             } else if (contextualActions.wristDown) {
-                if (mechanisms.intake.horizontalSlide.currentPosition.getValue() > 100) {
-                    mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
-                } else {
-                    mechanisms.intake.wrist.setPosition(Wrist.Position.READY);
-                }
+                mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
             }
 
             if (input.subSettings.incremental_horizontal) {
@@ -196,10 +192,11 @@ public class MainOp extends LinearOpMode {
                     mechanisms.intake.horizontalSlide.extend();
                 }
                 if (contextualActions.justRetractHorizontal) {
+                    mechanisms.intake.horizontalSlide.retract();
                     if (mechanisms.intake.horizontalSlide.currentPosition == ViperSlide.HorizontalPosition.COLLAPSED){
+                        mechanisms.outtake.outtakeClaw.open();
                         mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
                     }
-                    mechanisms.intake.horizontalSlide.retract();
                 }
             }
             mechanisms.intake.rotator.setPosition(contextualActions.rotator);
@@ -258,10 +255,9 @@ public class MainOp extends LinearOpMode {
         if (Settings.Movement.easeTransfer) {
             // automatically transfer when everything is collapsed
             if (mechanisms.intake.horizontalSlide.currentPosition == ViperSlide.HorizontalPosition.COLLAPSED &&
-                    !mechanisms.intake.intakeClaw.opened && !mechanisms.outtake.outtakeClaw.opened) {
+                    !mechanisms.intake.intakeClaw.opened && mechanisms.outtake.outtakeClaw.clawServo.getPosition() > 0.8) {
                 mechanisms.intake.intakeClaw.open();
-                mechanisms.outtake.outtakeClaw.close();
-                mechanisms.outtake.moveShoulderToBack();
+                scheduleTask(() -> mechanisms.outtake.moveShoulderToBack(), 200);
             }
         }
     }

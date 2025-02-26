@@ -285,7 +285,7 @@ public class Settings {
 
             @Config
             public static class Wrist {
-                public static double HORIZONTAL_POSITION = .55;
+                public static double HORIZONTAL_POSITION = .53;
                 public static double VERTICAL_POSITION = 0.85;
                 public static double READY_POSITION = .65;
             }

@@ -45,6 +45,7 @@ public class TestingSuite extends LinearOpMode {
 
     private static final String[] DUAL_MOTOR_OPTIONS = {
             "DUAL_MOTOR_SLIDE_VERTICAL",
+            "DUAL_MOTOR_SLIDE_VERTICAL_RTP",
     };
 
     private static final String[] DUAL_SERVO_OPTIONS = {
@@ -93,6 +94,21 @@ public class TestingSuite extends LinearOpMode {
                 }
             });
 
+
+            MenuHelper.handleControllerInput(this, gamepad2, !listConfirmed.get(), () -> {
+                if (gamepad2.dpad_up) {
+                    listSelection.set((listSelection.get() - 1 + LIST_OPTIONS.length) % LIST_OPTIONS.length);
+                } else if (gamepad2.dpad_down) {
+                    listSelection.set((listSelection.get() + 1) % LIST_OPTIONS.length);
+                } else if (gamepad2.a) {
+                    selectedItem[0] = LIST_OPTIONS[listSelection.get()];
+                    isMotor.set(listSelection.get() < MOTOR_OPTIONS.length + DUAL_MOTOR_OPTIONS.length);
+                    isServo.set(listSelection.get() >= MOTOR_OPTIONS.length + DUAL_MOTOR_OPTIONS.length && listSelection.get() < MOTOR_OPTIONS.length + DUAL_MOTOR_OPTIONS.length + SERVO_OPTIONS.length + DUAL_SERVO_OPTIONS.length);
+                    listConfirmed.set(true);
+                    menuActive.set(false);
+                }
+            });
+
             telemetry.update();
 
             if (!menuActive.get()) {
@@ -105,6 +121,22 @@ public class TestingSuite extends LinearOpMode {
                         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         motor2.setDirection(DcMotorSimple.Direction.REVERSE);
+                        waitForStart();
+                        while (opModeIsActive()) {
+                            float power = -gamepad1.left_trigger - gamepad2.left_trigger + gamepad1.right_trigger + gamepad2.right_trigger;
+                            motor1.setPower(power);
+                            motor2.setPower(power);
+                            telemetry.addData("Dual Motor Power", "%.2f", power);
+                            telemetry.addData("Left Motor Position", motor1.getCurrentPosition());
+                            telemetry.addData("Right Motor Position", motor2.getCurrentPosition());
+
+                            telemetry.update();
+                        }
+                    } else if (selectedItem[0].equals("DUAL_MOTOR_SLIDE_VERTICAL_RTP")) {
+                        DcMotor motor1 = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT);
+                        DcMotor motor2 = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
+                        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         waitForStart();
                         while (opModeIsActive()) {
                             float power = -gamepad1.left_trigger - gamepad2.left_trigger + gamepad1.right_trigger + gamepad2.right_trigger;

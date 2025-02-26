@@ -88,9 +88,7 @@ public class VerticalSlide implements ViperSlide {
     public void checkMotors() {
         if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
             verticalMotorRight.setPower(0);
-            if (Math.abs((verticalMotorRight.getCurrentPosition() - verticalMotorLeft.getCurrentPosition())) < 10) {
-                verticalMotorLeft.setPower(0);
-            }
+            verticalMotorLeft.setPower(0);
         } else {
             verticalMotorLeft.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
             verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
@@ -111,7 +109,7 @@ public class VerticalSlide implements ViperSlide {
 
         setPosition(VerticalPosition.TRANSFER);
 
-        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.currentPosition = VerticalPosition.TRANSFER;
         encoderTarget = verticalMotorRight.getTargetPosition();
