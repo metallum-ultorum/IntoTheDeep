@@ -204,13 +204,13 @@ public class MainOp extends LinearOpMode {
 
         if (Settings.Deploy.OUTTAKE) {
             if (input.mainSettings.incremental_vertical) {
+                if (mechanisms.outtake.verticalSlide.isTouchingSensor()) {
+                    mechanisms.outtake.verticalSlide.increment(1);
+                }
                 if (contextualActions.extendVertical) {
                     mechanisms.outtake.verticalSlide.increment();
                 } else if (contextualActions.retractVertical) {
                     mechanisms.outtake.verticalSlide.decrement();
-                }
-                if (mechanisms.outtake.verticalSlide.isTouchingSensor()) {
-                    mechanisms.outtake.verticalSlide.increment(1);
                 }
             } else {
                 if (contextualActions.justExtendVertical) {
