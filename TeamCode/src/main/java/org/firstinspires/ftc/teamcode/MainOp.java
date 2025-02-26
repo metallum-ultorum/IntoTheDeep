@@ -64,6 +64,7 @@ public class MainOp extends LinearOpMode {
             gamepadPrimary();
             gamepadAuxiliary();
             checkEasingConditions();
+            mechanisms.outtake.verticalSlide.checkMotors();
         }
     }
 
@@ -212,7 +213,7 @@ public class MainOp extends LinearOpMode {
                     mechanisms.outtake.verticalSlide.decrement();
                 }
                 if (mechanisms.outtake.verticalSlide.isTouchingSensor()) {
-                    mechanisms.outtake.verticalSlide.increment();
+                    mechanisms.outtake.verticalSlide.increment(1);
                 }
             } else {
                 if (contextualActions.justExtendVertical) {

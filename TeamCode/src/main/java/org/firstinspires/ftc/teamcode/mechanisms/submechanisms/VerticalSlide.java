@@ -26,9 +26,7 @@ public class VerticalSlide implements ViperSlide {
     public void setPosition(double position) {
         int targetPosition = (int) position;
         verticalMotorLeft.setTargetPosition(targetPosition);
-        verticalMotorLeft.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
         verticalMotorRight.setTargetPosition(targetPosition);
-        verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
     }
 
     // Converts position name to double
@@ -65,6 +63,13 @@ public class VerticalSlide implements ViperSlide {
         setPosition(encoderTarget);
     }
 
+    public void increment(int encoderTicks) {
+        if (encoderTarget - currentOffset < VerticalPosition.HIGH_BASKET.getValue()) {
+            encoderTarget += encoderTicks;
+        }
+        setPosition(encoderTarget);
+    }
+
     @Override
     public void decrement() {
         if (!Settings.Hardware.VerticalSlide.ENABLE_LOWER_LIMIT || !touchSensor.isPressed() || encoderTarget - currentOffset > VerticalPosition.TRANSFER.getValue()) {
@@ -75,6 +80,18 @@ public class VerticalSlide implements ViperSlide {
 
     public boolean isTouchingSensor() {
         return touchSensor.isPressed();
+    }
+
+    public void checkMotors() {
+        if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
+            verticalMotorRight.setPower(0);
+            if (Math.abs((verticalMotorRight.getCurrentPosition() - verticalMotorLeft.getCurrentPosition())) < 10) {
+                verticalMotorLeft.setPower(0);
+            }
+        } else {
+            verticalMotorLeft.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
+            verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
+        }
     }
 
     public void setToZero() {

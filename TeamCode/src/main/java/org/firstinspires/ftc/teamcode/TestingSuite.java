@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,11 +11,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.utils.MenuHelper;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -56,6 +55,7 @@ public class TestingSuite extends LinearOpMode {
             Settings.Hardware.IDs.LIMELIGHT + " yellow detection",
             Settings.Hardware.IDs.LIMELIGHT + " red detection",
             Settings.Hardware.IDs.LIMELIGHT + " blue detection",
+            Settings.Hardware.IDs.COLOR_SENSOR,
     };
 
     private static final String[] LIST_OPTIONS = Stream.concat(Stream.concat(Arrays.stream(MOTOR_OPTIONS),
@@ -226,6 +226,17 @@ public class TestingSuite extends LinearOpMode {
                             telemetry.addData("Target Y", result.getTy());
                             telemetry.addLine("Target Size: " + result.getTa()*100 + "%");
 
+                            telemetry.update();
+                        }
+                    }
+                    if (Objects.equals(selectedItem[0], SENSOR_OPTIONS[4])) {
+                        RevColorSensorV3 colorSensor = hardwareMap.get(RevColorSensorV3.class, Settings.Hardware.IDs.COLOR_SENSOR);
+                        colorSensor.initialize();
+                        waitForStart();
+                        while (opModeIsActive()) {
+                            telemetry.addData("Distance", colorSensor.getDistance(DistanceUnit.CM));
+                            telemetry.addData("Light Detected", colorSensor.getLightDetected());
+                            telemetry.addLine("RGB: (" + colorSensor.red() + colorSensor.green() + colorSensor.blue() + ")");
                             telemetry.update();
                         }
                     }

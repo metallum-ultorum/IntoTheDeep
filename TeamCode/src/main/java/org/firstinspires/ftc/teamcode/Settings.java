@@ -279,13 +279,13 @@ public class Settings {
             @Config
             public static class IntakeClaw {
                 /** Values for open and closed positions on the outtake claw */
-                public static double OPEN = 0.4;
+                public static double OPEN = 0.55;
                 public static double CLOSED = 0.8;
             }
 
             @Config
             public static class Wrist {
-                public static double HORIZONTAL_POSITION = .5;
+                public static double HORIZONTAL_POSITION = .55;
                 public static double VERTICAL_POSITION = 0.85;
                 public static double READY_POSITION = .65;
             }
@@ -331,6 +331,7 @@ public class Settings {
             public static final String PINPOINT = "pinpoint";
             public static final String SLIDE_VERTICAL_TOUCH_SENSOR = "verticalSlideSensor";
             public static final String LIMELIGHT = "limelight";
+            public static final String COLOR_SENSOR = "colorSensor";
         }
 
         @Config
