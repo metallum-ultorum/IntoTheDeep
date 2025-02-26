@@ -41,7 +41,7 @@ public class ChamberPedroAuto extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private double actionState;
     private Telemetry visualization;
-    public static double[] testOffset = {0, 0};
+    public static double[] testOffset = {0, 3};
     /**
      * This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method.
@@ -61,12 +61,13 @@ public class ChamberPedroAuto extends OpMode {
     public void buildPaths() {
         initialPlaceOnChamber = new Path(
                 // Line 1
-                new BezierCurve(
+                new BezierLine(
                         new Point(10.767, 59.940, Point.CARTESIAN),
-                        new Point(31.999, 64.417, Point.CARTESIAN),
-                        new Point(39.076, 63.406 + testOffset[0], Point.CARTESIAN)
+                        new Point(39.076, 63.406 - 1, Point.CARTESIAN)
                 )
         );
+        initialPlaceOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
+
         prepSample1 = new Path(
                 new BezierCurve(
                         new Point(40.297, 67.884, Point.CARTESIAN),
