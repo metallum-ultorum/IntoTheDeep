@@ -41,6 +41,7 @@ public class ChamberPedroAuto extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private double actionState;
     private Telemetry visualization;
+    public static double[] testOffset = {0, 0};
     /**
      * This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method.
@@ -63,7 +64,7 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(10.767, 59.940, Point.CARTESIAN),
                         new Point(31.999, 64.417, Point.CARTESIAN),
-                        new Point(39.076, 63.406, Point.CARTESIAN)
+                        new Point(39.076, 63.406 + testOffset[0], Point.CARTESIAN)
                 )
         );
         prepSample1 = new Path(
@@ -110,7 +111,7 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(17.784, 13.292, Point.CARTESIAN),
                         new Point(77.045, 18.092, Point.CARTESIAN),
-                        new Point(60.061, 8.492, Point.CARTESIAN)
+                        new Point(60.061, 8.492 + 2, Point.CARTESIAN)
                 )
         );
         prepSample3.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -118,8 +119,8 @@ public class ChamberPedroAuto extends OpMode {
         pushSample3 = new Path(
                 // Line 7
                 new BezierLine(
-                        new Point(60.164, 10.544, Point.CARTESIAN),
-                        new Point(31.16653084252758, 10.544, Point.CARTESIAN)
+                        new Point(60.164, 10.544 + 2, Point.CARTESIAN),
+                        new Point(31.16653084252758, 10.544 + 2, Point.CARTESIAN)
                 )
         );
         pushSample3.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -127,7 +128,7 @@ public class ChamberPedroAuto extends OpMode {
         initialGrabFromHumanPlayer = new Path(
                 // Line 8
                 new BezierCurve(
-                        new Point(17.599, 8.677, Point.CARTESIAN),
+                        new Point(17.599 + testOffset[1], 8.677, Point.CARTESIAN),
                         new Point(46.584, 28.615, Point.CARTESIAN),
                         new Point(10.478, 31.631, Point.CARTESIAN)
                 )
