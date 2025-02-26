@@ -339,17 +339,17 @@ public class Settings {
             // Positions in encoder ticks
 
             public static int TRANSFER = 0;
-            public static int LOW_RUNG = 0; // TODO TUNE
-            public static int LOW_BASKET = 1430; // TODO TUNE
+            public static int LOW_RUNG = 80;
+            public static int LOW_BASKET = 550;
 
             public static int HIGH_RUNG_PREP_AUTO = 1500;
-            public static int HIGH_RUNG = 1800; // TODO TUNE
-            public static int HIGH_BASKET = 3350;
+            public static int HIGH_RUNG = 1959; // TODO TUNE
+            public static int HIGH_BASKET = 3150;
 
             // Motor power settings
             public static double MOVEMENT_POWER = 1;
 
-            public static double INCREMENTAL_MOVEMENT_POWER = 10;
+            public static double INCREMENTAL_MOVEMENT_POWER = 12;
 
             public static boolean ENABLE_LOWER_LIMIT = false;
         }

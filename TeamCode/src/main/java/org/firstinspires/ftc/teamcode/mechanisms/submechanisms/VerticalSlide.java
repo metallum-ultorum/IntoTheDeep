@@ -32,14 +32,16 @@ public class VerticalSlide implements ViperSlide {
     // Converts position name to double
     public void setPosition(@NonNull VerticalPosition position) {
         this.currentPosition = position;
-        this.setPosition(position.getValue()); // Use the value associated with the enum
+        encoderTarget = position.getValue();
+        this.setPosition(encoderTarget); // Use the value associated with the enum
     }
 
     public void extend() {
         // Move to the next position in the enum, looping back to the start if needed
         VerticalPosition[] positions = VerticalPosition.values();
         int nextIndex = (currentPosition.ordinal() + 1) % positions.length;
-        setPosition(positions[nextIndex]);
+        encoderTarget = positions[nextIndex].getValue();
+        setPosition(encoderTarget);
     }
 
     @Override
@@ -47,7 +49,8 @@ public class VerticalSlide implements ViperSlide {
         // Move to the previous position in the enum, looping back if needed
         VerticalPosition[] positions = VerticalPosition.values();
         int prevIndex = (currentPosition.ordinal() - 1 + positions.length) % positions.length;
-        setPosition(positions[prevIndex]);
+        encoderTarget = positions[prevIndex].getValue();
+        setPosition(encoderTarget);
     }
 
     @Override

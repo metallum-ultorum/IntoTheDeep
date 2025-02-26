@@ -28,7 +28,9 @@ public interface ViperSlide {
 //        LOW_RUNG(Settings.Hardware.VerticalSlide.LOW_RUNG),
         LOW_BASKET(Settings.Hardware.VerticalSlide.LOW_BASKET),
         HIGH_RUNG(Settings.Hardware.VerticalSlide.HIGH_RUNG),
-        HIGH_BASKET(Settings.Hardware.VerticalSlide.HIGH_BASKET);
+        HIGH_BASKET(Settings.Hardware.VerticalSlide.HIGH_BASKET),
+
+        PREP_HIGH_RUNG(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO);
 
         private final int value;
 

@@ -41,7 +41,7 @@ public class ChamberPedroAuto extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private double actionState;
     private Telemetry visualization;
-    public static double sample2PushingYOffset = 0;
+    public static double sample2PushingYOffset = 3;
     /**
      * This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method.
@@ -170,11 +170,12 @@ public class ChamberPedroAuto extends OpMode {
         switch (pathState) {
             case 0:
                 actionState = 0;
+                mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.PREP_HIGH_RUNG);
                 follower.followPath(initialPlaceOnChamber);
                 setPathState(1);
                 break;
             case 1:
-                double firstActionLengthSeconds = 1.5; // 1.5s to vertically place specimen
+                double firstActionLengthSeconds = 0.7; // 1.5s to vertically place specimen
                 double secondActionLengthSeconds = 0.2; // .2s to collapse
 
                 if (!follower.isBusy() && actionState == 0) {
@@ -196,16 +197,16 @@ public class ChamberPedroAuto extends OpMode {
                 if (actionState == 2) {
                     // once the robot spent enough time collapsing, continue pathing
                     if (actionTimer.getElapsedTimeSeconds() > secondActionLengthSeconds) {
+                        setPathState(2);
                         actionState = 0;
                         /* Prep and push all the samples in a chain, then prep to grab the first specimen */
-                        mechanisms.outtake.moveShoulderToBack(); // so we're ready to grab from hp later
+                        mechanisms.outtake.moveShoulderToBack();
                         follower.followPath(new PathChain(
                                 prepSample1, pushSample1,
                                 prepSample2, pushSample2,
                                 prepSample3, pushSample3,
                                 initialGrabFromHumanPlayer
                         ), true);
-                        setPathState(2);
                     }
                 }
                 break;
@@ -248,7 +249,7 @@ public class ChamberPedroAuto extends OpMode {
                     actionState = 1;
                 }
 
-                double placementSeconds = 1.5;
+                double placementSeconds = 0.7;
                 if (actionState == 1 && actionTimer.getElapsedTimeSeconds() >= placementSeconds) {
                     actionState = 0;
                     /* Move all the samples over to make room for more */
@@ -300,7 +301,7 @@ public class ChamberPedroAuto extends OpMode {
      **/
     @Override
     public void loop() {
-
+        mechanisms.outtake.verticalSlide.checkMotors();
         // These loop the movements of the robot
         follower.update();
         autonomousPathUpdate();
