@@ -74,6 +74,7 @@ public class Settings {
                 {
                     dpad_movement_speed = 0.6;
                     bumper_rotation_speed = 0.9;
+                    GamepadButton extendVertical = GamepadButton.B;
                 }
 
                 @Override
@@ -85,6 +86,26 @@ public class Settings {
                     // Customize sub gamepad settings
                     trigger_threshold = 0.15;
                 }
+    });
+    public static final ControllerProfile RISHU_PROFILE = new ControllerProfile("Rishu (my goat)",
+            new DefaultGamepadSettings() {
+                {
+                    dpad_movement_speed = 0.5;
+                    bumper_rotation_speed = 0.9;
+                }
+
+
+                @Override
+                public double applyBoostCurve(double input) {
+                    return BoostCurves.linear(input);
+                }
+            }, new DefaultGamepadSettings() {
+        {
+            // Customize sub gamepad settings
+            trigger_threshold = 0.1;
+            buttonMapping.wristUp = GamepadButton.DPAD_UP;
+            buttonMapping.wristDown = GamepadButton.DPAD_DOWN;
+        }
     });
 
     // Gamepad settings
@@ -137,23 +158,6 @@ public class Settings {
             return Math.max(0, Math.min(1, input));
         }
     }
-    public static final ControllerProfile RISHU_PROFILE = new ControllerProfile("Rishu (my goat)",
-            new DefaultGamepadSettings() {
-                {
-                    dpad_movement_speed = 0.5;
-                    bumper_rotation_speed = 0.9;
-                }
-
-                @Override
-                public double applyBoostCurve(double input) {
-                    return BoostCurves.linear(input);
-                }
-            }, new DefaultGamepadSettings() {
-                {
-                    // Customize sub gamepad settings
-                    trigger_threshold = 0.1;
-                }
-            });
 
     public enum GamepadButton {
         // Face buttons
