@@ -63,7 +63,7 @@ public class ChamberPedroAuto extends OpMode {
                 // Line 1
                 new BezierLine(
                         new Point(10.767, 59.940, Point.CARTESIAN),
-                        new Point(39.076 + testOffset[0], 63.406 - 1, Point.CARTESIAN)
+                        new Point(40.008, 72.105, Point.CARTESIAN)
                 )
         );
         initialPlaceOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
