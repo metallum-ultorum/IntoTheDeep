@@ -45,7 +45,6 @@ public class TestingSuite extends LinearOpMode {
 
     private static final String[] DUAL_MOTOR_OPTIONS = {
             "DUAL_MOTOR_SLIDE_VERTICAL",
-            "DUAL_MOTOR_SLIDE_VERTICAL_RTP",
     };
 
     private static final String[] DUAL_SERVO_OPTIONS = {
@@ -132,22 +131,6 @@ public class TestingSuite extends LinearOpMode {
 
                             telemetry.update();
                         }
-                    } else if (selectedItem[0].equals("DUAL_MOTOR_SLIDE_VERTICAL_RTP")) {
-                        DcMotor motor1 = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_LEFT);
-                        DcMotor motor2 = hardwareMap.get(DcMotor.class, Settings.Hardware.IDs.SLIDE_VERTICAL_RIGHT);
-                        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        waitForStart();
-                        while (opModeIsActive()) {
-                            float power = -gamepad1.left_trigger - gamepad2.left_trigger + gamepad1.right_trigger + gamepad2.right_trigger;
-                            motor1.setPower(power);
-                            motor2.setPower(power);
-                            telemetry.addData("Dual Motor Power", "%.2f", power);
-                            telemetry.addData("Left Motor Position", motor1.getCurrentPosition());
-                            telemetry.addData("Right Motor Position", motor2.getCurrentPosition());
-
-                            telemetry.update();
-                        }
                     } else {
                         DcMotor testMotor = hardwareMap.get(DcMotor.class, selectedItem[0]);
                         testMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -170,14 +153,18 @@ public class TestingSuite extends LinearOpMode {
                         servo1.setPosition(position);
                         servo2.setPosition(position);
                         waitForStart();
+                        boolean lastLeftTrigger = false;
+                        boolean lastRightTrigger = false;
                         while (opModeIsActive()) {
-                            if (gamepad1.left_trigger > 0.5 || gamepad2.left_trigger > 0.5) {
+                            if ((gamepad1.left_trigger > 0.5 || gamepad2.left_trigger > 0.5) && !lastLeftTrigger) {
                                 position = Math.max(0, position - 0.05);
-                            } else if (gamepad1.right_trigger > 0.5 || gamepad2.right_trigger > 0.5) {
+                            } else if ((gamepad1.right_trigger > 0.5 || gamepad2.right_trigger > 0.5) && !lastRightTrigger) {
                                 position = Math.min(1, position + 0.05);
                             }
                             servo1.setPosition(position);
                             servo2.setPosition(position);
+                            lastLeftTrigger = gamepad1.left_trigger > 0.5 || gamepad2.left_trigger > 0.5;
+                            lastRightTrigger = gamepad1.right_trigger > 0.5 || gamepad2.right_trigger > 0.5;
                             telemetry.addData("Dual Servo Position", "%.3f", position);
                             telemetry.update();
                         }
