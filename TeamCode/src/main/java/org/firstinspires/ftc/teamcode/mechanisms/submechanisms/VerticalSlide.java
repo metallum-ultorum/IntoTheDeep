@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Settings;
 
 public class VerticalSlide implements ViperSlide {
-    private final DcMotor verticalMotorLeft;
-    private final DcMotor verticalMotorRight;
+    public final DcMotor verticalMotorLeft;
+    public final DcMotor verticalMotorRight;
     private final RevTouchSensor touchSensor;
     private double encoderTarget;
     private VerticalPosition currentPosition;
