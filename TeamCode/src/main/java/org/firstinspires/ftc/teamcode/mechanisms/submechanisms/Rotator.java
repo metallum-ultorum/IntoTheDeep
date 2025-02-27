@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Settings;
 
@@ -18,13 +19,8 @@ public class Rotator {
     }
 
     // Intended to be used with a joystick for variable control
-    public void setPosition(double newPosition) {
-        if(newPosition < horizontalPos) {
-            newPosition = horizontalPos;
-        } else if(newPosition > verticalPos) {
-            newPosition = verticalPos;
-        }
-        position = newPosition;
+    public void setPosition(double targetPosition) {
+        position = Range.clip(targetPosition, horizontalPos, verticalPos);
         rotatorServo.setPosition(position);
     }
 
