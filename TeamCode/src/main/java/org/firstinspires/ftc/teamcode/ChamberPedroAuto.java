@@ -72,7 +72,7 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(40.297, 67.884, Point.CARTESIAN),
                         new Point(6.891, 32.677, Point.CARTESIAN),
-                        new Point(69.199, 33.631, Point.CARTESIAN),
+                        new Point(69.199, 32.631, Point.CARTESIAN),
                         new Point(80.737, 26.162, Point.CARTESIAN),
                         new Point(61.168, 24.500, Point.CARTESIAN)
                 )
@@ -176,7 +176,7 @@ public class ChamberPedroAuto extends OpMode {
                 setPathState(1);
                 break;
             case 1:
-                double firstActionLengthSeconds = 0.7; // 1.5s to vertically place specimen
+                double firstActionLengthSeconds = 1.5; // 1.5s to vertically place specimen
                 double secondActionLengthSeconds = 0.2; // .2s to collapse
 
                 if (!follower.isBusy() && actionState == 0) {
@@ -252,7 +252,7 @@ public class ChamberPedroAuto extends OpMode {
                     actionState = 1;
                 }
 
-                double placementSeconds = 0.7;
+                double placementSeconds = 0.5;
                 if (actionState == 1 && actionTimer.getElapsedTimeSeconds() >= placementSeconds) {
                     actionState = 0;
                     /* Move all the samples over to make room for more */
@@ -327,7 +327,7 @@ public class ChamberPedroAuto extends OpMode {
 
     public void score() {
         mechanisms.outtake.outtakeClaw.close();
-        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 50);
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 100);
         mechanisms.outtake.moveShoulderToBack();
     }
 
