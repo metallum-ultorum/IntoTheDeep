@@ -363,6 +363,8 @@ public class ChamberPedroAuto extends OpMode {
         follower.setStartingPose(new Pose(10.767, 59.940));
         buildPaths();
         visualization = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+        mechanisms.intake.horizontalSlide.reset();
+        mechanisms.outtake.verticalSlide.reset();
     }
 
     /**
