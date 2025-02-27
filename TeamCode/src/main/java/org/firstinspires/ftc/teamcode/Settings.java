@@ -74,7 +74,6 @@ public class Settings {
                 {
                     dpad_movement_speed = 0.6;
                     bumper_rotation_speed = 0.9;
-                    GamepadButton extendVertical = GamepadButton.B;
                 }
 
                 @Override
@@ -303,7 +302,7 @@ public class Settings {
             @Config
             public static class Shoulder {
                 // TODO: TUNE WHEN NEW SERVO GOES IN
-                public static double TRANSFER_POSITION = 0.25;
+                public static double TRANSFER_POSITION = 0.1;
                 public static double PLACE_FORWARD_POSITION = 0;
                 public static double PLACE_BACKWARD_POSITION = 0.65;
 
@@ -346,8 +345,8 @@ public class Settings {
             public static int LOW_RUNG = 80;
             public static int LOW_BASKET = 550;
 
-            public static int HIGH_RUNG_PREP_AUTO = 1500;
-            public static int HIGH_RUNG = 1959; // TODO TUNE
+            public static int HIGH_RUNG_PREP_AUTO = 1890;
+            public static int HIGH_RUNG = 2250; // TODO TUNE
             public static int HIGH_BASKET = 3150;
 
             // Motor power settings

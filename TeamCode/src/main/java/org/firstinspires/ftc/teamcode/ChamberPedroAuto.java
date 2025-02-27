@@ -41,14 +41,14 @@ public class ChamberPedroAuto extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private double actionState;
     private Telemetry visualization;
-    public static double[] testOffset = {0, 3};
+    public static double[] testOffset = {1.5, 6};
     /**
      * This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method.
      */
     private int pathState;
 
-    private Path initialPlaceOnChamber, prepSample1, pushSample1, prepSample2,
+    private static Path initialPlaceOnChamber, prepSample1, pushSample1, prepSample2,
             pushSample2, prepSample3, pushSample3, initialGrabFromHumanPlayer, placeOnChamber,
             consolidateSpecimens, grabFromHumanPlayer, park;
 
@@ -63,7 +63,7 @@ public class ChamberPedroAuto extends OpMode {
                 // Line 1
                 new BezierLine(
                         new Point(10.767, 59.940, Point.CARTESIAN),
-                        new Point(39.076, 63.406 - 1, Point.CARTESIAN)
+                        new Point(39.076 + testOffset[0], 63.406 - 1, Point.CARTESIAN)
                 )
         );
         initialPlaceOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -112,7 +112,7 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(17.784, 13.292, Point.CARTESIAN),
                         new Point(77.045, 18.092, Point.CARTESIAN),
-                        new Point(60.061, 8.492 + 2, Point.CARTESIAN)
+                        new Point(60.061, 8.492 + 1, Point.CARTESIAN)
                 )
         );
         prepSample3.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -120,8 +120,8 @@ public class ChamberPedroAuto extends OpMode {
         pushSample3 = new Path(
                 // Line 7
                 new BezierLine(
-                        new Point(60.164, 10.544 + 2, Point.CARTESIAN),
-                        new Point(31.16653084252758, 10.544 + 2, Point.CARTESIAN)
+                        new Point(60.164, 10.544 + 1, Point.CARTESIAN),
+                        new Point(31.16653084252758, 10.544 + 1, Point.CARTESIAN)
                 )
         );
         pushSample3.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -184,6 +184,7 @@ public class ChamberPedroAuto extends OpMode {
                     actionState = 1;
                     actionTimer.resetTimer();
                     score();
+
                 }
 
                 if (actionState == 1) {
@@ -202,6 +203,7 @@ public class ChamberPedroAuto extends OpMode {
                         actionState = 0;
                         /* Prep and push all the samples in a chain, then prep to grab the first specimen */
                         mechanisms.outtake.moveShoulderToBack();
+                        prepGrab();
                         follower.followPath(new PathChain(
                                 prepSample1, pushSample1,
                                 prepSample2, pushSample2,
@@ -212,20 +214,19 @@ public class ChamberPedroAuto extends OpMode {
                 }
                 break;
             case 2:
-                double prepLengthSeconds = 0.1; // 3 seconds to get ready to grab specimen
+                double harsithAlignmentLengthSeconds = 0.1; // 0.1 seconds to give harsith time
                 //noinspection SpellCheckingInspection
-                double grabLengthSeconds = 0.1; // half a second to yoinky sploinky
+                double grabLengthSeconds = 0.3; // half a second to yoinky sploinky
 
                 if (!follower.isBusy() && actionState == 0) {
-                    // once the robot finished previous trajectory for the first time, begin g
+                    // once the robot is in position to grab, wait a bit for harsith to align
                     actionState = 1;
                     actionTimer.resetTimer();
-                    prepGrab();
                 }
 
                 if (actionState == 1) {
-                    // once the robot spent enough time scoring, collapse
-                    if (actionTimer.getElapsedTimeSeconds() > prepLengthSeconds) {
+                    // once we have waited a bit, grab from harsith
+                    if (actionTimer.getElapsedTimeSeconds() > harsithAlignmentLengthSeconds) {
                         actionState = 2;
                         actionTimer.resetTimer();
                         grab();
@@ -235,6 +236,7 @@ public class ChamberPedroAuto extends OpMode {
                 if (actionState == 2) {
                     // once the robot spent enough time collapsing, continue pathing
                     if (actionTimer.getElapsedTimeSeconds() > grabLengthSeconds) {
+                        prepScore();
                         actionState = 0;
                         follower.followPath(placeOnChamber);
                         setPathState(3);
@@ -263,6 +265,7 @@ public class ChamberPedroAuto extends OpMode {
                 if (!follower.isBusy()) {
                     /* We're done placing */
                     collapse();
+                    prepGrab();
 
                     if (hpSpecimensPlaced >= 3) {
                         /* There's no more to get from the HP */
@@ -271,6 +274,7 @@ public class ChamberPedroAuto extends OpMode {
 
                     hpSpecimensPlaced += 1;
                     follower.followPath(grabFromHumanPlayer, true);
+                    actionState = 0;
                     setPathState(2); // ! Loop back to 2 and place another HP specimen
                 }
                 break;
@@ -316,9 +320,14 @@ public class ChamberPedroAuto extends OpMode {
         telemetry.update();
     }
 
+    public void prepScore() {
+        mechanisms.outtake.moveShoulderToFront();
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.PREP_HIGH_RUNG);
+    }
+
     public void score() {
         mechanisms.outtake.outtakeClaw.close();
-        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG);
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 50);
         mechanisms.outtake.moveShoulderToBack();
     }
 
@@ -330,11 +339,11 @@ public class ChamberPedroAuto extends OpMode {
 
     public void prepGrab() {
         mechanisms.outtake.outtakeClaw.open();
+        mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_BACKWARD);
     }
 
     public void grab() {
         mechanisms.outtake.outtakeClaw.close();
-        mechanisms.outtake.moveShoulderToFront();
     }
 
 
