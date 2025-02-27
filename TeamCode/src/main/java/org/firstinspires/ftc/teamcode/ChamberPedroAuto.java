@@ -255,9 +255,10 @@ public class ChamberPedroAuto extends OpMode {
                 double placementSeconds = 0.5;
                 if (actionState == 1 && actionTimer.getElapsedTimeSeconds() >= placementSeconds) {
                     actionState = 0;
+                    collapse();
                     /* Move all the samples over to make room for more */
-                    follower.followPath(consolidateSpecimens);
-                    setPathState(4);
+                    follower.followPath(grabFromHumanPlayer, true);
+                    setPathState(5);
                 }
                 break;
             case 4:
