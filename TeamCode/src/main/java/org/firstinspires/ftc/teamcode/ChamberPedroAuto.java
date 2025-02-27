@@ -166,6 +166,7 @@ public class ChamberPedroAuto extends OpMode {
                 setPathState(1);
                 break;
             case 1:
+                //TODO; Decrease this value as much as possible:
                 double firstActionLengthSeconds = 1.5; // 1.5s to vertically place specimen
                 double secondActionLengthSeconds = 0.2; // .2s to collapse
 
