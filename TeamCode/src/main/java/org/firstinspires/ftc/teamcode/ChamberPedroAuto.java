@@ -48,9 +48,16 @@ public class ChamberPedroAuto extends OpMode {
      */
     private int pathState;
 
-    private static Path initialPlaceOnChamber, prepSample1, pushSample1, prepSample2,
-            pushSample2, prepSample3, pushSample3, initialGrabFromHumanPlayer, placeOnChamber,
-            consolidateSpecimens, grabFromHumanPlayer, park;
+    private static Path initialPlaceOnChamber;
+    private static Path prepSample1;
+    private static Path pushSample1;
+    private static Path prepSample2;
+    private static Path pushSample2;
+    private static Path prepSample3;
+    private static Path pushSample3;
+    private static Path initialGrabFromHumanPlayer;
+    private static Path grabFromHumanPlayer;
+    private static Path park;
 
 
 
@@ -136,23 +143,6 @@ public class ChamberPedroAuto extends OpMode {
         );
         initialGrabFromHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(0));
 
-        placeOnChamber = new Path(
-                // Line 9
-                new BezierCurve(
-                        new Point(10.478, 31.631, Point.CARTESIAN),
-                        new Point(16.032, 60.951, Point.CARTESIAN),
-                        new Point(40.008, 75.105, Point.CARTESIAN)
-                )
-        );
-        placeOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
-        consolidateSpecimens = new Path(
-                // Line 10
-                new BezierLine(
-                        new Point(40.008, 75.105, Point.CARTESIAN),
-                        new Point(39.864, 63.984, Point.CARTESIAN)
-                )
-        );
-        consolidateSpecimens.setConstantHeadingInterpolation(Math.toRadians(0));
         grabFromHumanPlayer = new Path(
                 new BezierLine(
                         new Point(39.864, 63.984, Point.CARTESIAN),
@@ -238,6 +228,16 @@ public class ChamberPedroAuto extends OpMode {
                     if (actionTimer.getElapsedTimeSeconds() > grabLengthSeconds) {
                         prepScore();
                         actionState = 0;
+                        // Line 9
+                        Path placeOnChamber = new Path(
+                                // Line 9
+                                new BezierCurve(
+                                        new Point(10.478, 31.631, Point.CARTESIAN),
+                                        new Point(16.032, 60.951, Point.CARTESIAN),
+                                        new Point(40.008, 70.105 + (hpSpecimensPlaced * 2), Point.CARTESIAN)
+                                )
+                        );
+                        placeOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
                         follower.followPath(placeOnChamber);
                         setPathState(3);
                     }
@@ -256,30 +256,20 @@ public class ChamberPedroAuto extends OpMode {
                 if (actionState == 1 && actionTimer.getElapsedTimeSeconds() >= placementSeconds) {
                     actionState = 0;
                     collapse();
-                    /* Move all the samples over to make room for more */
-                    follower.followPath(grabFromHumanPlayer, true);
-                    setPathState(5);
-                }
-                break;
-            case 4:
-                /* Wait until the specimens are consolidated */
-                if (!follower.isBusy()) {
-                    /* We're done placing */
-                    collapse();
-                    prepGrab();
 
                     if (hpSpecimensPlaced >= 3) {
                         /* There's no more to get from the HP */
-                        setPathState(5); // Done with the HP cycle
+                        setPathState(4); // Done with the HP cycle
                     }
 
                     hpSpecimensPlaced += 1;
-                    follower.followPath(grabFromHumanPlayer, true);
+                    prepGrab();
                     actionState = 0;
                     setPathState(2); // ! Loop back to 2 and place another HP specimen
+                    follower.followPath(grabFromHumanPlayer, true);
                 }
                 break;
-            case 5:
+            case 4:
                 /* We have placed all specimens from the HP, so now either park or do echolocate */
                 if (!follower.isBusy()) {
                     if (Settings.Autonomous.ECHOLOCATE_ENABLED) {
