@@ -126,10 +126,9 @@ public class ChamberPedroAuto extends OpMode {
 
         pushSample3 = new Path(
                 // Line 7
-                new BezierCurve(
-                        new Point(60.164, 10.544 + 1, Point.CARTESIAN),
-                        new Point(14.5, 10.544 + 1, Point.CARTESIAN),
-                        new Point(11.2, 10.544 + 3, Point.CARTESIAN)
+                new BezierLine(
+                        new Point(60.164, 10.544 + 2, Point.CARTESIAN),
+                        new Point(11.2, 10.544 + 2, Point.CARTESIAN)
                 )
         );
         pushSample3.setConstantHeadingInterpolation(Math.toRadians(0));
