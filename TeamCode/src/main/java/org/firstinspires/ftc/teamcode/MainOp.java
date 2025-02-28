@@ -33,6 +33,7 @@ public class MainOp extends LinearOpMode {
     Drivetrain drivetrain;
     GoBildaPinpointDriver manualPinpoint;
     boolean CHASSIS_DISABLED = false;
+    boolean prevGamepadTriangle;
     LimelightManager.LimelightPipeline pipeline = LimelightManager.LimelightPipeline.BLUE;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     double storedTx;
@@ -147,20 +148,22 @@ public class MainOp extends LinearOpMode {
         });
 
         if (gamepad1.triangle) {
-            pipeline = pipeline == LimelightManager.LimelightPipeline.BLUE ? LimelightManager.LimelightPipeline.RED : LimelightManager.LimelightPipeline.BLUE;
-            gamepad1.rumble(50);
+            if (!prevGamepadTriangle) {
+                pipeline = pipeline == LimelightManager.LimelightPipeline.BLUE ? LimelightManager.LimelightPipeline.RED : LimelightManager.LimelightPipeline.BLUE;
+                gamepad1.rumble(50);
+            }
+            prevGamepadTriangle = true;
+        } else {
+            prevGamepadTriangle = false;
         }
 
-        // Set game controller colors based on confirmation
-        if (mainConfirmed.get()) {
-            gamepad1.setLedColor(0, 255, 0, 1000);
+
+        // Set game controller colors based on pipeline
+        if (pipeline == LimelightManager.LimelightPipeline.BLUE) {
+            gamepad1.setLedColor(0, 0, 255, 1000);
+            gamepad2.setLedColor(0, 0, 255, 1000);
         } else {
             gamepad1.setLedColor(255, 0, 0, 1000);
-        }
-
-        if (subConfirmed.get()) {
-            gamepad2.setLedColor(0, 255, 0, 1000);
-        } else {
             gamepad2.setLedColor(255, 0, 0, 1000);
         }
 
