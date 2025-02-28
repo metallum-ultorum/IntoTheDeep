@@ -64,12 +64,11 @@ public class MainOp extends LinearOpMode {
         while (opModeIsActive()) {
             gamepadPrimary();
             gamepadAuxiliary();
-            checkEasingConditions();
+            checkAutomationConditions();
+            checkAssistanceConditions();
             mechanisms.outtake.verticalSlide.checkMotors();
-            if (mechanisms.intake.limelight.update()) {
-                gamepad2.rumble(50);
-            }
             mechanisms.intake.colorSensor.update();
+            telemetry.update();
         }
     }
 
@@ -267,7 +266,7 @@ public class MainOp extends LinearOpMode {
         }
     }
 
-    public void checkEasingConditions() {
+    public void checkAutomationConditions() {
         if (Settings.Movement.easeTransfer) {
             // automatically transfer when everything is collapsed
             if (mechanisms.intake.horizontalSlide.currentPosition.getValue() <=
@@ -280,6 +279,12 @@ public class MainOp extends LinearOpMode {
                 mechanisms.intake.intakeClaw.open();
                 scheduleTask(() -> mechanisms.outtake.moveShoulderToBack(), 200);
             }
+        }
+    }
+
+    public void checkAssistanceConditions() {
+        if (mechanisms.intake.limelight.update()) {
+            gamepad2.rumble(50);
         }
     }
 
