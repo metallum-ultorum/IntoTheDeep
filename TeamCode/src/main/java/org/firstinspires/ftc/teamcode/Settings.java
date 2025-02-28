@@ -21,7 +21,7 @@ public class Settings {
         /** Default speed for autonomous movements */
         public static double default_autonomous_speed = 0.6;
         /** Flips movement to make movement easier while the robot is backwards **/
-        public static int flip_movement = 1;
+        public static int flip_movement = -1;
         /**
          * Determines if the gecko wheels outtake a little when closing the claw to ease
          * transfer
@@ -138,7 +138,7 @@ public class Settings {
         public boolean use_absolute_positioning = false;
 
         public boolean incremental_horizontal = false;
-        public boolean incremental_vertical = true;
+        public boolean incremental_vertical = false;
 
         public final ButtonMapping buttonMapping;
 
@@ -148,7 +148,7 @@ public class Settings {
 
         /**
          * Applies a mathematical curve to the boost input to adjust control response
-         * 
+         *
          * @param input Raw input value between 0 and 1
          * @return Modified input value between 0 and 1
          */
@@ -346,7 +346,7 @@ public class Settings {
             public static int LOW_BASKET = 550;
 
             public static int HIGH_RUNG_PREP_AUTO = 1890;
-            public static int HIGH_RUNG = 2250; // TODO TUNE
+            public static int HIGH_RUNG = 2250;
             public static int HIGH_BASKET = 3150;
 
             // Motor power settings
