@@ -345,10 +345,11 @@ public class Settings {
             public static int TRANSFER = 0;
             public static int LOW_RUNG = 80;
             public static int LOW_BASKET = 550;
+            public static int HANG_RUNG_1 = 3350;
 
             public static int HIGH_RUNG_PREP_AUTO = 1890;
             public static int HIGH_RUNG = 2250;
-            public static int HIGH_BASKET = 3100;
+            public static int HIGH_BASKET = 3350;
 
             // Motor power settings
             public static double MOVEMENT_POWER = 1;

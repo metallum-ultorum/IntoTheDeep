@@ -16,7 +16,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.mechanisms.MechanismManager;
-import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Rotator;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
@@ -42,7 +41,7 @@ public class BasketPedroAuto extends OpMode {
     private static Path grabSample3;
     private static Path returnSample;
     private static Path park;
-    public double presetSamplesPlaced = 0;
+    public int samplesScored = 0;
     private Follower follower;
     private MechanismManager mechanisms;
     private Timer pathTimer, actionTimer, opmodeTimer;
@@ -63,11 +62,11 @@ public class BasketPedroAuto extends OpMode {
                 // Line 1
                 new BezierCurve(
                         new Point(9.757, 84.983, Point.CARTESIAN),
-                        new Point(35.863, 83.627, Point.CARTESIAN),
+                        new Point(42.362, 79.294, Point.CARTESIAN),
                         new Point(13.800, 130.423, Point.CARTESIAN)
                 )
         );
-        initialDropInBasket.setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(135));
+        initialDropInBasket.setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45));
 
         grabSample1 = new Path(
                 new BezierLine(
@@ -75,7 +74,7 @@ public class BasketPedroAuto extends OpMode {
                         new Point(33.877, 120.891, Point.CARTESIAN)
                 )
         );
-        grabSample1.setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(0));
+        grabSample1.setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0));
 
         grabSample2 = new Path(
                 // Line 4
@@ -84,7 +83,7 @@ public class BasketPedroAuto extends OpMode {
                         new Point(33.804, 131.723, Point.CARTESIAN)
                 )
         );
-        grabSample2.setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(0));
+        grabSample2.setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0));
 
         grabSample3 = new Path(
                 new BezierLine(
@@ -92,7 +91,7 @@ public class BasketPedroAuto extends OpMode {
                         new Point(34.960, 131.868, Point.CARTESIAN)
                 )
         );
-        grabSample3.setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(45));
+        grabSample3.setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(45));
 
         returnSample = new Path(
                 // Lines 3, 5, 7
@@ -101,7 +100,16 @@ public class BasketPedroAuto extends OpMode {
                         new Point(13.728, 130.423, Point.CARTESIAN)
                 )
         );
-        returnSample.setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(135));
+        returnSample.setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45));
+
+        park = new Path(
+                new BezierCurve(
+                        new Point(13.728, 130.423, Point.CARTESIAN),
+                        new Point(64.749, 129.123, Point.CARTESIAN),
+                        new Point(60.272, 96.626, Point.CARTESIAN)
+                )
+        );
+        park.setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(90));
     }
 
     /**
@@ -118,18 +126,32 @@ public class BasketPedroAuto extends OpMode {
                 setPathState(1);
                 break;
             case 1:
+                telemetry.addData("VS: ", mechanisms.outtake.verticalSlide.verticalMotorRight.getCurrentPosition()
+                        - ViperSlide.VerticalPosition.HIGH_BASKET.getValue());
                 double dropTime = 0.1;
+                double shoulderMoveTime = 0.7;
                 boolean slideFinishedExtending =
                         Math.abs(mechanisms.outtake.verticalSlide.verticalMotorRight.getCurrentPosition()
-                                - ViperSlide.VerticalPosition.HIGH_BASKET.getValue()) < 10;
+                                - ViperSlide.VerticalPosition.HIGH_BASKET.getValue()) < 50;
                 // wait until the robot finished previous trajectory and is ready to drop
-                if (!follower.isBusy() && slideFinishedExtending) {
+                if (!follower.isBusy() && slideFinishedExtending && actionState == 0) {
+                    mechanisms.outtake.moveShoulderToBack();
                     actionState = 1;
                     actionTimer.resetTimer();
-                    drop();
+                } else if (actionState == 0) {
+                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
                 }
 
                 if (actionState == 1) {
+                    if (actionTimer.getElapsedTimeSeconds() > shoulderMoveTime) {
+                        drop();
+                        samplesScored += 1;
+                        actionTimer.resetTimer();
+                        actionState = 2;
+                    }
+                }
+
+                if (actionState == 2) {
                     // after giving the robot a smidgen to drop, collapse and start next trajectory
                     if (actionTimer.getElapsedTimeSeconds() > dropTime) {
                         collapse();
@@ -137,13 +159,26 @@ public class BasketPedroAuto extends OpMode {
                         actionState = 0;
                         actionTimer.resetTimer();
                         prepGrab();
-                        follower.followPath(grabSample1);
+                        switch (samplesScored) {
+                            case 1:
+                                follower.followPath(grabSample1);
+                                break;
+                            case 2:
+                                follower.followPath(grabSample2);
+                                break;
+                            case 3:
+                                follower.followPath(grabSample3);
+                                break;
+                            default:
+                                setPathState(3);
+                        }
                     }
                 }
                 break;
             case 2:
                 double clawCloseSeconds = 0.1;
-                double collapseSeconds = 2;
+                double collapseSeconds = 0.5;
+                double transferSeconds = 0.2;
                 if (!follower.isBusy() && actionState == 0) {
                     // theoretically, we're on top of the sample with the claw
                     actionState = 1;
@@ -155,55 +190,50 @@ public class BasketPedroAuto extends OpMode {
                     // once claw is closed, transfer sample from intake to outtake
                     if (actionTimer.getElapsedTimeSeconds() > clawCloseSeconds) {
                         collapse();
+                        actionState = 2;
+                        actionTimer.resetTimer();
                     }
                 }
 
                 if (actionState == 2) {
                     // once the robot spent enough time collapsing, transfer and pathing
                     if (actionTimer.getElapsedTimeSeconds() > collapseSeconds) {
-                        transferSample(); // TODO from here
+                        transferSample();
+                        actionState = 3;
+                        actionTimer.resetTimer();
+                    }
+                }
+
+                if (actionState == 3) {
+                    if (actionTimer.getElapsedTimeSeconds() > transferSeconds) {
                         actionState = 0;
-                        // Line 9
+                        actionTimer.resetTimer();
+                        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
                         follower.followPath(returnSample);
-                        setPathState(99999); // TODO after this case but i gtg to show choir
+                        setPathState(1);
                     }
                 }
                 break;
             case 3:
-                /* Wait until we are in position to score */
-                if (!follower.isBusy() && actionState == 0) {
-                    /* Score Sample */
-                    drop();
+                /* We have placed all presets, so park */
+                if (!follower.isBusy()) {
+                    follower.followPath(park);
+                    actionState = 0;
                     actionTimer.resetTimer();
-                    actionState = 1;
-                }
-
-                double placementSeconds = 0.5;
-                if (actionState == 1 && actionTimer.getElapsedTimeSeconds() >= placementSeconds) {
-                    actionState = 0;
-                    collapse();
-
-                    if (presetSamplesPlaced >= 3) {
-                        /* There's no more to get from the HP */
-                        setPathState(4); // Done with the HP cycle
-                    }
-
-                    presetSamplesPlaced += 1;
-                    prepGrab();
-                    actionState = 0;
-                    setPathState(2); // ! Loop back to 2 and place another HP specimen
-                    follower.followPath(park, true);
+                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HANG_RUNG_1);
+                    setPathState(4);
                 }
                 break;
             case 4:
-                /* We have placed all specimens from the HP, so now either park or do echolocate */
-                if (!follower.isBusy()) {
-                    if (Settings.Autonomous.ECHOLOCATE_ENABLED) {
-                        setPathState(1000); // TODO
-                    } else {
-                        follower.followPath(park);
-                    }
-                    setPathState(-1);
+                boolean slideDoneExtending =
+                        Math.abs(mechanisms.outtake.verticalSlide.verticalMotorRight.getCurrentPosition()
+                                - ViperSlide.VerticalPosition.HANG_RUNG_1.getValue()) < 50;
+                if (!follower.isBusy() && slideDoneExtending) {
+                    // once the slide is done extending, and we are at park position, hold on the bar
+                    mechanisms.outtake.moveShoulderToBack();
+                    actionState = 0;
+                    actionTimer.resetTimer();
+                    setPathState(-1); // all done!
                 }
                 break;
         }
@@ -230,6 +260,8 @@ public class BasketPedroAuto extends OpMode {
 
         // Feedback to Driver Hub
         telemetry.addData("path state", pathState);
+        telemetry.addData("samples scored", samplesScored);
+        telemetry.addLine("action state: " + actionState + " for " + actionTimer.getElapsedTimeSeconds() + "seconds");
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
@@ -238,7 +270,7 @@ public class BasketPedroAuto extends OpMode {
     }
 
     public void prepDrop() {
-        mechanisms.outtake.moveShoulderToBack();
+        mechanisms.outtake.moveShoulderToFront();
         mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
     }
 
@@ -251,19 +283,20 @@ public class BasketPedroAuto extends OpMode {
         mechanisms.outtake.moveShoulderToFront();
         mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
         mechanisms.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.COLLAPSED);
-        mechanisms.intake.rotator.setPosition(Rotator.verticalPos);
+        mechanisms.intake.rotator.setPosition(0.5);
         mechanisms.intake.intakeClaw.close();
     }
 
     public void transferSample() {
-        // TODO
+        mechanisms.outtake.outtakeClaw.close();
+        mechanisms.intake.intakeClaw.open();
     }
 
     public void prepGrab() {
         mechanisms.outtake.outtakeClaw.open();
         mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_FORWARD);
         mechanisms.intake.intakeClaw.open();
-        mechanisms.intake.rotator.setPosition(Rotator.horizontalPos);
+        mechanisms.intake.rotator.setPosition(0.5);
         mechanisms.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.LEVEL_1);
         mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
     }
@@ -286,7 +319,7 @@ public class BasketPedroAuto extends OpMode {
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
-        follower.setStartingPose(new Pose(10.767, 59.940));
+        follower.setStartingPose(new Pose(9.757, 84.983));
         buildPaths();
         visualization = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         mechanisms.intake.horizontalSlide.reset();
