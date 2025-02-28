@@ -65,6 +65,10 @@ public class MainOp extends LinearOpMode {
             gamepadAuxiliary();
             checkEasingConditions();
             mechanisms.outtake.verticalSlide.checkMotors();
+            if (mechanisms.intake.limelight.update()) {
+                gamepad2.rumble(50);
+            }
+            mechanisms.intake.colorSensor.update();
         }
     }
 

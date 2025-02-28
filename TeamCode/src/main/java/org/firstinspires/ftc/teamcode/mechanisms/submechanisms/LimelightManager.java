@@ -13,9 +13,10 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 public class LimelightManager {
     Limelight3A limelight;
     LLResult currentResult;
-    LimelightPipeline currentPipeline = LimelightPipeline.YELLOW;
+    LimelightPipeline currentPipeline = LimelightPipeline.RED;
     double lastTx = 0;
     double lastTy = 0;
+    double angleNeededForRumble = 5;
 
     public LimelightManager(Limelight3A limelight) {
         this.limelight = limelight;
@@ -36,7 +37,10 @@ public class LimelightManager {
      */
     public boolean update() {
         currentResult = limelight.getLatestResult();
-        if (currentResult.getTx() != 0 && currentResult.getTy() != 0 && lastTx != 0 && lastTy != 0) {
+        if (currentResult.getTx() != 0 && currentResult.getTy() != 0
+                && lastTx != 0 && lastTy != 0
+        && (currentResult.getTx() == lastTx && currentResult.getTy() == lastTy)
+        && (Math.abs(currentResult.getTx()) < angleNeededForRumble)) {
             return true;
         }
         lastTx = currentResult.getTx();
