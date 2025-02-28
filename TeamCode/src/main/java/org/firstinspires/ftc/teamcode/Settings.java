@@ -37,6 +37,8 @@ public class Settings {
                     bumper_rotation_speed = 0.8;
 
                     incremental_vertical = true;
+                    buttonMapping.rotateLeft = GamepadButton.OPTIONS;
+                    buttonMapping.rotateRight = GamepadButton.OPTIONS;
                 }
 
                 @Override
@@ -92,7 +94,6 @@ public class Settings {
                     dpad_movement_speed = 0.5;
                     bumper_rotation_speed = 0.9;
                 }
-
 
                 @Override
                 public double applyBoostCurve(double input) {
