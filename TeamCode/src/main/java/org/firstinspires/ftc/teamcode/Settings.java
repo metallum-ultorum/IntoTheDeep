@@ -37,8 +37,6 @@ public class Settings {
                     bumper_rotation_speed = 0.8;
 
                     incremental_vertical = true;
-                    buttonMapping.rotateLeft = null;
-                    buttonMapping.rotateRight = null;
                 }
 
                 @Override
