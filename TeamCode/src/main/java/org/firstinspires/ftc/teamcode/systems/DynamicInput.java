@@ -15,7 +15,8 @@ public class DynamicInput {
 
     // Track previous button states for justPressed functionality
     private boolean prevExtendHorizontal, prevRetractHorizontal, prevExtendVertical, prevRetractVertical, prevWrist,
-            prevInwardClaw, prevOutwardClaw, prevToggleClaw, prevShoulderUp, prevShoulderDown, prevFlipMovement, prevIntakeIn;
+            prevInwardClaw, prevOutwardClaw, prevToggleClaw, prevShoulderUp, prevShoulderDown, prevFlipMovement, prevIntakeIn,
+            prevExtendVerticalToBasket, prevExtendVerticalToChamber, prevExtendVerticalToChamberPrep, prevRetractVerticalToTransfer;
 
     public DynamicInput(Gamepad gamepad1, Gamepad gamepad2, Settings.ControllerProfile mainProfile,
             Settings.ControllerProfile subProfile) {
@@ -119,13 +120,14 @@ public class DynamicInput {
     public static class ContextualActions extends Actions {
         public final boolean justExtendHorizontal, justRetractHorizontal, justRetractVertical, justExtendVertical,
                 justWristUp, justInwardClaw, justOutwardClaw, justToggleClaw, justShoulderUp, justShoulderDown,
-                justFlipMovement, justIntakeIn;
+                justFlipMovement, justIntakeIn, justExtendVerticalToBasket, justExtendVerticalToChamber, justExtendVerticalToChamberPrep, justRetractVerticalToTransfer;
 
         public ContextualActions(Gamepad mainCtrl, Settings.DefaultGamepadSettings mainSettings,
                 Gamepad subCtrl, Settings.DefaultGamepadSettings subSettings,
                                  boolean prevExtendHorizontal, boolean prevRetractHorizontal, boolean prevExtendVertical,
                                  boolean prevRetractVertical, boolean prevWrist, boolean prevInwardClaw, boolean prevOutwardClaw,
-                                 boolean prevToggleClaw, boolean prevShoulderUp, boolean prevShoulderDown, boolean prevFlipMovement, boolean prevIntakeIn) {
+                                 boolean prevToggleClaw, boolean prevShoulderUp, boolean prevShoulderDown, boolean prevFlipMovement,
+                                 boolean prevIntakeIn, boolean prevExtendVerticalToBasket, boolean prevExtendVerticalToChamber, boolean prevExtendVerticalToChamberPrep, boolean prevRetractVerticalToTransfer) {
             super(mainCtrl, mainSettings, subCtrl, subSettings);
 
             this.justExtendHorizontal = extendHorizontal && !prevExtendHorizontal;
@@ -140,6 +142,10 @@ public class DynamicInput {
             this.justShoulderDown = shoulderDown && !prevShoulderDown;
             this.justFlipMovement = flipMovement && !prevFlipMovement;
             this.justIntakeIn = intakeIn && !prevIntakeIn;
+            this.justExtendVerticalToBasket = extendVerticalToBasket && !prevExtendVerticalToBasket;
+            this.justExtendVerticalToChamber = extendVerticalToChamber && !prevExtendVerticalToChamber;
+            this.justExtendVerticalToChamberPrep = extendVerticalToChamberPrep && !prevExtendVerticalToChamberPrep;
+            this.justRetractVerticalToTransfer = retractVerticalToTransfer && !prevRetractVerticalToTransfer;
         }
     }
 
@@ -154,7 +160,7 @@ public class DynamicInput {
     public ContextualActions getContextualActions() {
         ContextualActions actions = new ContextualActions(mainCtrl, mainSettings, subCtrl, subSettings,
                 prevExtendHorizontal, prevRetractHorizontal, prevExtendVertical, prevRetractVertical, prevWrist,
-                prevInwardClaw, prevOutwardClaw, prevToggleClaw, prevShoulderUp, prevShoulderDown, prevFlipMovement, prevIntakeIn);
+                prevInwardClaw, prevOutwardClaw, prevToggleClaw, prevShoulderUp, prevShoulderDown, prevFlipMovement, prevIntakeIn, prevExtendVerticalToBasket, prevExtendVerticalToChamber, prevExtendVerticalToChamberPrep, prevRetractVerticalToTransfer);
 
         // Update previous states
         prevExtendHorizontal = actions.extendHorizontal;
@@ -169,6 +175,10 @@ public class DynamicInput {
         prevShoulderDown = actions.shoulderDown;
         prevFlipMovement = actions.flipMovement;
         prevIntakeIn = actions.intakeIn;
+        prevExtendVerticalToBasket = actions.extendVerticalToBasket;
+        prevExtendVerticalToChamber = actions.extendVerticalToChamber;
+        prevExtendVerticalToChamberPrep = actions.extendVerticalToChamberPrep;
+        prevRetractVerticalToTransfer = actions.retractVerticalToTransfer;
 
         return actions;
     }

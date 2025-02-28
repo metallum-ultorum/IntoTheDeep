@@ -246,19 +246,19 @@ public class MainOp extends LinearOpMode {
                 if (mechanisms.outtake.verticalSlide.isTouchingSensor()) {
                     mechanisms.outtake.verticalSlide.increment(1);
                 }
+                if (contextualActions.justExtendVerticalToBasket) {
+                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
+                } else if (contextualActions.justExtendVerticalToChamber) {
+                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG);
+                } else if (contextualActions.justExtendVerticalToChamberPrep) {
+                        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.PREP_HIGH_RUNG);
+                } else if (contextualActions.justRetractVerticalToTransfer) {
+                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
+                }
                 if (contextualActions.extendVertical) {
                     mechanisms.outtake.verticalSlide.increment();
                 } else if (contextualActions.retractVertical) {
                     mechanisms.outtake.verticalSlide.decrement();
-                }
-                if (contextualActions.extendVerticalToBasket) {
-                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
-                } else if (contextualActions.extendVerticalToChamber) {
-                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 150);
-                } else if (contextualActions.extendVerticalToChamberPrep) {
-                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.PREP_HIGH_RUNG);
-                } else if (contextualActions.retractVerticalToTransfer) {
-                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
                 }
             } else {
                 if (contextualActions.justExtendVertical) {
