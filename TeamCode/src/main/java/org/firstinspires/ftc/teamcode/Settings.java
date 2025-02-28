@@ -363,7 +363,7 @@ public class Settings {
             // Motor power settings
             public static double MOVEMENT_POWER = 1;
 
-            public static double INCREMENTAL_MOVEMENT_POWER = 12;
+            public static double INCREMENTAL_MOVEMENT_POWER = 20;
 
             public static boolean ENABLE_LOWER_LIMIT = false;
         }
@@ -373,8 +373,8 @@ public class Settings {
             // Positions in encoder ticks
             // TODO: TUNE
             public static int COLLAPSED = 0;
-            public static int LEVEL_1 = 200;
-            public static int EXPANDED = 320;
+            public static int LEVEL_1 = 82;
+            public static int EXPANDED = 250;
 
             // Motor power settings
             public static double MOVEMENT_POWER = 0.5;
