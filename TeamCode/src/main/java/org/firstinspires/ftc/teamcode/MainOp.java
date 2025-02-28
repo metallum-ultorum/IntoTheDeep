@@ -151,6 +151,7 @@ public class MainOp extends LinearOpMode {
             if (!prevGamepadTriangle) {
                 pipeline = pipeline == LimelightManager.LimelightPipeline.BLUE ? LimelightManager.LimelightPipeline.RED : LimelightManager.LimelightPipeline.BLUE;
                 gamepad1.rumble(50);
+                gamepad2.rumble(50);
             }
             prevGamepadTriangle = true;
         } else {
