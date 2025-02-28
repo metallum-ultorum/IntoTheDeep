@@ -70,9 +70,10 @@ public class BasketPedroAuto extends OpMode {
         initialDropInBasket.setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45));
 
         grabSample1 = new Path(
+                // Line 2
                 new BezierLine(
                         new Point(13.800, 130.423, Point.CARTESIAN),
-                        new Point(33.877, 120.891, Point.CARTESIAN)
+                        new Point(36.33202733199599, 121.17953861584755, Point.CARTESIAN)
                 )
         );
         grabSample1.setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0));
