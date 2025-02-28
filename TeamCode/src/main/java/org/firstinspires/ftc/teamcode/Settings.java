@@ -36,7 +36,7 @@ public class Settings {
                     dpad_movement_speed = 0.6;
                     bumper_rotation_speed = 0.8;
 
-                    GamepadButton extendVertical = GamepadButton.B;
+                    incremental_vertical = true;
                 }
 
                 @Override
