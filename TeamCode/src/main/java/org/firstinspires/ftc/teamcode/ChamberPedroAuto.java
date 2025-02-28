@@ -200,7 +200,7 @@ public class ChamberPedroAuto extends OpMode {
                                 prepSample2, pushSample2,
                                 prepSample3, pushSample3
 //                                ,initialGrabFromHumanPlayer
-                        ), true);
+                        ), false);
                     }
                 }
                 break;

@@ -267,7 +267,7 @@ public class Settings {
     public static class Assistance {
         public static double inverseLateralMultiplier = 50; // move at full power at 30 inches laterally away, going down to 0.0333333333 at 1 inch away
         public static double minimumRotationCorrectionThreshold = Math.PI / 50; // Don't correct heading within 0.1570796327
-        public static double approachSpeed = 0.3; // if within an inch it's good enough
+        public static double approachSpeed = 0.4; // if within an inch it's good enough
         public static double limelightWindowSize = 40; // degrees
     }
 
