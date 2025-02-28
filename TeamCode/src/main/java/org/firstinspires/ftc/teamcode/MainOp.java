@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Settings.ControllerProfile;
 import org.firstinspires.ftc.teamcode.mechanisms.MechanismManager;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.systems.Drivetrain;
@@ -170,13 +171,14 @@ public class MainOp extends LinearOpMode {
 
             if (contextualActions.justIntakeIn) {
                 mechanisms.intake.intakeClaw.close();
-                scheduleTask(() -> mechanisms.intake.wrist.setPosition(Wrist.Position.READY), 200);
+                scheduleTask(() -> mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL), 200);
+                mechanisms.outtake.outtakeClaw.open();
             } else if (contextualActions.intakeOut) {
                 mechanisms.intake.intakeClaw.open();
             }
 
             if (contextualActions.justWristUp) {
-                if (mechanisms.intake.horizontalSlide.currentPosition.getValue() > 100) {
+                if (mechanisms.intake.horizontalSlide.currentPosition.getValue() > 100 && mechanisms.intake.intakeClaw.opened) {
                     mechanisms.intake.wrist.setPosition(Wrist.Position.READY);
                 } else {
                     mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
@@ -185,7 +187,7 @@ public class MainOp extends LinearOpMode {
                 mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
             }
 
-            if (input.subSettings.incremental_horizontal) {
+            if (Settings.DefaultGamepadSettings.incremental_horizontal) {
                 if (contextualActions.extendHorizontal) {
                     mechanisms.intake.horizontalSlide.increment();
                 } else if (contextualActions.retractHorizontal) {
@@ -207,7 +209,7 @@ public class MainOp extends LinearOpMode {
         }
 
         if (Settings.Deploy.OUTTAKE) {
-            if (input.mainSettings.incremental_vertical) {
+            if (Settings.DefaultGamepadSettings.incremental_vertical) {
                 if (mechanisms.outtake.verticalSlide.isTouchingSensor()) {
                     mechanisms.outtake.verticalSlide.increment(1);
                 }
@@ -228,6 +230,7 @@ public class MainOp extends LinearOpMode {
             if (contextualActions.justToggleClaw) {
                 if (mechanisms.outtake.outtakeClaw.opened) {
                     mechanisms.outtake.outtakeClaw.close();
+                    scheduleTask(() -> mechanisms.intake.intakeClaw.open(), 400);
                 } else {
                     mechanisms.outtake.outtakeClaw.open();
                 }
@@ -258,8 +261,13 @@ public class MainOp extends LinearOpMode {
     public void checkEasingConditions() {
         if (Settings.Movement.easeTransfer) {
             // automatically transfer when everything is collapsed
-            if (mechanisms.intake.horizontalSlide.currentPosition == ViperSlide.HorizontalPosition.COLLAPSED &&
-                    !mechanisms.intake.intakeClaw.opened && mechanisms.outtake.outtakeClaw.clawServo.getPosition() > 0.8) {
+            if (mechanisms.intake.horizontalSlide.currentPosition.getValue() <=
+                    ViperSlide.HorizontalPosition.COLLAPSED.getValue() + 10
+                    && mechanisms.outtake.verticalSlide.verticalMotorRight.getCurrentPosition() <=
+                    ViperSlide.VerticalPosition.TRANSFER.getValue() + 10
+                    && !mechanisms.intake.intakeClaw.opened
+                    && mechanisms.outtake.outtakeClaw.clawServo.getPosition() > 0.8
+                    && mechanisms.outtake.shoulder.position() == Shoulder.Position.PLACE_BACKWARD) {
                 mechanisms.intake.intakeClaw.open();
                 scheduleTask(() -> mechanisms.outtake.moveShoulderToBack(), 200);
             }

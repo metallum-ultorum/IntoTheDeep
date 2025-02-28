@@ -8,11 +8,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Settings;
 
 public class VerticalSlide implements ViperSlide {
-    private final DcMotor verticalMotorLeft;
-    private final DcMotor verticalMotorRight;
+    public final DcMotor verticalMotorLeft;
+    public final DcMotor verticalMotorRight;
     private final RevTouchSensor touchSensor;
     private double encoderTarget;
     private VerticalPosition currentPosition;
+    private int currentPositionValue;
+
     private double currentOffset;
 
     public VerticalSlide(DcMotor verticalMotorLeft, DcMotor verticalMotorRight, RevTouchSensor verticalMotorTouchSensor) {
@@ -39,8 +41,8 @@ public class VerticalSlide implements ViperSlide {
     public void extend() {
         // Move to the next position in the enum, looping back to the start if needed
         VerticalPosition[] positions = VerticalPosition.values();
-        int nextIndex = (currentPosition.ordinal() + 1) % positions.length;
-        encoderTarget = positions[nextIndex].getValue();
+        currentPositionValue = (currentPositionValue + 1) % positions.length;
+        encoderTarget = positions[currentPositionValue].getValue();
         setPosition(encoderTarget);
     }
 
@@ -48,9 +50,9 @@ public class VerticalSlide implements ViperSlide {
     public void retract() {
         // Move to the previous position in the enum, looping back if needed
         VerticalPosition[] positions = VerticalPosition.values();
-        int prevIndex = (currentPosition.ordinal() - 1 + positions.length) % positions.length;
-        encoderTarget = positions[prevIndex].getValue();
-        setPosition(encoderTarget);
+        currentPositionValue = (currentPositionValue - 1 + positions.length) % positions.length;
+        encoderTarget = positions[currentPositionValue].getValue();
+        setPosition(VerticalPosition.TRANSFER);
     }
 
     @Override
