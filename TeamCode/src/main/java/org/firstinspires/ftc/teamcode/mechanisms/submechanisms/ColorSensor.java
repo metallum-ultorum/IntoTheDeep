@@ -51,13 +51,17 @@ public class ColorSensor {
     }
 
     /**
-     * Initializes Color Sensor
+     * Initializes Color Sensor and enables LED
      */
     public void init() {
         colorSensor.initialize();
         colorSensor.enableLed(true);
     }
 
+    /**
+     * Updates the data and checks if there is a desired object detected
+     * @return whether the gamepad should vibrate based on detected object
+     */
     public boolean update() {
         rgbValues[0] = colorSensor.red();
         rgbValues[1] = colorSensor.green();
@@ -83,30 +87,24 @@ public class ColorSensor {
     }
 
     public boolean isYellow() {
-        return rgbValues[0] > yellowMinValues[0]
-            && rgbValues[0] < yellowMaxValues[0]
-            && rgbValues[1] > yellowMinValues[1]
-            && rgbValues[1] < yellowMaxValues[1]
-            && rgbValues[2] > yellowMinValues[2]
-            && rgbValues[2] < yellowMaxValues[2];
+        return checkMinMaxValues(yellowMinValues, yellowMaxValues);
     }
 
     public boolean isRed() {
-        return rgbValues[0] > redMinValues[0]
-            && rgbValues[0] < redMaxValues[0]
-            && rgbValues[1] > redMinValues[1]
-            && rgbValues[1] < redMaxValues[1]
-            && rgbValues[2] > redMinValues[2]
-            && rgbValues[2] < redMaxValues[2];
+        return checkMinMaxValues(redMinValues, redMaxValues);
     }
 
     public boolean isBlue() {
-        return rgbValues[0] > blueMinValues[0]
-            && rgbValues[0] < blueMaxValues[0]
-            && rgbValues[1] > blueMinValues[1]
-            && rgbValues[1] < blueMaxValues[1]
-            && rgbValues[2] > blueMinValues[2]
-            && rgbValues[2] < blueMaxValues[2];
+        return checkMinMaxValues(blueMinValues, blueMaxValues);
+    }
+
+    public boolean checkMinMaxValues(double[] minValues, double[] maxValues) {
+        return rgbValues[0] > minValues[0]
+            && rgbValues[0] < maxValues[0]
+            && rgbValues[1] > minValues[1]
+            && rgbValues[1] < maxValues[1]
+            && rgbValues[2] > minValues[2]
+            && rgbValues[2] < maxValues[2];
     }
 
     public void setDesiredColors(ColorSensorOption newDesiredColors) {

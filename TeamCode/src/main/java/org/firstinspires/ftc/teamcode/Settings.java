@@ -410,6 +410,11 @@ public class Settings {
         // Extensor controls
         public GamepadButton extendHorizontal = GamepadButton.B;
         public GamepadButton retractHorizontal = GamepadButton.X;
+        public GamepadButton extendVerticalToChamber = GamepadButton.A;
+        public GamepadButton extendVerticalToChamberPrep = GamepadButton.X;
+        public GamepadButton extendVerticalToBasket = GamepadButton.Y;
+        public GamepadButton retractVerticalToTransfer = GamepadButton.B;
+
         public final GamepadButton retractVertical = GamepadButton.LEFT_BUMPER;
         public final GamepadButton extendVertical = GamepadButton.RIGHT_BUMPER;
 
@@ -417,10 +422,10 @@ public class Settings {
         public final GamepadAxis moveForward = GamepadAxis.LEFT_STICK_Y;
         public final GamepadAxis moveSideways = GamepadAxis.LEFT_STICK_X;
         public final GamepadAxis rotate = GamepadAxis.RIGHT_STICK_X;
-        public final GamepadButton flipMovement = GamepadButton.A;
+        public final GamepadButton flipMovement = GamepadButton.GUIDE;
 
-        public GamepadButton rotateRight = GamepadButton.A;
-        public GamepadButton rotateLeft = GamepadButton.X;
+        public GamepadButton rotateRight = GamepadButton.X;
+        public GamepadButton rotateLeft = GamepadButton.A;
 
         // Claw controls
         public final GamepadButton intakeIn = GamepadButton.LEFT_TRIGGER;

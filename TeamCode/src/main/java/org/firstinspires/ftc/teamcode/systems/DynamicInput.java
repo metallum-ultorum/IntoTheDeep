@@ -174,6 +174,7 @@ public class DynamicInput {
 
     public static class Actions {
         public final boolean extendHorizontal, retractHorizontal, retractVertical, extendVertical, extensorBusy;
+        public final boolean extendVerticalToChamber, extendVerticalToChamberPrep, extendVerticalToBasket, retractVerticalToTransfer;
         public final boolean intakeIn, intakeOut, intakeStop;
         public final boolean wristUp, wristDown;
         public final boolean ascendExtensorExtend, ascendExtensorRetract, ascendExtensorGround, ascendExtensorCeiling;
@@ -190,6 +191,10 @@ public class DynamicInput {
             this.retractHorizontal = getButtonState(subCtrl, subSettings.buttonMapping.retractHorizontal);
             this.retractVertical = getButtonState(mainCtrl, mainSettings.buttonMapping.retractVertical);
             this.extendVertical = getButtonState(mainCtrl, mainSettings.buttonMapping.extendVertical);
+            this.extendVerticalToChamber = getButtonState(mainCtrl, mainSettings.buttonMapping.extendVerticalToChamber);
+            this.extendVerticalToChamberPrep = getButtonState(mainCtrl, mainSettings.buttonMapping.extendVerticalToChamberPrep);
+            this.extendVerticalToBasket = getButtonState(mainCtrl, mainSettings.buttonMapping.extendVerticalToBasket);
+            this.retractVerticalToTransfer = getButtonState(mainCtrl, mainSettings.buttonMapping.retractVerticalToTransfer);
             this.extensorBusy = extendHorizontal || retractHorizontal || retractVertical;
             this.intakeIn = getButtonState(subCtrl, subSettings.buttonMapping.intakeIn);
             this.intakeOut = getButtonState(subCtrl, subSettings.buttonMapping.intakeOut);

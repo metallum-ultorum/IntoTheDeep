@@ -52,7 +52,7 @@ public class VerticalSlide implements ViperSlide {
         VerticalPosition[] positions = VerticalPosition.values();
         currentPositionValue = (currentPositionValue - 1 + positions.length) % positions.length;
         encoderTarget = positions[currentPositionValue].getValue();
-        setPosition(VerticalPosition.TRANSFER);
+        setPosition(encoderTarget);
     }
 
     @Override
