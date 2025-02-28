@@ -70,7 +70,7 @@ public class ChamberPedroAuto extends OpMode {
                 // Line 1
                 new BezierLine(
                         new Point(10.767, 59.940, Point.CARTESIAN),
-                        new Point(40.008, 72.105, Point.CARTESIAN)
+                        new Point(40.008, 70.105, Point.CARTESIAN)
                 )
         );
         initialPlaceOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -80,7 +80,7 @@ public class ChamberPedroAuto extends OpMode {
                         new Point(40.297, 67.884, Point.CARTESIAN),
                         new Point(6.891, 32.677, Point.CARTESIAN),
                         new Point(69.199, 32.631, Point.CARTESIAN),
-                        new Point(80.737, 26.162, Point.CARTESIAN),
+                        new Point(75.737, 26.162, Point.CARTESIAN),
                         new Point(61.168, 24.500, Point.CARTESIAN)
                 )
         );
@@ -118,7 +118,7 @@ public class ChamberPedroAuto extends OpMode {
         prepSample3 = new Path(
                 new BezierCurve(
                         new Point(17.784, 13.292, Point.CARTESIAN),
-                        new Point(77.045, 18.092, Point.CARTESIAN),
+                        new Point(72.045, 18.092, Point.CARTESIAN),
                         new Point(60.061, 8.492 + 1, Point.CARTESIAN)
                 )
         );
@@ -126,9 +126,10 @@ public class ChamberPedroAuto extends OpMode {
 
         pushSample3 = new Path(
                 // Line 7
-                new BezierLine(
+                new BezierCurve(
                         new Point(60.164, 10.544 + 1, Point.CARTESIAN),
-                        new Point(31.16653084252758, 10.544 + 1, Point.CARTESIAN)
+                        new Point(14.5, 10.544 + 1, Point.CARTESIAN),
+                        new Point(11.2, 10.544 + 3, Point.CARTESIAN)
                 )
         );
         pushSample3.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -138,7 +139,7 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(17.599 + testOffset[1], 8.677, Point.CARTESIAN),
                         new Point(46.584, 28.615, Point.CARTESIAN),
-                        new Point(10.478, 31.631, Point.CARTESIAN)
+                        new Point(11.178, 31.631, Point.CARTESIAN)
                 )
         );
         initialGrabFromHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -146,7 +147,7 @@ public class ChamberPedroAuto extends OpMode {
         grabFromHumanPlayer = new Path(
                 new BezierLine(
                         new Point(39.864, 63.984, Point.CARTESIAN),
-                        new Point(10.544, 31.631, Point.CARTESIAN)
+                        new Point(11.244, 31.631, Point.CARTESIAN)
                 )
         );
         grabFromHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -164,23 +165,23 @@ public class ChamberPedroAuto extends OpMode {
                 mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.PREP_HIGH_RUNG);
                 follower.followPath(initialPlaceOnChamber);
                 setPathState(1);
+                actionTimer.resetTimer();
                 break;
             case 1:
-                //TODO; Decrease this value as much as possible:
-                double firstActionLengthSeconds = 1.5; // 1.5s to vertically place specimen
-                double secondActionLengthSeconds = 0.2; // .2s to collapse
+                double firstActionLengthSeconds = 2; // to start vertically placing specimen
+                double secondActionLengthSeconds = 0.9; // to vertically place specimen
+                double thirdActionLengthSeconds = 0.2; // to collapse
 
-                if (!follower.isBusy() && actionState == 0) {
+                if (actionTimer.getElapsedTimeSeconds() > firstActionLengthSeconds && actionState == 0) {
                     // once the robot finished previous trajectory for the first time, begin scoring
                     actionState = 1;
                     actionTimer.resetTimer();
                     score();
-
                 }
 
                 if (actionState == 1) {
                     // once the robot spent enough time scoring, collapse
-                    if (actionTimer.getElapsedTimeSeconds() > firstActionLengthSeconds) {
+                    if (actionTimer.getElapsedTimeSeconds() > secondActionLengthSeconds) {
                         actionState = 2;
                         actionTimer.resetTimer();
                         collapse();
@@ -189,7 +190,7 @@ public class ChamberPedroAuto extends OpMode {
 
                 if (actionState == 2) {
                     // once the robot spent enough time collapsing, continue pathing
-                    if (actionTimer.getElapsedTimeSeconds() > secondActionLengthSeconds) {
+                    if (actionTimer.getElapsedTimeSeconds() > thirdActionLengthSeconds) {
                         setPathState(2);
                         actionState = 0;
                         /* Prep and push all the samples in a chain, then prep to grab the first specimen */
@@ -198,8 +199,8 @@ public class ChamberPedroAuto extends OpMode {
                         follower.followPath(new PathChain(
                                 prepSample1, pushSample1,
                                 prepSample2, pushSample2,
-                                prepSample3, pushSample3,
-                                initialGrabFromHumanPlayer
+                                prepSample3, pushSample3
+//                                ,initialGrabFromHumanPlayer
                         ), true);
                     }
                 }
@@ -233,9 +234,9 @@ public class ChamberPedroAuto extends OpMode {
                         Path placeOnChamber = new Path(
                                 // Line 9
                                 new BezierCurve(
-                                        new Point(10.478, 31.631, Point.CARTESIAN),
+                                        new Point(11.478, 31.631, Point.CARTESIAN),
                                         new Point(16.032, 60.951, Point.CARTESIAN),
-                                        new Point(40.008, 70.105 + (hpSpecimensPlaced * 2), Point.CARTESIAN)
+                                        new Point(40.008, 67.105 - (hpSpecimensPlaced * 2), Point.CARTESIAN)
                                 )
                         );
                         placeOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -319,7 +320,7 @@ public class ChamberPedroAuto extends OpMode {
 
     public void score() {
         mechanisms.outtake.outtakeClaw.close();
-        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 100);
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 150);
         mechanisms.outtake.moveShoulderToBack();
     }
 

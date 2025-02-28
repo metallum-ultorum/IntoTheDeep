@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.Settings;
  */
 public class Rotator {
     public static double position = 0;
-    public static final double horizontalPos = Settings.Hardware.Servo.Rotator.LEFT_LIMIT;
-    public static final double verticalPos = Settings.Hardware.Servo.Rotator.RIGHT_LIMIT;
+    public static final double leftLimit = Settings.Hardware.Servo.Rotator.LEFT_LIMIT;
+    public static final double rightLimit = Settings.Hardware.Servo.Rotator.RIGHT_LIMIT;
     public final Servo rotatorServo;
 
     public Rotator(Servo rotatorServo) {
@@ -20,12 +20,12 @@ public class Rotator {
 
     // Intended to be used with a joystick for variable control
     public void setPosition(double targetPosition) {
-        position = Range.clip(targetPosition, horizontalPos, verticalPos);
+        position = Range.clip(targetPosition, leftLimit, rightLimit);
         rotatorServo.setPosition(position);
     }
 
     public void init() {
-        setPosition(horizontalPos);
+        setPosition(leftLimit);
     }
 
     public void reset() {
