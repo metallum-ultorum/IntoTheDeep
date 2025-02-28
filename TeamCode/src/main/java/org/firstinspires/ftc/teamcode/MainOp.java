@@ -47,7 +47,7 @@ public class MainOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Show profile selection menu for both controllers
-        AtomicReference<ControllerProfile> mainProfile = new AtomicReference<>(Settings.DEFAULT_PROFILE);
+        AtomicReference<ControllerProfile> mainProfile = new AtomicReference<>(Settings.AGNEY_PROFILE);
         AtomicReference<ControllerProfile> subProfile = new AtomicReference<>(Settings.DEFAULT_PROFILE);
         boolean menuConfirmed = false;
         AtomicInteger mainSelection = new AtomicInteger();
@@ -83,6 +83,11 @@ public class MainOp extends LinearOpMode {
 
     public boolean refreshMenu(AtomicReference<ControllerProfile> mainProfile, AtomicReference<ControllerProfile> subProfile,
                                AtomicInteger mainSelection, AtomicInteger subSelection, AtomicBoolean mainConfirmed, AtomicBoolean subConfirmed) {
+        telemetry.addLine("\nSelected Profiles:");
+        telemetry.addData("Main Controller", mainProfile.get().name + (mainConfirmed.get() ? " (Confirmed)" : ""));
+        telemetry.addData("Sub Controller", subProfile.get().name + (subConfirmed.get() ? " (Confirmed)" : ""));
+        telemetry.addLine("Limelight Color: " + (pipeline == LimelightManager.LimelightPipeline.BLUE ? "BLUE" : "RED") + ". Press ▲ to switch.");
+
         // Build options array
         String[] mainOptions = new String[Settings.MAIN_AVAILABLE_PROFILES.length + 1];
         for (int i = 0; i < Settings.MAIN_AVAILABLE_PROFILES.length; i++) {
@@ -124,10 +129,6 @@ public class MainOp extends LinearOpMode {
                     gamepad1.rumble(200);
                 }
             }
-            if (gamepad1.triangle) {
-                pipeline = pipeline == LimelightManager.LimelightPipeline.BLUE ? LimelightManager.LimelightPipeline.RED : LimelightManager.LimelightPipeline.BLUE;
-                gamepad1.rumble(50);
-            }
         });
 
         MenuHelper.handleControllerInput(this, gamepad2, !subConfirmed.get(), () -> {
@@ -143,17 +144,12 @@ public class MainOp extends LinearOpMode {
                     gamepad2.rumble(200);
                 }
             }
-            if (gamepad2.triangle) {
-                pipeline = pipeline == LimelightManager.LimelightPipeline.BLUE ? LimelightManager.LimelightPipeline.RED : LimelightManager.LimelightPipeline.BLUE;
-                gamepad2.rumble(50);
-            }
         });
 
-        // Display selections
-        telemetry.addLine("\nSelected Profiles:");
-        telemetry.addData("Main Controller", mainProfile.get().name + (mainConfirmed.get() ? " (Confirmed)" : ""));
-        telemetry.addData("Sub Controller", subProfile.get().name + (subConfirmed.get() ? " (Confirmed)" : ""));
-        telemetry.addLine("Limelight Color: " + (pipeline == LimelightManager.LimelightPipeline.BLUE ? "BLUE" : "RED") + ". Press ▲ to switch.");
+        if (gamepad1.triangle) {
+            pipeline = pipeline == LimelightManager.LimelightPipeline.BLUE ? LimelightManager.LimelightPipeline.RED : LimelightManager.LimelightPipeline.BLUE;
+            gamepad1.rumble(50);
+        }
 
         // Set game controller colors based on confirmation
         if (mainConfirmed.get()) {
