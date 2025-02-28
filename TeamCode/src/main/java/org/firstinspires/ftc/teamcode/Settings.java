@@ -37,8 +37,6 @@ public class Settings {
                     bumper_rotation_speed = 0.8;
 
                     incremental_vertical = true;
-                    buttonMapping.rotateLeft = GamepadButton.OPTIONS;
-                    buttonMapping.rotateRight = GamepadButton.OPTIONS;
                 }
 
                 @Override
@@ -133,7 +131,7 @@ public class Settings {
         public static boolean invert_x_axis = false;
 
         /** Whether to use right stick for rotation instead of bumpers */
-        public static boolean use_right_stick_rotation = false;
+        public static boolean use_right_stick_rotation = true;
 
         /* Whether to move based on rotation or absolute heading */
 

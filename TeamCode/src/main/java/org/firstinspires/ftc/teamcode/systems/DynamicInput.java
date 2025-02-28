@@ -95,12 +95,14 @@ public class DynamicInput {
             rotationRight = rotation > 0 ? rotation : 0;
             rotationLeft = rotation < 0 ? -rotation : 0;
 
-            rotationRight += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateRight)
-                    ? Settings.DefaultGamepadSettings.bumper_rotation_speed
-                    : 0;
-            rotationLeft += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateLeft)
-                    ? Settings.DefaultGamepadSettings.bumper_rotation_speed
-                    : 0;
+            if (!Settings.DefaultGamepadSettings.use_right_stick_rotation) {
+                rotationRight += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateRight)
+                        ? Settings.DefaultGamepadSettings.bumper_rotation_speed
+                        : 0;
+                rotationLeft += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateLeft)
+                        ? Settings.DefaultGamepadSettings.bumper_rotation_speed
+                        : 0;
+            }
 
             // Set final values
             this.up = upPower;
