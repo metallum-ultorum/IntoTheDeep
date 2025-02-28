@@ -140,7 +140,8 @@ public class Settings {
 
         public static boolean use_absolute_positioning = false;
 
-        public static boolean incremental_horizontal = true;
+        public static boolean incremental_horizontal = false;
+
         public static boolean incremental_vertical = false;
 
         public final ButtonMapping buttonMapping;
