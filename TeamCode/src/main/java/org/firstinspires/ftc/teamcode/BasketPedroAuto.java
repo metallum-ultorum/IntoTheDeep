@@ -193,7 +193,7 @@ public class BasketPedroAuto extends OpMode {
                 }
                 break;
             case 2:
-                double harsithAlignmentLengthSeconds = 0.1; // 0.1 seconds to give harsith time
+                double harsithAlignmentLengthSeconds = 0; // 0.1 seconds to give harsith time
                 //noinspection SpellCheckingInspection
                 double grabLengthSeconds = 0.3; // half a second to yoinky sploinky
 

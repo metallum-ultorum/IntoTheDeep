@@ -183,7 +183,7 @@ public class MainOp extends LinearOpMode {
                 mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
             }
 
-            if (input.subSettings.incremental_horizontal) {
+            if (Settings.DefaultGamepadSettings.incremental_horizontal) {
                 if (contextualActions.extendHorizontal) {
                     mechanisms.intake.horizontalSlide.increment();
                 } else if (contextualActions.retractHorizontal) {
@@ -205,7 +205,7 @@ public class MainOp extends LinearOpMode {
         }
 
         if (Settings.Deploy.OUTTAKE) {
-            if (input.mainSettings.incremental_vertical) {
+            if (Settings.DefaultGamepadSettings.incremental_vertical) {
                 if (mechanisms.outtake.verticalSlide.isTouchingSensor()) {
                     mechanisms.outtake.verticalSlide.increment(1);
                 }
@@ -226,7 +226,7 @@ public class MainOp extends LinearOpMode {
             if (contextualActions.justToggleClaw) {
                 if (mechanisms.outtake.outtakeClaw.opened) {
                     mechanisms.outtake.outtakeClaw.close();
-                    scheduleTask(() -> mechanisms.intake.intakeClaw.open(), 200);
+                    scheduleTask(() -> mechanisms.intake.intakeClaw.open(), 400);
                 } else {
                     mechanisms.outtake.outtakeClaw.open();
                 }

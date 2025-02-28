@@ -129,7 +129,7 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(60.164, 10.544 + 1, Point.CARTESIAN),
                         new Point(14.5, 10.544 + 1, Point.CARTESIAN),
-                        new Point(11.5, 10.544 + 3, Point.CARTESIAN)
+                        new Point(11.2, 10.544 + 3, Point.CARTESIAN)
                 )
         );
         pushSample3.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -139,7 +139,7 @@ public class ChamberPedroAuto extends OpMode {
                 new BezierCurve(
                         new Point(17.599 + testOffset[1], 8.677, Point.CARTESIAN),
                         new Point(46.584, 28.615, Point.CARTESIAN),
-                        new Point(11.478, 31.631, Point.CARTESIAN)
+                        new Point(11.178, 31.631, Point.CARTESIAN)
                 )
         );
         initialGrabFromHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(0));
@@ -147,7 +147,7 @@ public class ChamberPedroAuto extends OpMode {
         grabFromHumanPlayer = new Path(
                 new BezierLine(
                         new Point(39.864, 63.984, Point.CARTESIAN),
-                        new Point(11.544, 31.631, Point.CARTESIAN)
+                        new Point(11.244, 31.631, Point.CARTESIAN)
                 )
         );
         grabFromHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(0));

@@ -21,7 +21,7 @@ public class Settings {
         /** Default speed for autonomous movements */
         public static double default_autonomous_speed = 0.6;
         /** Flips movement to make movement easier while the robot is backwards **/
-        public static int flip_movement = -1;
+        public static int flip_movement = 1;
         /**
          * Determines if the gecko wheels outtake a little when closing the claw to ease
          * transfer
@@ -108,37 +108,38 @@ public class Settings {
     });
 
     // Gamepad settings
+    @Config
     public static class DefaultGamepadSettings {
         /** Sensitivity multiplier for left stick input */
-        public double left_stick_sensitivity = 1.0;
+        public static double left_stick_sensitivity = 1.0;
         /** Speed for dpad-based absolute movement, from 0 to 1 */
-        public double dpad_movement_speed = 0.3;
-        public double trigger_threshold = 0.1;
+        public static double dpad_movement_speed = 0.3;
+        public static double trigger_threshold = 0.1;
 
         /** Deadzone for stick inputs to prevent drift */
-        public double stick_deadzone = 0.05;
+        public static double stick_deadzone = 0.05;
 
         /** Sensitivity multiplier for right stick input */
-        public double right_stick_sensitivity = 0.7;
+        public static double right_stick_sensitivity = 0.7;
 
         /** Bumper rotation speed */
-        public double bumper_rotation_speed = 0.8;
+        public static double bumper_rotation_speed = 0.8;
 
         /** Whether to invert Y axis controls */
-        public boolean invert_y_axis = false;
+        public static boolean invert_y_axis = false;
 
         /** Whether to invert X axis controls */
-        public boolean invert_x_axis = false;
+        public static boolean invert_x_axis = false;
 
         /** Whether to use right stick for rotation instead of bumpers */
-        public boolean use_right_stick_rotation = false;
+        public static boolean use_right_stick_rotation = false;
 
         /* Whether to move based on rotation or absolute heading */
 
-        public boolean use_absolute_positioning = false;
+        public static boolean use_absolute_positioning = false;
 
-        public boolean incremental_horizontal = false;
-        public boolean incremental_vertical = false;
+        public static boolean incremental_horizontal = true;
+        public static boolean incremental_vertical = false;
 
         public final ButtonMapping buttonMapping;
 
@@ -289,7 +290,7 @@ public class Settings {
             @Config
             public static class Wrist {
                 public static double HORIZONTAL_POSITION = .53;
-                public static double VERTICAL_POSITION = 0.85;
+                public static double VERTICAL_POSITION = 0.88;
                 public static double READY_POSITION = .65;
             }
 
@@ -347,7 +348,7 @@ public class Settings {
 
             public static int HIGH_RUNG_PREP_AUTO = 1890;
             public static int HIGH_RUNG = 2250;
-            public static int HIGH_BASKET = 3150;
+            public static int HIGH_BASKET = 3100;
 
             // Motor power settings
             public static double MOVEMENT_POWER = 1;
