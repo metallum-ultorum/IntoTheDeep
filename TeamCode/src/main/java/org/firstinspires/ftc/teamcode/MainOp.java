@@ -221,7 +221,7 @@ public class MainOp extends LinearOpMode {
                 if (contextualActions.extendVerticalToBasket) {
                     mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);
                 } else if (contextualActions.extendVerticalToChamber) {
-                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG);
+                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 150);
                 } else if (contextualActions.extendVerticalToChamberPrep) {
                     mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.PREP_HIGH_RUNG);
                 } else if (contextualActions.retractVerticalToTransfer) {
