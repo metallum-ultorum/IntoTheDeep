@@ -265,6 +265,14 @@ public class Settings {
         public static double CALIBRATION_APPROXIMATION_COEFFICIENT = 0;
     }
 
+    @Config
+    public static class Assistance {
+        public static double inverseLateralMultiplier = 50; // move at full power at 30 inches laterally away, going down to 0.0333333333 at 1 inch away
+        public static double minimumRotationCorrectionThreshold = Math.PI / 50; // Don't correct heading within 0.1570796327
+        public static double approachSpeed = 0.3; // if within an inch it's good enough
+        public static double limelightWindowSize = 40; // degrees
+    }
+
     // Hardware settings
     @Config
     public static class Hardware {
@@ -371,7 +379,7 @@ public class Settings {
 
             // Motor power settings
             public static double MOVEMENT_POWER = 0.5;
-            public static double INCREMENTAL_MOVEMENT_POWER = 15;
+            public static int INCREMENTAL_MOVEMENT_POWER = 15;
         }
 
         @Config

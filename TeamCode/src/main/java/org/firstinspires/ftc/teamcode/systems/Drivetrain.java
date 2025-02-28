@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.systems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Settings;
 
@@ -59,5 +60,14 @@ public class Drivetrain {
         frontRightMotor.setPower(frontRight);
         rearLeftMotor.setPower(rearLeft);
         rearRightMotor.setPower(rearRight);
+    }
+
+    public void lerpToOffset(double offsetX, double offsetY, double offsetHeading) {
+        double drivePower = -offsetY;
+        double strafePower = Range.clip((-offsetX * 1.2) / Settings.Assistance.inverseLateralMultiplier, -1, 1);
+        // offsetHeading is -Pi/2 to pi/2, where 0 is the target heading
+        double rotation = Range.clip(offsetHeading, -Math.PI / 2, Math.PI / 2) / (Math.PI / 2);
+        rotation = Math.abs(rotation) < Settings.Assistance.minimumRotationCorrectionThreshold ? 0 : rotation;
+        mecanumDrive(drivePower, strafePower, rotation);
     }
 }

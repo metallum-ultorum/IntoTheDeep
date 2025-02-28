@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.localization.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Settings.ControllerProfile;
 import org.firstinspires.ftc.teamcode.mechanisms.MechanismManager;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.LimelightManager;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
@@ -29,7 +31,11 @@ public class MainOp extends LinearOpMode {
     MechanismManager mechanisms;
     DynamicInput input;
     Drivetrain drivetrain;
+    GoBildaPinpointDriver manualPinpoint;
+    boolean CHASSIS_DISABLED = false;
+    LimelightManager.LimelightPipeline pipeline = LimelightManager.LimelightPipeline.BLUE;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    double storedTx;
 
     /**
      * Main execution flow:
@@ -57,11 +63,14 @@ public class MainOp extends LinearOpMode {
         mechanisms = new MechanismManager(hardwareMap);
         input = new DynamicInput(gamepad1, gamepad2, mainProfile.get(), subProfile.get());
         drivetrain = new Drivetrain(hardwareMap);
-
         // Main loop
         waitForStart();
         mechanisms.init();
+        mechanisms.outtake.verticalSlide.reset(); // fixme
+        manualPinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        mechanisms.intake.limelight.setCurrentPipeline(pipeline);
         while (opModeIsActive()) {
+            manualPinpoint.update();
             gamepadPrimary();
             gamepadAuxiliary();
             checkAutomationConditions();
@@ -89,7 +98,6 @@ public class MainOp extends LinearOpMode {
 
         // Display menu header
         telemetry.addLine("=== Controller Profile Selection ===");
-
         // Main Controller Menu
         if (!mainConfirmed.get()) {
             telemetry.addLine("\nMain Controller (Gamepad 1):");
@@ -113,7 +121,12 @@ public class MainOp extends LinearOpMode {
                     mainProfile.set(Settings.MAIN_AVAILABLE_PROFILES[mainSelection.get()]);
                 } else {
                     mainConfirmed.set(true);
+                    gamepad1.rumble(200);
                 }
+            }
+            if (gamepad1.triangle) {
+                pipeline = pipeline == LimelightManager.LimelightPipeline.BLUE ? LimelightManager.LimelightPipeline.RED : LimelightManager.LimelightPipeline.BLUE;
+                gamepad1.rumble(50);
             }
         });
 
@@ -127,7 +140,12 @@ public class MainOp extends LinearOpMode {
                     subProfile.set(Settings.SUB_AVAILABLE_PROFILES[subSelection.get()]);
                 } else {
                     subConfirmed.set(true);
+                    gamepad2.rumble(200);
                 }
+            }
+            if (gamepad2.triangle) {
+                pipeline = pipeline == LimelightManager.LimelightPipeline.BLUE ? LimelightManager.LimelightPipeline.RED : LimelightManager.LimelightPipeline.BLUE;
+                gamepad2.rumble(50);
             }
         });
 
@@ -135,6 +153,20 @@ public class MainOp extends LinearOpMode {
         telemetry.addLine("\nSelected Profiles:");
         telemetry.addData("Main Controller", mainProfile.get().name + (mainConfirmed.get() ? " (Confirmed)" : ""));
         telemetry.addData("Sub Controller", subProfile.get().name + (subConfirmed.get() ? " (Confirmed)" : ""));
+        telemetry.addLine("Limelight Color: " + (pipeline == LimelightManager.LimelightPipeline.BLUE ? "BLUE" : "RED") + ". Press ▲ to switch.");
+
+        // Set game controller colors based on confirmation
+        if (mainConfirmed.get()) {
+            gamepad1.setLedColor(0, 255, 0, 1000);
+        } else {
+            gamepad1.setLedColor(255, 0, 0, 1000);
+        }
+
+        if (subConfirmed.get()) {
+            gamepad2.setLedColor(0, 255, 0, 1000);
+        } else {
+            gamepad2.setLedColor(255, 0, 0, 1000);
+        }
 
         // Check for menu completion
         if (mainConfirmed.get() && subConfirmed.get()) {
@@ -147,6 +179,9 @@ public class MainOp extends LinearOpMode {
     }
 
     public void gamepadPrimary() {
+        if (CHASSIS_DISABLED) {
+            return;
+        }
         DynamicInput.Movements directions = input.getMovements();
         DynamicInput.Actions actions = input.getActions();
 
@@ -283,9 +318,52 @@ public class MainOp extends LinearOpMode {
     }
 
     public void checkAssistanceConditions() {
-        if (mechanisms.intake.limelight.update()) {
-            gamepad2.rumble(50);
+        if (mechanisms.intake.limelight.specimenDetected() && Math.abs(manualPinpoint.getHeading()) < 0.3) {
+            if (gamepad1.touchpad) {
+                gamepad1.setLedColor(0, 0, 255, 1000);
+                drivetrain.lerpToOffset(
+                        mechanisms.intake.limelight.limelight.getLatestResult().getTx(),
+                        Settings.Assistance.approachSpeed,
+                        wrappedHeading()
+                );
+                storedTx = mechanisms.intake.limelight.limelight.getLatestResult().getTx();
+                CHASSIS_DISABLED = true;
+
+            } else {
+                gamepad1.rumble(50);
+                gamepad1.setLedColor(0, 255, 0, 1000);
+                CHASSIS_DISABLED = false;
+            }
+        } else if (CHASSIS_DISABLED && gamepad1.touchpad && storedTx != 0) {
+            gamepad1.setLedColor(255, 0, 255, 1000);
+            drivetrain.lerpToOffset(
+                    mechanisms.intake.limelight.limelight.getLatestResult().getTx(),
+                    0.35,
+                    wrappedHeading()
+            );
+        } else {
+            storedTx = 0;
+            if (gamepad1.touchpad) {
+                gamepad1.setLedColor(0, 255, 255, 1000);
+                drivetrain.lerpToOffset(
+                        0,
+                        0,
+                        wrappedHeading()
+                );
+                CHASSIS_DISABLED = true;
+            } else {
+                gamepad1.setLedColor(255, 0, 0, 1000);
+                CHASSIS_DISABLED = false;
+            }
         }
+        telemetry.addData("limelight tx", mechanisms.intake.limelight.limelight.getLatestResult().getTx());
+        telemetry.addData("limelight ty", mechanisms.intake.limelight.limelight.getLatestResult().getTy());
+        telemetry.addData("limelight detects specimen?", mechanisms.intake.limelight.specimenDetected());
+        telemetry.addData("heading", wrappedHeading());
+    }
+
+    public double wrappedHeading() {
+        return (manualPinpoint.getHeading() + Math.PI) % (2 * Math.PI) - Math.PI;
     }
 
     public void scheduleTask(Runnable task, long delayMillis) {

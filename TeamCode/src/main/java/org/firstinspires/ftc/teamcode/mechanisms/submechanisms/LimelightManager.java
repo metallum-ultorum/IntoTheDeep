@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
+import org.firstinspires.ftc.teamcode.Settings;
+
 /**
  * Incoming Yap Session:
  * Limelight returns Tx and Ty values, which return angles for where a detected object is,
@@ -11,12 +13,12 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
  * Contact Rishu if any of this is confusing
  */
 public class LimelightManager {
-    Limelight3A limelight;
+    public Limelight3A limelight;
     LLResult currentResult;
     LimelightPipeline currentPipeline = LimelightPipeline.RED;
     double lastTx = 0;
     double lastTy = 0;
-    double angleNeededForRumble = 5;
+    double angleNeededForRumble = 25;
 
     public LimelightManager(Limelight3A limelight) {
         this.limelight = limelight;
@@ -33,14 +35,12 @@ public class LimelightManager {
 
     /**
      * Updates the data and checks if there is a desired object detected
-     * @return whether the gamepad should vibrate based on detected object
+     * @return if a specimen is detected
      */
-    public boolean update() {
+    public boolean specimenDetected() {
         currentResult = limelight.getLatestResult();
         if (currentResult.getTx() != 0 && currentResult.getTy() != 0
-                && lastTx != 0 && lastTy != 0
-        && (currentResult.getTx() == lastTx && currentResult.getTy() == lastTy)
-        && (Math.abs(currentResult.getTx()) < angleNeededForRumble)) {
+                && (Math.abs(currentResult.getTx()) < Settings.Assistance.limelightWindowSize)) {
             return true;
         }
         lastTx = currentResult.getTx();

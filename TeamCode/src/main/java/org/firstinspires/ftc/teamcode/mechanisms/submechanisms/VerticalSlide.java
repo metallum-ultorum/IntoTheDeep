@@ -102,8 +102,8 @@ public class VerticalSlide implements ViperSlide {
     }
 
     public void reset() {
-            verticalMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            verticalMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        verticalMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        verticalMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void init() {
