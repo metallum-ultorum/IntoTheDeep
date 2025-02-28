@@ -63,7 +63,7 @@ public class BasketPedroAuto extends OpMode {
                 // Line 1
                 new BezierCurve(
                         new Point(9.757, 84.983, Point.CARTESIAN),
-                        new Point(27.088, 86.804, Point.CARTESIAN),
+                        new Point(35.863, 83.627, Point.CARTESIAN),
                         new Point(13.800, 130.423, Point.CARTESIAN)
                 )
         );
