@@ -37,6 +37,8 @@ public class Settings {
                     bumper_rotation_speed = 0.8;
 
                     incremental_vertical = true;
+                    buttonMapping.rotateLeft = null;
+                    buttonMapping.rotateRight = null;
                 }
 
                 @Override
@@ -283,7 +285,7 @@ public class Settings {
             @Config
             public static class IntakeClaw {
                 /** Values for open and closed positions on the outtake claw */
-                public static double OPEN = 0.55;
+                public static double OPEN = 0.5;
                 public static double CLOSED = 0.8;
             }
 
