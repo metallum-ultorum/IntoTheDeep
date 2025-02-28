@@ -190,6 +190,7 @@ public class BasketPedroAuto extends OpMode {
 //                                ,initialGrabFromHumanPlayer
                         ), true);
                     }
+                    actionTimer.resetTimer();
                 }
                 break;
             case 2:
@@ -230,11 +231,12 @@ public class BasketPedroAuto extends OpMode {
                         follower.followPath(placeOnChamber);
                         setPathState(3);
                     }
+                    actionTimer.resetTimer();
                 }
                 break;
             case 3:
-                /* Wait until we are in position to score */
-                if (!follower.isBusy() && actionState == 0) {
+                double placeTime = 2.5; // to start vertically placing specimen
+                if (actionTimer.getElapsedTimeSeconds() < placeTime && actionState == 0) {
                     /* Score Sample */
                     score();
                     actionTimer.resetTimer();
