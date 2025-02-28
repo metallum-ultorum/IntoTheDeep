@@ -67,7 +67,6 @@ public class MainOp extends LinearOpMode {
         // Main loop
         waitForStart();
         mechanisms.init();
-        mechanisms.outtake.verticalSlide.reset(); // fixme
         manualPinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         mechanisms.intake.limelight.setCurrentPipeline(pipeline);
         while (opModeIsActive()) {

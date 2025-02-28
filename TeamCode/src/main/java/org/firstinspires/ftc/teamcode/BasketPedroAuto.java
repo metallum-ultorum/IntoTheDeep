@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.mechanisms.MechanismManager;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Rotator;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Shoulder;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.ViperSlide;
 import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Wrist;
@@ -283,7 +284,7 @@ public class BasketPedroAuto extends OpMode {
         mechanisms.outtake.moveShoulderToFront();
         mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
         mechanisms.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.COLLAPSED);
-        mechanisms.intake.rotator.setPosition(0.5);
+        mechanisms.intake.rotator.setPosition(Rotator.center);
         mechanisms.intake.intakeClaw.close();
     }
 
@@ -296,7 +297,7 @@ public class BasketPedroAuto extends OpMode {
         mechanisms.outtake.outtakeClaw.open();
         mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_FORWARD);
         mechanisms.intake.intakeClaw.open();
-        mechanisms.intake.rotator.setPosition(0.5);
+        mechanisms.intake.rotator.setPosition(Rotator.center);
         mechanisms.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.LEVEL_1);
         mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
     }

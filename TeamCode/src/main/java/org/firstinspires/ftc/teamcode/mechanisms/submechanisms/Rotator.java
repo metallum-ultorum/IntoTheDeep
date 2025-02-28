@@ -12,6 +12,7 @@ public class Rotator {
     public static double position = 0;
     public static final double leftLimit = Settings.Hardware.Servo.Rotator.LEFT_LIMIT;
     public static final double rightLimit = Settings.Hardware.Servo.Rotator.RIGHT_LIMIT;
+    public static final double center = Settings.Hardware.Servo.Rotator.CENTER;
     public final Servo rotatorServo;
 
     public Rotator(Servo rotatorServo) {
@@ -25,7 +26,7 @@ public class Rotator {
     }
 
     public void init() {
-        setPosition(leftLimit);
+        setPosition(center);
     }
 
     public void reset() {

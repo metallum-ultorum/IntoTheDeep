@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.systems;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Settings;
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.Rotator;
 
 public class DynamicInput {
     public final Gamepad mainCtrl;
@@ -58,46 +59,46 @@ public class DynamicInput {
             // Get mapped axis values with deadzone
             double leftStickY = applyDeadzone(
                     getAxisValue(mainCtrl, mainSettings.buttonMapping.moveForward),
-                    mainSettings.stick_deadzone);
+                    Settings.DefaultGamepadSettings.stick_deadzone);
             double leftStickX = applyDeadzone(
                     getAxisValue(mainCtrl, mainSettings.buttonMapping.moveSideways),
-                    mainSettings.stick_deadzone);
+                    Settings.DefaultGamepadSettings.stick_deadzone);
             double rightStickX = applyDeadzone(
                     getAxisValue(mainCtrl, mainSettings.buttonMapping.rotate),
-                    mainSettings.stick_deadzone);
+                    Settings.DefaultGamepadSettings.stick_deadzone);
 
             // Apply sensitivities and inversion
-            leftStickY *= mainSettings.invert_y_axis ? -1 : 1;
-            leftStickX *= mainSettings.invert_x_axis ? -1 : 1;
+            leftStickY *= Settings.DefaultGamepadSettings.invert_y_axis ? -1 : 1;
+            leftStickX *= Settings.DefaultGamepadSettings.invert_x_axis ? -1 : 1;
 
-            double upPower = (leftStickY < 0 ? -leftStickY : 0) * mainSettings.left_stick_sensitivity;
-            double downPower = (leftStickY > 0 ? leftStickY : 0) * mainSettings.left_stick_sensitivity;
-            double rightPower = (leftStickX > 0 ? leftStickX : 0) * mainSettings.left_stick_sensitivity;
-            double leftPower = (leftStickX < 0 ? -leftStickX : 0) * mainSettings.left_stick_sensitivity;
+            double upPower = (leftStickY < 0 ? -leftStickY : 0) * Settings.DefaultGamepadSettings.left_stick_sensitivity;
+            double downPower = (leftStickY > 0 ? leftStickY : 0) * Settings.DefaultGamepadSettings.left_stick_sensitivity;
+            double rightPower = (leftStickX > 0 ? leftStickX : 0) * Settings.DefaultGamepadSettings.left_stick_sensitivity;
+            double leftPower = (leftStickX < 0 ? -leftStickX : 0) * Settings.DefaultGamepadSettings.left_stick_sensitivity;
 
             // Add absolute movement using mapped buttons
             if (getButtonState(mainCtrl, mainSettings.buttonMapping.moveUp))
-                upPower = mainSettings.dpad_movement_speed;
+                upPower = Settings.DefaultGamepadSettings.dpad_movement_speed;
             if (getButtonState(mainCtrl, mainSettings.buttonMapping.moveDown))
-                downPower = mainSettings.dpad_movement_speed;
+                downPower = Settings.DefaultGamepadSettings.dpad_movement_speed;
             if (getButtonState(mainCtrl, mainSettings.buttonMapping.moveRight))
-                rightPower = mainSettings.dpad_movement_speed;
+                rightPower = Settings.DefaultGamepadSettings.dpad_movement_speed;
             if (getButtonState(mainCtrl, mainSettings.buttonMapping.moveLeft))
-                leftPower = mainSettings.dpad_movement_speed;
+                leftPower = Settings.DefaultGamepadSettings.dpad_movement_speed;
 
             // Handle rotation based on settings
             double rotationRight;
             double rotationLeft;
 
-            double rotation = rightStickX * mainSettings.right_stick_sensitivity;
+            double rotation = rightStickX * Settings.DefaultGamepadSettings.right_stick_sensitivity;
             rotationRight = rotation > 0 ? rotation : 0;
             rotationLeft = rotation < 0 ? -rotation : 0;
 
             rotationRight += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateRight)
-                    ? mainSettings.bumper_rotation_speed
+                    ? Settings.DefaultGamepadSettings.bumper_rotation_speed
                     : 0;
             rotationLeft += getButtonState(mainCtrl, mainSettings.buttonMapping.rotateLeft)
-                    ? mainSettings.bumper_rotation_speed
+                    ? Settings.DefaultGamepadSettings.bumper_rotation_speed
                     : 0;
 
             // Set final values
@@ -221,7 +222,7 @@ public class DynamicInput {
             this.shoulderDown = getButtonState(subCtrl, subSettings.buttonMapping.shoulderDown);
             this.shoulderUp = getButtonState(subCtrl, subSettings.buttonMapping.shoulderUp);
             this.flipMovement = getButtonState(mainCtrl, mainSettings.buttonMapping.flipMovement);
-            this.rotator = (getAxisValue(subCtrl, subSettings.buttonMapping.rotator)/-2) + 0.5;
+            this.rotator = (getAxisValue(subCtrl, subSettings.buttonMapping.rotator) * Rotator.center) + Rotator.center;
         }
     }
 

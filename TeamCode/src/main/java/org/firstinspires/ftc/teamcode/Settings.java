@@ -308,7 +308,8 @@ public class Settings {
             @Config
             public static class Rotator {
                 public static double LEFT_LIMIT = 0; //TODO: PHYSICALLY ADJUST TO MAKE THIS AS CLOSE TO THE MIDDLE AS POSSIBLE, THEN TUNE
-                public static double RIGHT_LIMIT = 1; //TODO: SWAP WITH LEFT_LIMIT IF NEEDED
+                public static double RIGHT_LIMIT = 1;
+                public static double CENTER = (LEFT_LIMIT + RIGHT_LIMIT) / 2;
             }
 
             @Config
