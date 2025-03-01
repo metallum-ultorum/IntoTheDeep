@@ -71,18 +71,61 @@ public class VerticalSlide implements ViperSlide {
     }
 
     public void increment(int encoderTicks) {
-        if (encoderTarget - currentOffset < VerticalPosition.HIGH_BASKET.getValue()) {
-            encoderTarget += encoderTicks;
+        switch (Settings.Deploy.VERTICAL_SLIDE_MODE) {
+            case RIGHT_ONLY_RAW:
+                verticalMotorRight.setPower(MOVEMENT_POWER);
+                break;
+            case LEFT_ONLY_RAW:
+                verticalMotorLeft.setPower(MOVEMENT_POWER);
+                break;
+            case RAW:
+                verticalMotorRight.setPower(MOVEMENT_POWER);
+                verticalMotorLeft.setPower(MOVEMENT_POWER);
+                break;
+            default:
+                if (encoderTarget - currentOffset < VerticalPosition.HIGH_BASKET.getValue()) {
+                    encoderTarget += encoderTicks;
+                }
+                setPosition(encoderTarget);
+                break;
         }
-        setPosition(encoderTarget);
     }
 
     @Override
     public void decrement() {
-        if (!Settings.Hardware.VerticalSlide.ENABLE_LOWER_LIMIT || !touchSensor.isPressed() || encoderTarget - currentOffset > VerticalPosition.TRANSFER.getValue()) {
-            encoderTarget -= Settings.Hardware.VerticalSlide.INCREMENTAL_MOVEMENT_POWER;
+        switch (Settings.Deploy.VERTICAL_SLIDE_MODE) {
+            case RIGHT_ONLY_RAW:
+                verticalMotorRight.setPower(-MOVEMENT_POWER);
+                break;
+            case LEFT_ONLY_RAW:
+                verticalMotorLeft.setPower(-MOVEMENT_POWER);
+                break;
+            case RAW:
+                verticalMotorRight.setPower(-MOVEMENT_POWER);
+                verticalMotorLeft.setPower(-MOVEMENT_POWER);
+                break;
+            default:
+                if (!Settings.Hardware.VerticalSlide.ENABLE_LOWER_LIMIT || !touchSensor.isPressed() || encoderTarget - currentOffset > VerticalPosition.TRANSFER.getValue()) {
+                    encoderTarget -= Settings.Hardware.VerticalSlide.INCREMENTAL_MOVEMENT_POWER;
+                }
+                setPosition(encoderTarget);
+                break;
         }
-        setPosition(encoderTarget);
+    }
+
+    public void maybeStop() {
+        switch (Settings.Deploy.VERTICAL_SLIDE_MODE) {
+            case RAW:
+                verticalMotorLeft.setPower(0);
+                verticalMotorRight.setPower(0);
+                break;
+            case RIGHT_ONLY_RAW:
+                verticalMotorRight.setPower(0);
+                break;
+            case LEFT_ONLY_RAW:
+                verticalMotorLeft.setPower(0);
+                break;
+        }
     }
 
     public boolean isTouchingSensor() {
@@ -90,25 +133,35 @@ public class VerticalSlide implements ViperSlide {
     }
 
     public void checkMotors() {
-        if (Settings.Deploy.customVerticalSlidePID) {
-            if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 80) {
-                verticalMotorRight.setPower(getIdlePower(encoderTarget));
-                verticalMotorLeft.setPower(getIdlePower(encoderTarget));
-            } else if (encoderTarget > verticalMotorRight.getCurrentPosition()) {
-                verticalMotorRight.setPower(MOVEMENT_POWER);
-                verticalMotorLeft.setPower(MOVEMENT_POWER);
-            } else {
-                verticalMotorRight.setPower(-MOVEMENT_POWER);
-                verticalMotorLeft.setPower(-MOVEMENT_POWER);
-            }
-        } else {
-            if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
-                verticalMotorRight.setPower(0);
-                verticalMotorLeft.setPower(0);
-            } else {
-                verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
-                verticalMotorLeft.setPower(verticalMotorRight.getPower());
-            }
+        switch (Settings.Deploy.VERTICAL_SLIDE_MODE) {
+            case CUSTOM_RTP:
+                if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 30) {
+                    verticalMotorRight.setPower(getIdlePower(encoderTarget));
+                    verticalMotorLeft.setPower(getIdlePower(encoderTarget));
+                } else if (encoderTarget > verticalMotorRight.getCurrentPosition()) {
+                    verticalMotorRight.setPower(MOVEMENT_POWER);
+                    verticalMotorLeft.setPower(MOVEMENT_POWER);
+                } else {
+                    verticalMotorRight.setPower(-MOVEMENT_POWER);
+                    verticalMotorLeft.setPower(-MOVEMENT_POWER);
+                }
+                break;
+            case RUN_TO_POSITION:
+                if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
+                    verticalMotorRight.setPower(0);
+                    verticalMotorLeft.setPower(0);
+                } else {
+                    verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
+                    verticalMotorLeft.setPower(verticalMotorRight.getPower());
+                }
+                break;
+            case RIGHT_ONLY_RTP:
+                if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
+                    verticalMotorRight.setPower(0);
+                } else {
+                    verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
+                }
+                break;
         }
     }
 
@@ -139,14 +192,34 @@ public class VerticalSlide implements ViperSlide {
 
         setPosition(VerticalPosition.TRANSFER);
 
-        if (Settings.Deploy.customVerticalSlidePID) {
-            verticalMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            verticalMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        } else {
-            verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        switch (Settings.Deploy.VERTICAL_SLIDE_MODE) {
+            case CUSTOM_RTP:
+                verticalMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                verticalMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case RUN_TO_POSITION:
+                verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            case RIGHT_ONLY_RTP:
+                verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            case RIGHT_ONLY_RAW:
+                verticalMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case LEFT_ONLY_RAW:
+                verticalMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case RAW:
+                verticalMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                verticalMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         this.currentPosition = VerticalPosition.TRANSFER;
         encoderTarget = verticalMotorRight.getTargetPosition();
+
+    }
+
+    public enum verticalRunModes {
+        RUN_TO_POSITION,
+        CUSTOM_RTP,
+        RIGHT_ONLY_RTP,
+        RAW,
+        RIGHT_ONLY_RAW,
+        LEFT_ONLY_RAW
     }
 }

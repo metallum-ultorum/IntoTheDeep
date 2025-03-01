@@ -27,7 +27,7 @@ public interface ViperSlide {
 //        Not needed anymore as low rung can be reached at lowest position
 //        LOW_RUNG(Settings.Hardware.VerticalSlide.LOW_RUNG),
 //        LOW_BASKET(Settings.Hardware.VerticalSlide.LOW_BASKET),
-PREP_HIGH_RUNG(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO),
+        PREP_HIGH_RUNG(Settings.Hardware.VerticalSlide.HIGH_RUNG_PREP_AUTO),
         HIGH_RUNG(Settings.Hardware.VerticalSlide.HIGH_RUNG),
         HIGH_BASKET(Settings.Hardware.VerticalSlide.HIGH_BASKET),
         HANG_RUNG_1(Settings.Hardware.VerticalSlide.HANG_RUNG_1);

@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.mechanisms.submechanisms.VerticalSlide;
 
 import java.lang.reflect.Field;
 
@@ -203,7 +206,7 @@ public class Settings {
             JUST_PARK, JUST_PLACE, CHAMBER, BASKET
         }
 
-        public static boolean customVerticalSlidePID = false;
+        public static VerticalSlide.verticalRunModes VERTICAL_SLIDE_MODE = VerticalSlide.verticalRunModes.CUSTOM_RTP;
     }
 
     public static String getDisabledFlags() {
@@ -369,6 +372,7 @@ public class Settings {
             public static double INCREMENTAL_MOVEMENT_POWER = 20;
 
             public static boolean ENABLE_LOWER_LIMIT = false;
+            public static int CUSTOM_PID_TOLERANCE = 30;
         }
 
         @Config

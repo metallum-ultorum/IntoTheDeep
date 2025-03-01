@@ -319,7 +319,7 @@ public class ChamberPedroAuto extends OpMode {
 
     public void score() {
         mechanisms.outtake.outtakeClaw.close();
-        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 150);
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 250);
         mechanisms.outtake.moveShoulderToBack();
     }
 
