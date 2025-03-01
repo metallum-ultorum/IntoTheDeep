@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.localization.GoBildaPinpointDriver;
+import com.pedropathing.pathgen.BezierCurve;
+import com.pedropathing.pathgen.BezierLine;
+import com.pedropathing.pathgen.Path;
+import com.pedropathing.pathgen.Point;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -45,8 +50,12 @@ public class MainOp extends LinearOpMode {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     double storedTx;
     private Follower follower;
-    private final Pose startPose = new Pose(40.008, 61.105,0);
-
+    private final Pose startPose = new Pose(11.2, 31.6,0);
+    boolean autoCycleRunning = false;
+    int autoCycleState = -1;
+    int autoCycleAction = 0;
+    Timer actionTimer;
+    int hpSpecimensPlaced = 4;
 
     /**
      * Main execution flow:
@@ -77,6 +86,7 @@ public class MainOp extends LinearOpMode {
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
+        actionTimer = new Timer();
         // Main loop
         waitForStart();
         follower.startTeleopDrive();
@@ -87,6 +97,7 @@ public class MainOp extends LinearOpMode {
             manualPinpoint.update();
             gamepadPrimary();
             gamepadAuxiliary();
+            checkAutoCycleConditions();
             checkAutomationConditions();
             checkAssistanceConditions();
             mechanisms.outtake.verticalSlide.checkMotors();
@@ -334,50 +345,155 @@ public class MainOp extends LinearOpMode {
             }
         }
     }
-
+    
     public void checkAssistanceConditions() {
-        if (mechanisms.intake.limelight.specimenDetected() && Math.abs(manualPinpoint.getHeading()) < 0.3) {
-            if (gamepad1.touchpad) {
-                gamepad1.setLedColor(0, 0, 255, 1000);
+        if (!autoCycleRunning) {
+            if (mechanisms.intake.limelight.specimenDetected() && Math.abs(manualPinpoint.getHeading()) < 0.3) {
+                if (gamepad1.touchpad) {
+                    gamepad1.setLedColor(0, 0, 255, 1000);
+                    drivetrain.lerpToOffset(
+                            mechanisms.intake.limelight.limelight.getLatestResult().getTx(),
+                            Settings.Assistance.approachSpeed,
+                            wrappedHeading()
+                    );
+                    storedTx = mechanisms.intake.limelight.limelight.getLatestResult().getTx();
+                    CHASSIS_DISABLED = true;
+                } else {
+                    gamepad1.rumble(50);
+                    gamepad1.setLedColor(0, 255, 0, 1000);
+                    CHASSIS_DISABLED = false;
+                }
+            } else if (CHASSIS_DISABLED && gamepad1.touchpad && storedTx != 0) {
+                gamepad1.setLedColor(255, 0, 255, 1000);
                 drivetrain.lerpToOffset(
                         mechanisms.intake.limelight.limelight.getLatestResult().getTx(),
-                        Settings.Assistance.approachSpeed,
+                        0.35,
                         wrappedHeading()
                 );
-                storedTx = mechanisms.intake.limelight.limelight.getLatestResult().getTx();
-                CHASSIS_DISABLED = true;
-
             } else {
-                gamepad1.rumble(50);
-                gamepad1.setLedColor(0, 255, 0, 1000);
-                CHASSIS_DISABLED = false;
+                storedTx = 0;
+                if (gamepad1.touchpad) {
+                    gamepad1.setLedColor(0, 255, 255, 1000);
+                    drivetrain.lerpToOffset(
+                            0,
+                            0,
+                            wrappedHeading()
+                    );
+                    CHASSIS_DISABLED = true;
+                } else {
+                    gamepad1.setLedColor(255, 0, 0, 1000);
+                    CHASSIS_DISABLED = false;
+                }
             }
-        } else if (CHASSIS_DISABLED && gamepad1.touchpad && storedTx != 0) {
-            gamepad1.setLedColor(255, 0, 255, 1000);
-            drivetrain.lerpToOffset(
-                    mechanisms.intake.limelight.limelight.getLatestResult().getTx(),
-                    0.35,
-                    wrappedHeading()
-            );
-        } else {
-            storedTx = 0;
-            if (gamepad1.touchpad) {
-                gamepad1.setLedColor(0, 255, 255, 1000);
-                drivetrain.lerpToOffset(
-                        0,
-                        0,
-                        wrappedHeading()
-                );
-                CHASSIS_DISABLED = true;
-            } else {
-                gamepad1.setLedColor(255, 0, 0, 1000);
-                CHASSIS_DISABLED = false;
-            }
+            telemetry.addData("limelight tx", mechanisms.intake.limelight.limelight.getLatestResult().getTx());
+            telemetry.addData("limelight ty", mechanisms.intake.limelight.limelight.getLatestResult().getTy());
+            telemetry.addData("limelight detects specimen?", mechanisms.intake.limelight.specimenDetected());
+            telemetry.addData("heading", wrappedHeading());
         }
-        telemetry.addData("limelight tx", mechanisms.intake.limelight.limelight.getLatestResult().getTx());
-        telemetry.addData("limelight ty", mechanisms.intake.limelight.limelight.getLatestResult().getTy());
-        telemetry.addData("limelight detects specimen?", mechanisms.intake.limelight.specimenDetected());
-        telemetry.addData("heading", wrappedHeading());
+    }
+
+    public void checkAutoCycleConditions() {
+        if (gamepad1.touchpad && gamepad2.touchpad) {
+            gamepad1.setLedColor(255, 255, 0, 1000);
+            gamepad2.setLedColor(255, 255, 0, 1000);
+            gamepad1.rumbleBlips(5);
+            gamepad2.rumbleBlips(5);
+            autoCycleRunning = true;
+            CHASSIS_DISABLED = true;
+        } else {
+            gamepad1.setLedColor(0, 0, 255, 1000);
+            gamepad2.setLedColor(0, 0, 255, 1000);
+            autoCycleRunning = false;
+            CHASSIS_DISABLED = false;
+        }
+
+        if (autoCycleRunning) {
+            // State Machine for Auto Cycle
+            autoCycleStateMachine();
+        }
+
+        telemetry.addData("DeadEye v2 State", autoCycleState);
+        telemetry.addData("DeadEye v2 Action", autoCycleAction);
+    }
+
+    public void autoCycleStateMachine() {
+        switch (autoCycleState) {
+            case -1:
+                autoCycleState = 0;
+                autoCycleAction = 0;
+                follower.setStartingPose(startPose);
+                break;
+            case 0:
+                // Move to Chamber to score
+                Path placeOnChamber = new Path(
+                        new BezierCurve(
+                                new Point(11.478, 31.631, Point.CARTESIAN),
+                                new Point(16.032, 60.951, Point.CARTESIAN),
+                                new Point(40.008, 70.105 + (hpSpecimensPlaced), Point.CARTESIAN)
+                        )
+                );
+                placeOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
+                follower.followPath(placeOnChamber);
+                prepScore();
+                autoCycleState = 1;
+                break;
+            case 1:
+                /* Wait until we are in position to score */
+                if (!follower.isBusy()) {
+                    /* Score Specimen */
+                    score();
+                    actionTimer.resetTimer();
+                    autoCycleState = 2;
+                }
+
+
+            case 2:
+                /* Wait until we are done scoring */
+                double placementSeconds = 0.5;
+                if (actionTimer.getElapsedTimeSeconds() >= placementSeconds) {
+                    collapse();
+                    hpSpecimensPlaced += 1;
+                    prepGrab();
+                    Path grabFromHumanPlayer = new Path(
+                            new BezierLine(
+                                    new Point(39.864, 63.984, Point.CARTESIAN),
+                                    new Point(11.244, 31.631, Point.CARTESIAN)
+                            )
+                    );
+                    grabFromHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(0));
+                    follower.followPath(grabFromHumanPlayer, true);
+                    autoCycleState = 0;
+                }
+                break;
+            
+        }
+    }
+
+
+    public void prepScore() {
+        mechanisms.outtake.moveShoulderToFront();
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.PREP_HIGH_RUNG);
+    }
+
+    public void score() {
+        mechanisms.outtake.outtakeClaw.close();
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG.getValue() + 150);
+        mechanisms.outtake.moveShoulderToBack();
+    }
+
+    public void collapse() {
+        mechanisms.outtake.outtakeClaw.open();
+        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
+        mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_FORWARD);
+    }
+
+    public void prepGrab() {
+        mechanisms.outtake.outtakeClaw.open();
+        mechanisms.outtake.shoulder.setPosition(Shoulder.Position.PLACE_BACKWARD);
+    }
+
+    public void grab() {
+        mechanisms.outtake.outtakeClaw.close();
     }
 
     public double wrappedHeading() {
