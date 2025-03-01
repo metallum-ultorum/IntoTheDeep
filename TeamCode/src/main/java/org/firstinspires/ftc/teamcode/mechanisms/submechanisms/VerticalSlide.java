@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 
-import static org.firstinspires.ftc.teamcode.Settings.Hardware.VerticalSlide.IDLE_POWER;
 import static org.firstinspires.ftc.teamcode.Settings.Hardware.VerticalSlide.MOVEMENT_POWER;
 
 import androidx.annotation.NonNull;
@@ -91,16 +90,39 @@ public class VerticalSlide implements ViperSlide {
     }
 
     public void checkMotors() {
-        if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
-            verticalMotorRight.setPower(IDLE_POWER);
-            verticalMotorLeft.setPower(IDLE_POWER);
-        } else if (encoderTarget > verticalMotorRight.getCurrentPosition()) {
-            verticalMotorRight.setPower(MOVEMENT_POWER);
-            verticalMotorLeft.setPower(MOVEMENT_POWER);
+        if (Settings.Deploy.CUSTOM_VERTICAL_SLIDE_PID) {
+            if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 80) {
+                verticalMotorRight.setPower(getIdlePower(encoderTarget));
+                verticalMotorLeft.setPower(getIdlePower(encoderTarget));
+            } else if (encoderTarget > verticalMotorRight.getCurrentPosition()) {
+                verticalMotorRight.setPower(MOVEMENT_POWER);
+                verticalMotorLeft.setPower(MOVEMENT_POWER);
+            } else {
+                verticalMotorRight.setPower(-MOVEMENT_POWER);
+                verticalMotorLeft.setPower(-MOVEMENT_POWER);
+            }
         } else {
-            verticalMotorRight.setPower(-MOVEMENT_POWER);
-            verticalMotorLeft.setPower(-MOVEMENT_POWER);
+            if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
+                verticalMotorRight.setPower(0);
+                verticalMotorLeft.setPower(0);
+            } else {
+                verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
+                verticalMotorLeft.setPower(verticalMotorRight.getPower());
+            }
         }
+    }
+
+    public double getIdlePower(double encoderTarget) {
+        if (encoderTarget < 900) {
+            return 0;
+        }
+        if (encoderTarget < 1200) {
+            return 0.1;
+        }
+        if (encoderTarget < 2000) {
+            return 0.2;
+        }
+        return 0.18;
     }
 
     public void setToZero() {
@@ -117,8 +139,13 @@ public class VerticalSlide implements ViperSlide {
 
         setPosition(VerticalPosition.TRANSFER);
 
-        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        verticalMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        if (Settings.Deploy.CUSTOM_VERTICAL_SLIDE_PID) {
+            verticalMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            verticalMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } else {
+            verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
         this.currentPosition = VerticalPosition.TRANSFER;
         encoderTarget = verticalMotorRight.getTargetPosition();
     }

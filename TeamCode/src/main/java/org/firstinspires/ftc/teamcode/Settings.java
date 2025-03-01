@@ -198,6 +198,7 @@ public class Settings {
 
         public static AutonomousMode AUTONOMOUS_MODE_LEFT = AutonomousMode.BASKET;
         public static AutonomousMode AUTONOMOUS_MODE_RIGHT = AutonomousMode.CHAMBER;
+        public static boolean CUSTOM_VERTICAL_SLIDE_PID = true;
 
         public enum AutonomousMode {
             JUST_PARK, JUST_PLACE, CHAMBER, BASKET
