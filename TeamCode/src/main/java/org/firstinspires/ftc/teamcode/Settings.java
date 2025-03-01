@@ -202,6 +202,8 @@ public class Settings {
         public enum AutonomousMode {
             JUST_PARK, JUST_PLACE, CHAMBER, BASKET
         }
+
+        public static boolean customVerticalSlidePID = false;
     }
 
     public static String getDisabledFlags() {
