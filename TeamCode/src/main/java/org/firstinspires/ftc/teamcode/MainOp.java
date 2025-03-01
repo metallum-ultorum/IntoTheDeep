@@ -21,6 +21,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+// pedro shit I tried to do
+import com.pedropathing.follower.Follower;
+import com.pedropathing.localization.Pose;
+import com.pedropathing.util.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
+
 /**
  * Main TeleOp class for driver-controlled period.
  * Handles controller profile selection and robot operation during matches.
@@ -37,6 +44,9 @@ public class MainOp extends LinearOpMode {
     LimelightManager.LimelightPipeline pipeline = LimelightManager.LimelightPipeline.BLUE;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     double storedTx;
+    private Follower follower;
+    private final Pose startPose = new Pose(40.008, 61.105,0);
+
 
     /**
      * Main execution flow:
@@ -64,8 +74,12 @@ public class MainOp extends LinearOpMode {
         mechanisms = new MechanismManager(hardwareMap);
         input = new DynamicInput(gamepad1, gamepad2, mainProfile.get(), subProfile.get());
         drivetrain = new Drivetrain(hardwareMap);
+        Constants.setConstants(FConstants.class, LConstants.class);
+        follower = new Follower(hardwareMap);
+        follower.setStartingPose(startPose);
         // Main loop
         waitForStart();
+        follower.startTeleopDrive();
         mechanisms.init();
         manualPinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         mechanisms.intake.limelight.setCurrentPipeline(pipeline);
@@ -77,6 +91,11 @@ public class MainOp extends LinearOpMode {
             checkAssistanceConditions();
             mechanisms.outtake.verticalSlide.checkMotors();
             mechanisms.intake.colorSensor.update();
+            follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
+            follower.update();
+            telemetry.addData("X", follower.getPose().getX());
+            telemetry.addData("Y", follower.getPose().getY());
+            telemetry.addData("Heading in Degrees", Math.toDegrees(follower.getPose().getHeading()));
             telemetry.update();
         }
     }
@@ -251,7 +270,7 @@ public class MainOp extends LinearOpMode {
                 } else if (contextualActions.justExtendVerticalToChamber) {
                     mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_RUNG);
                 } else if (contextualActions.justExtendVerticalToChamberPrep) {
-                        mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.PREP_HIGH_RUNG);
+                    mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.PREP_HIGH_RUNG);
                 } else if (contextualActions.justRetractVerticalToTransfer) {
                     mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
                 }
