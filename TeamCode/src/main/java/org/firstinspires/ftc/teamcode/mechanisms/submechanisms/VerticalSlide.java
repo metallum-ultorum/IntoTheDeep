@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Settings;
 
@@ -29,6 +30,9 @@ public class VerticalSlide implements ViperSlide {
     @Override
     public void setPosition(double position) {
         int targetPosition = (int) position;
+        if (targetPosition > verticalMotorRight.getCurrentPosition()) {
+            targetPosition += 40;
+        }
         verticalMotorLeft.setTargetPosition(targetPosition);
         verticalMotorRight.setTargetPosition(targetPosition);
     }
@@ -72,16 +76,6 @@ public class VerticalSlide implements ViperSlide {
 
     public void increment(int encoderTicks) {
         switch (Settings.Deploy.VERTICAL_SLIDE_MODE) {
-            case RIGHT_ONLY_RAW:
-                verticalMotorRight.setPower(MOVEMENT_POWER);
-                break;
-            case LEFT_ONLY_RAW:
-                verticalMotorLeft.setPower(MOVEMENT_POWER);
-                break;
-            case RAW:
-                verticalMotorRight.setPower(MOVEMENT_POWER);
-                verticalMotorLeft.setPower(MOVEMENT_POWER);
-                break;
             default:
                 if (encoderTarget - currentOffset < VerticalPosition.HIGH_BASKET.getValue()) {
                     encoderTarget += encoderTicks;
@@ -94,16 +88,6 @@ public class VerticalSlide implements ViperSlide {
     @Override
     public void decrement() {
         switch (Settings.Deploy.VERTICAL_SLIDE_MODE) {
-            case RIGHT_ONLY_RAW:
-                verticalMotorRight.setPower(-MOVEMENT_POWER);
-                break;
-            case LEFT_ONLY_RAW:
-                verticalMotorLeft.setPower(-MOVEMENT_POWER);
-                break;
-            case RAW:
-                verticalMotorRight.setPower(-MOVEMENT_POWER);
-                verticalMotorLeft.setPower(-MOVEMENT_POWER);
-                break;
             default:
                 if (!Settings.Hardware.VerticalSlide.ENABLE_LOWER_LIMIT || !touchSensor.isPressed() || encoderTarget - currentOffset > VerticalPosition.TRANSFER.getValue()) {
                     encoderTarget -= Settings.Hardware.VerticalSlide.INCREMENTAL_MOVEMENT_POWER;
@@ -134,8 +118,15 @@ public class VerticalSlide implements ViperSlide {
 
     public void checkMotors() {
         switch (Settings.Deploy.VERTICAL_SLIDE_MODE) {
+            case RIGHT_ONLY_RTP:
+//                if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
+//                    verticalMotorRight.setPower(0);
+//                } else {
+                verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
+//                }
+                break;
             case CUSTOM_RTP:
-                if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 30) {
+                if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 40) {
                     verticalMotorRight.setPower(getIdlePower(encoderTarget));
                     verticalMotorLeft.setPower(getIdlePower(encoderTarget));
                 } else if (encoderTarget > verticalMotorRight.getCurrentPosition()) {
@@ -153,13 +144,6 @@ public class VerticalSlide implements ViperSlide {
                 } else {
                     verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
                     verticalMotorLeft.setPower(verticalMotorRight.getPower());
-                }
-                break;
-            case RIGHT_ONLY_RTP:
-                if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
-                    verticalMotorRight.setPower(0);
-                } else {
-                    verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
                 }
                 break;
         }

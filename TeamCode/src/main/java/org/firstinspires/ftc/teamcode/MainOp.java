@@ -273,7 +273,7 @@ public class MainOp extends LinearOpMode {
         if (Settings.Deploy.OUTTAKE) {
             if (Settings.DefaultGamepadSettings.incremental_vertical) {
                 if (mechanisms.outtake.verticalSlide.isTouchingSensor()) {
-                    mechanisms.outtake.verticalSlide.increment(1);
+                    mechanisms.outtake.verticalSlide.increment(0);
                 }
                 if (contextualActions.justExtendVerticalToBasket) {
                     mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.HIGH_BASKET);

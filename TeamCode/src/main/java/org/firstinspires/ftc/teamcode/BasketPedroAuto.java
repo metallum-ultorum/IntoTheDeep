@@ -178,7 +178,7 @@ public class BasketPedroAuto extends OpMode {
                 }
                 break;
             case 2:
-                double clawCloseSeconds = 0.1;
+                double clawCloseSeconds = 0.3;
                 double collapseSeconds = 0.5;
                 double transferSeconds = 0.2;
                 if (!follower.isBusy() && actionState == 0) {
@@ -192,7 +192,6 @@ public class BasketPedroAuto extends OpMode {
                     // once claw is closed, transfer sample from intake to outtake
                     if (actionTimer.getElapsedTimeSeconds() > clawCloseSeconds) {
                         collapse();
-                        prepTransferSample();
                         actionState = 2;
                         actionTimer.resetTimer();
                     }
@@ -286,6 +285,7 @@ public class BasketPedroAuto extends OpMode {
         mechanisms.outtake.moveShoulderToFront();
         mechanisms.intake.rotator.setPosition(Rotator.center);
         mechanisms.intake.intakeClaw.close();
+        prepTransferSample();
     }
 
     public void prepTransferSample(){
@@ -307,9 +307,8 @@ public class BasketPedroAuto extends OpMode {
         mechanisms.intake.wrist.setPosition(Wrist.Position.HORIZONTAL);
     }
 
-    public void grab() {
-        mechanisms.outtake.outtakeClaw.close();
-    }
+    public void grab() {mechanisms.intake.intakeClaw.close();}
+
 
 
     /**
