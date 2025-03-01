@@ -192,6 +192,7 @@ public class BasketPedroAuto extends OpMode {
                     // once claw is closed, transfer sample from intake to outtake
                     if (actionTimer.getElapsedTimeSeconds() > clawCloseSeconds) {
                         collapse();
+                        prepTransferSample();
                         actionState = 2;
                         actionTimer.resetTimer();
                     }
@@ -283,10 +284,13 @@ public class BasketPedroAuto extends OpMode {
     public void collapse() {
         mechanisms.outtake.verticalSlide.setPosition(ViperSlide.VerticalPosition.TRANSFER);
         mechanisms.outtake.moveShoulderToFront();
-        mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
-        mechanisms.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.COLLAPSED);
         mechanisms.intake.rotator.setPosition(Rotator.center);
         mechanisms.intake.intakeClaw.close();
+    }
+
+    public void prepTransferSample(){
+        mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);
+        mechanisms.intake.horizontalSlide.setPosition(ViperSlide.HorizontalPosition.COLLAPSED);
     }
 
     public void transferSample() {

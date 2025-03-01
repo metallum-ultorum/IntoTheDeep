@@ -206,7 +206,7 @@ public class Settings {
             JUST_PARK, JUST_PLACE, CHAMBER, BASKET
         }
 
-        public static VerticalSlide.verticalRunModes VERTICAL_SLIDE_MODE = VerticalSlide.verticalRunModes.CUSTOM_RTP;
+        public static VerticalSlide.verticalRunModes VERTICAL_SLIDE_MODE = VerticalSlide.verticalRunModes.RIGHT_ONLY_RTP;
     }
 
     public static String getDisabledFlags() {
