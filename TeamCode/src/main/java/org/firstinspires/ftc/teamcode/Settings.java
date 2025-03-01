@@ -266,8 +266,8 @@ public class Settings {
     @Config
     public static class Assistance {
         public static double inverseLateralMultiplier = 50; // move at full power at 30 inches laterally away, going down to 0.0333333333 at 1 inch away
-        public static double minimumRotationCorrectionThreshold = Math.PI / 50; // Don't correct heading within 0.1570796327
-        public static double approachSpeed = 0.4; // if within an inch it's good enough
+        public static double minimumRotationCorrectionThreshold = Math.PI / 70; // Don't correct heading within 0.1570796327
+        public static double approachSpeed = 0.5; // if within an inch it's good enough
         public static double limelightWindowSize = 40; // degrees
     }
 
@@ -304,7 +304,7 @@ public class Settings {
 
             @Config
             public static class Rotator {
-                public static double LEFT_LIMIT = 0; //TODO: PHYSICALLY ADJUST TO MAKE THIS AS CLOSE TO THE MIDDLE AS POSSIBLE, THEN TUNE
+                public static double LEFT_LIMIT = 0.1;
                 public static double RIGHT_LIMIT = 1;
                 public static double CENTER = (LEFT_LIMIT + RIGHT_LIMIT) / 2;
             }

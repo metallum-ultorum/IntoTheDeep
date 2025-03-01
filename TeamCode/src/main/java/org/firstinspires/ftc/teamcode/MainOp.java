@@ -211,7 +211,7 @@ public class MainOp extends LinearOpMode {
             }
 
             if (contextualActions.justWristUp) {
-                if (mechanisms.intake.horizontalSlide.currentPosition.getValue() > 100 && mechanisms.intake.intakeClaw.opened) {
+                if (mechanisms.intake.horizontalSlide.currentPosition.getValue() > 30 && mechanisms.intake.intakeClaw.opened) {
                     mechanisms.intake.wrist.setPosition(Wrist.Position.READY);
                 } else {
                     mechanisms.intake.wrist.setPosition(Wrist.Position.VERTICAL);

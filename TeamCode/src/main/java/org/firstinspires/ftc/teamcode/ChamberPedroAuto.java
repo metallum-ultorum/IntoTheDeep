@@ -207,7 +207,7 @@ public class ChamberPedroAuto extends OpMode {
             case 2:
                 double harsithAlignmentLengthSeconds = 0.1; // 0.1 seconds to give harsith time
                 //noinspection SpellCheckingInspection
-                double grabLengthSeconds = 0.3; // half a second to yoinky sploinky
+                double grabLengthSeconds = 0.35; // half a second to yoinky sploinky
 
                 if (!follower.isBusy() && actionState == 0) {
                     // once the robot is in position to grab, wait a bit for harsith to align

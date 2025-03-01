@@ -18,7 +18,6 @@ public class LimelightManager {
     LimelightPipeline currentPipeline = LimelightPipeline.RED;
     double lastTx = 0;
     double lastTy = 0;
-    double angleNeededForRumble = 25;
 
     public LimelightManager(Limelight3A limelight) {
         this.limelight = limelight;

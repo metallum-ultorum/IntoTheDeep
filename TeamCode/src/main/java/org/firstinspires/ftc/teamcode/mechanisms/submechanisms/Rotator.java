@@ -9,11 +9,11 @@ import org.firstinspires.ftc.teamcode.Settings;
  * @noinspection unused
  */
 public class Rotator {
-    public static double position = 0;
     public static final double leftLimit = Settings.Hardware.Servo.Rotator.LEFT_LIMIT;
     public static final double rightLimit = Settings.Hardware.Servo.Rotator.RIGHT_LIMIT;
     public static final double center = Settings.Hardware.Servo.Rotator.CENTER;
     public final Servo rotatorServo;
+    public static double position = center;
 
     public Rotator(Servo rotatorServo) {
         this.rotatorServo = rotatorServo;
