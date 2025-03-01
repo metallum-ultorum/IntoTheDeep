@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.mechanisms.submechanisms;
 
+import static org.firstinspires.ftc.teamcode.Settings.Hardware.VerticalSlide.IDLE_POWER;
+import static org.firstinspires.ftc.teamcode.Settings.Hardware.VerticalSlide.MOVEMENT_POWER;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.hardware.rev.RevTouchSensor;
@@ -89,11 +92,14 @@ public class VerticalSlide implements ViperSlide {
 
     public void checkMotors() {
         if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
-            verticalMotorRight.setPower(0);
-            verticalMotorLeft.setPower(0);
+            verticalMotorRight.setPower(IDLE_POWER);
+            verticalMotorLeft.setPower(IDLE_POWER);
+        } else if (encoderTarget > verticalMotorRight.getCurrentPosition()) {
+            verticalMotorRight.setPower(MOVEMENT_POWER);
+            verticalMotorLeft.setPower(MOVEMENT_POWER);
         } else {
-            verticalMotorRight.setPower(Settings.Hardware.VerticalSlide.MOVEMENT_POWER);
-            verticalMotorLeft.setPower(verticalMotorRight.getPower());
+            verticalMotorRight.setPower(-MOVEMENT_POWER);
+            verticalMotorLeft.setPower(-MOVEMENT_POWER);
         }
     }
 
@@ -111,8 +117,8 @@ public class VerticalSlide implements ViperSlide {
 
         setPosition(VerticalPosition.TRANSFER);
 
-        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        verticalMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        verticalMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.currentPosition = VerticalPosition.TRANSFER;
         encoderTarget = verticalMotorRight.getTargetPosition();
     }
