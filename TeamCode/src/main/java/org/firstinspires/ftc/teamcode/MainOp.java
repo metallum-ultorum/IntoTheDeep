@@ -414,7 +414,8 @@ public class MainOp extends LinearOpMode {
             deadReckonerStateMachine();
         }
 
-        telemetry.addData("DeadArm State", deadReckonerState);
+        telemetry.addData("DeadReckoner Running", deadReckonerRunning);
+        telemetry.addData("DeadReckoner State", deadReckonerState);
     }
 
     public void deadReckonerStateMachine() {
