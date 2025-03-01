@@ -53,7 +53,6 @@ public class MainOp extends LinearOpMode {
     private final Pose startPose = new Pose(11.2, 31.6,0);
     boolean autoCycleRunning = false;
     int autoCycleState = -1;
-    int autoCycleAction = 0;
     Timer actionTimer;
     int hpSpecimensPlaced = 4;
 
@@ -413,31 +412,39 @@ public class MainOp extends LinearOpMode {
         }
 
         telemetry.addData("DeadEye v2 State", autoCycleState);
-        telemetry.addData("DeadEye v2 Action", autoCycleAction);
     }
 
     public void autoCycleStateMachine() {
         switch (autoCycleState) {
             case -1:
                 autoCycleState = 0;
-                autoCycleAction = 0;
                 follower.setStartingPose(startPose);
                 break;
             case 0:
                 // Move to Chamber to score
-                Path placeOnChamber = new Path(
-                        new BezierCurve(
-                                new Point(11.478, 31.631, Point.CARTESIAN),
-                                new Point(16.032, 60.951, Point.CARTESIAN),
-                                new Point(40.008, 70.105 + (hpSpecimensPlaced), Point.CARTESIAN)
-                        )
-                );
-                placeOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
-                follower.followPath(placeOnChamber);
-                prepScore();
-                autoCycleState = 1;
-                break;
+                if (!follower.isBusy()) {
+                    grab();
+                    autoCycleState = 1;
+                    actionTimer.resetTimer();
+                    break;
+                }
             case 1:
+                double grabWaitTime = 0.35;
+                if (actionTimer.getElapsedTimeSeconds() >= grabWaitTime) {
+                    Path placeOnChamber = new Path(
+                            new BezierCurve(
+                                    new Point(11.478, 31.631, Point.CARTESIAN),
+                                    new Point(16.032, 60.951, Point.CARTESIAN),
+                                    new Point(40.008, 70.105 + (hpSpecimensPlaced), Point.CARTESIAN)
+                            )
+                    );
+                    placeOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
+                    follower.followPath(placeOnChamber);
+                    prepScore();
+                    autoCycleState = 1;
+                    break;
+                }
+            case 2:
                 /* Wait until we are in position to score */
                 if (!follower.isBusy()) {
                     /* Score Specimen */
@@ -447,7 +454,7 @@ public class MainOp extends LinearOpMode {
                 }
 
 
-            case 2:
+            case 3:
                 /* Wait until we are done scoring */
                 double placementSeconds = 0.5;
                 if (actionTimer.getElapsedTimeSeconds() >= placementSeconds) {
