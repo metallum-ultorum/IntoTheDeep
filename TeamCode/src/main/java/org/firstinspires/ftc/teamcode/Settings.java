@@ -362,6 +362,7 @@ public class Settings {
 
             // Motor power settings
             public static double MOVEMENT_POWER = 1;
+            public static double IDLE_POWER = 0.2;
 
             public static double INCREMENTAL_MOVEMENT_POWER = 20;
 
