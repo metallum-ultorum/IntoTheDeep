@@ -91,7 +91,7 @@ public class VerticalSlide implements ViperSlide {
 
     public void checkMotors() {
         if (Settings.Deploy.customVerticalSlidePID) {
-            if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 5) {
+            if (Math.abs(verticalMotorRight.getCurrentPosition() - encoderTarget) < 80) {
                 verticalMotorRight.setPower(getIdlePower(encoderTarget));
                 verticalMotorLeft.setPower(getIdlePower(encoderTarget));
             } else if (encoderTarget > verticalMotorRight.getCurrentPosition()) {
