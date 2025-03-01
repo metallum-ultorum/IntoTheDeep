@@ -51,8 +51,8 @@ public class MainOp extends LinearOpMode {
     double storedTx;
     private Follower follower;
     private final Pose startPose = new Pose(11.2, 31.6,0);
-    boolean autoCycleRunning = false;
-    int autoCycleState = -1;
+    boolean deadReckonerRunning = false;
+    int deadReckonerState = -1;
     Timer actionTimer;
     int hpSpecimensPlaced = 4;
 
@@ -96,7 +96,7 @@ public class MainOp extends LinearOpMode {
             manualPinpoint.update();
             gamepadPrimary();
             gamepadAuxiliary();
-            checkAutoCycleConditions();
+            checkDeadReckonerConditions();
             checkAutomationConditions();
             checkAssistanceConditions();
             mechanisms.outtake.verticalSlide.checkMotors();
@@ -346,7 +346,7 @@ public class MainOp extends LinearOpMode {
     }
     
     public void checkAssistanceConditions() {
-        if (!autoCycleRunning) {
+        if (!deadReckonerRunning) {
             if (mechanisms.intake.limelight.specimenDetected() && Math.abs(manualPinpoint.getHeading()) < 0.3) {
                 if (gamepad1.touchpad) {
                     gamepad1.setLedColor(0, 0, 255, 1000);
@@ -391,40 +391,40 @@ public class MainOp extends LinearOpMode {
         }
     }
 
-    public void checkAutoCycleConditions() {
+    public void checkDeadReckonerConditions() {
         if (gamepad1.touchpad && gamepad2.touchpad) {
             gamepad1.setLedColor(255, 255, 0, 1000);
             gamepad2.setLedColor(255, 255, 0, 1000);
             gamepad1.rumbleBlips(5);
             gamepad2.rumbleBlips(5);
-            autoCycleRunning = true;
+            deadReckonerRunning = true;
             CHASSIS_DISABLED = true;
         } else {
             gamepad1.setLedColor(0, 0, 255, 1000);
             gamepad2.setLedColor(0, 0, 255, 1000);
-            autoCycleRunning = false;
+            deadReckonerRunning = false;
             CHASSIS_DISABLED = false;
         }
 
-        if (autoCycleRunning) {
+        if (deadReckonerRunning) {
             // State Machine for Auto Cycle
-            autoCycleStateMachine();
+            deadReckonerStateMachine();
         }
 
-        telemetry.addData("DeadEye v2 State", autoCycleState);
+        telemetry.addData("DeadArm State", deadReckonerState);
     }
 
-    public void autoCycleStateMachine() {
-        switch (autoCycleState) {
+    public void deadReckonerStateMachine() {
+        switch (deadReckonerState) {
             case -1:
-                autoCycleState = 0;
+                deadReckonerState = 0;
                 follower.setStartingPose(startPose);
                 break;
             case 0:
                 // Move to Chamber to score
                 if (!follower.isBusy()) {
                     grab();
-                    autoCycleState = 1;
+                    deadReckonerState = 1;
                     actionTimer.resetTimer();
                     break;
                 }
@@ -441,7 +441,7 @@ public class MainOp extends LinearOpMode {
                     placeOnChamber.setConstantHeadingInterpolation(Math.toRadians(0));
                     follower.followPath(placeOnChamber);
                     prepScore();
-                    autoCycleState = 1;
+                    deadReckonerState = 1;
                     break;
                 }
             case 2:
@@ -450,7 +450,7 @@ public class MainOp extends LinearOpMode {
                     /* Score Specimen */
                     score();
                     actionTimer.resetTimer();
-                    autoCycleState = 2;
+                    deadReckonerState = 2;
                 }
 
 
@@ -469,7 +469,7 @@ public class MainOp extends LinearOpMode {
                     );
                     grabFromHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(0));
                     follower.followPath(grabFromHumanPlayer, true);
-                    autoCycleState = 0;
+                    deadReckonerState = 0;
                 }
                 break;
             
