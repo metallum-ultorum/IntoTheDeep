@@ -73,7 +73,7 @@ public class BasketPedroAuto extends OpMode {
                 // Line 2
                 new BezierLine(
                         new Point(13.800, 130.423, Point.CARTESIAN),
-                        new Point(36.33202733199599, 120.17953861584755, Point.CARTESIAN)
+                        new Point(36.33202733199599, 121.17953861584755, Point.CARTESIAN)
                 )
         );
         grabSample1.setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0));
@@ -81,16 +81,16 @@ public class BasketPedroAuto extends OpMode {
         grabSample2 = new Path(
                 // Line 4
                 new BezierLine(
-                        new Point(13.728, 129.423, Point.CARTESIAN),
-                        new Point(33.804, 130.723, Point.CARTESIAN)
+                        new Point(13.728, 130.423, Point.CARTESIAN),
+                        new Point(33.804, 131.723, Point.CARTESIAN)
                 )
         );
         grabSample2.setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0));
 
         grabSample3 = new Path(
                 new BezierLine(
-                        new Point(13.728, 129.423, Point.CARTESIAN),
-                        new Point(34.960, 130.868, Point.CARTESIAN)
+                        new Point(13.728, 130.423, Point.CARTESIAN),
+                        new Point(34.960, 131.868, Point.CARTESIAN)
                 )
         );
         grabSample3.setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(45));
